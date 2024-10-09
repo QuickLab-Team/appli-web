@@ -33,10 +33,10 @@ class Produit(models.Model):
     quantite = models.IntegerField()
     description = models.TextField()
     famille = models.ForeignKey('Famille', on_delete=models.CASCADE)
-    stockage = models.ForeignKey('Stockage', on_delete=models.CASCADE, related_name='produits')
+    stockage = models.ForeignKey('Stockage', on_delete=models.CASCADE)
     
     def __str__(self):
-        return "{0} {1}".format(self.id, self.nom)
+        return "{0} {1}".format(self.id, self.nom, self.description)
     
 class Stockage(models.Model):
     """
@@ -75,11 +75,10 @@ class Reservation(models.Model):
     """
     id = models.AutoField(primary_key=True)
     utilisateur = models.ForeignKey('Utilisateur', on_delete=models.CASCADE)
-    produits = models.ManyToManyField(Produit, through='ReservationProduit')
     date = models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return "{0} - {1} - {2} {3}".format(self.utilisateur, self.produits.all(), self.quantite, self.unite)
+        return "{0}".format(self.utilisateur)
 
 class ReservationProduit(models.Model):
     """
