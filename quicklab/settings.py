@@ -37,6 +37,8 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTH_USER_MODEL = 'reservation_models.Utilisateur'
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),

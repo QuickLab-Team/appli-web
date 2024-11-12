@@ -13,7 +13,11 @@ class Utilisateur(AbstractUser):
     role = models.CharField(max_length=100)
     username = None 
 
-    USERNAME_FIELD = "id"
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = [
+        "nom",
+        "prenom",
+    ]
 
     objects = CustomUserManager()
 
@@ -85,7 +89,7 @@ class ReservationProduit(models.Model):
     ReservationProduit
     """
     id = models.AutoField(primary_key=True)
-    reservation = models.ForeignKey('Reservation', on_delete=models.CASCADE)
+    reservation = models.ForeignKey('Reservation', related_name='produits', on_delete=models.CASCADE)
     produit = models.ForeignKey('Produit', on_delete=models.CASCADE)
     quantite = models.IntegerField()
     
