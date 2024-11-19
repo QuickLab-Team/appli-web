@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    container_name: quicklab-db
+    environment:
+      MYSQL_DATABASE: quicklab
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    container_name: quicklab-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: quicklab-db
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  web:
+    build: .
+    container_name: quicklab-web
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_NAME=quicklab
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=rootpassword
+      - DATABASE_HOST=quicklab-db
+      - DATABASE_PORT=3306
+    networks:
+      - mynetwork
+
+volumes:
+  mysql_data:
+
+networks:
+  mynetwork:
+    driver: bridge
