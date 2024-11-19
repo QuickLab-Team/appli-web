@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'reservation_models',
+    'preparateurs',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -77,7 +79,7 @@ ROOT_URLCONF = 'quicklab.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'preparateurs/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -143,6 +145,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block styles %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <title>{{ titre }}</title>
+</head>
+<body>
+    <div class="page">
+        {% include 'menu.html' %}
+        <div class="right-page">
+            <div class="nav">
+                <h1 class="titre">QuickLab</h1>
+                <ul class="button">
+                    <li><a href="">Se déconnecter</a></li>
+                </ul>
+            </div>
+            <div class="content">
+                <p>Lorem10000</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

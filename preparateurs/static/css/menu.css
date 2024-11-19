@@ -1,0 +1,32 @@
+.menu{
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.menu .titre{
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: 'Nunito';
+    margin-bottom: 30px;
+}
+
+.menu .sous-titre{
+    font-size: 0.8em;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    font-family: 'Nunito';
+    color: #EAE6E6;
+}
+
+.menu .sous-titre a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.menu li{
+    list-style: none;
+}
+
+.menu ul{
+    margin-top: 20%;
+}

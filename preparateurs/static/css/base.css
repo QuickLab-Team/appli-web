@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+:root{
+    --primary-color: #0B1E5C;
+    --secondary-color: #FFFFFF;
+    --third-color: #D9E7F0;
+}
+
+*{
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page{
+    height: 100%;
+    display: flex;
+}
+
+.menu{
+    background-color: var(--primary-color);
+    height: 100%;
+    width: 20%;
+    overflow: hidden;
+    position: fixed;
+}
+
+.right-page{
+    width: 100%;
+    margin-left: 20%;
+}
+
+.nav{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav .titre{
+    font-size: 3em;
+    font-weight: bold;
+    margin-left: 30px;
+    color: var(--primary-color);
+}
+
+.nav .button{
+    list-style: none;
+    display: flex;
+    margin-right: 30px;
+}
+
+.nav a{
+    text-decoration: none;
+}
+
+.content{
+    margin-left: 20px;
+    margin-top: 5%;
+}
+
+.nav .button li{
+    background-color: var(--third-color);
+    padding: 5px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.nav .button a{
+    color: var(--primary-color)
+}
