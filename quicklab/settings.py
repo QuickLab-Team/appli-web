@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'reservation_models',
+    'preparateurs',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +78,7 @@ ROOT_URLCONF = 'quicklab.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'preparateurs', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
