@@ -13,13 +13,13 @@
         {% include 'menu.html' %}
         <div class="right-page">
             <div class="nav">
-                <h1 class="titre">QuickLab</h1>
+                <h1 class="titre">{{titre}}</h1>
                 <ul class="button">
                     <li><a href="">Se déconnecter</a></li>
                 </ul>
             </div>
             <div class="content">
-                <p>Lorem10000</p>
+                {% block content %}{% endblock %}
             </div>
         </div>
     </div>

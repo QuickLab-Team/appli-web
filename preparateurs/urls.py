@@ -5,7 +5,7 @@ from .views import accueil
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('', accueil, name='accueil'),
-    path('inscription/', inscription, name='inscription'),
+    path('accueil', views.accueil, name='accueil'),
+    path('inscription/', views.inscription, name='inscription'),
     path('connexion/', ConnexionView.as_view(), name='connexion'),
 ]

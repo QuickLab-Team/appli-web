@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/accueil.css' %}">
+{% endblock %}
+
+{% block titre %}Accueil{% endblock %}
+
+{% block content %}
+<div class="accueil">
+    <h2>Bienvenue sur QuickLab ! 👋</h2>
+
+    <p>QuickLab est votre solution intuitive et performante pour simplifier la gestion des commandes au sein du département de chimie. Notre outil a été conçu pour vous offrir une expérience fluide, efficace et adaptée à vos besoins.</p>
+
+    <p>Pourquoi choisir QuickLab ?</p>
+
+    <ul>
+        <li>Rapidité : Effectuez vos commandes en un clin d’œil.</li>
+        <li>Simplicité : Une interface conviviale accessible à tous.</li>
+        <li>Efficacité : Gagnez du temps et concentrez-vous sur l’essentiel.</li>
+    </ul>
+
+    <p>Vous rencontrez un problème ou avez une suggestion ? Notre équipe est là pour vous aider. N’hésitez pas à nous écrire à help@quicklab.com.</p>
+
+    <p>Commencez dès maintenant !</p>
+
+    <p>QuickLab, la technologie au service de la chimie.</p>
+</div>
+{% endblock %}

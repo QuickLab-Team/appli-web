@@ -5,9 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 
 def home(request):
-     return render(request, 'base.html')
+    return render(request, 'base.html', {
+        'titre': 'QuickLab',
+    })
+
 def accueil(request):
-    return render(request, 'preparateurs/accueil.html')
+    return render(request, 'accueil.html', {
+        'titre': '',
+    })
 
 def inscription(request):
     if request.method == 'POST':
