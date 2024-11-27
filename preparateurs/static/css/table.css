@@ -16,9 +16,11 @@
 }
 .table-scroll {
     width: 100%;
+    border-collapse: collapse;
 }
 .table-scroll tbody td {
-    border-bottom: 1px solid black;
     padding: 12px;
     text-align: center;
+    border-right: none;
+    border-bottom: 1px solid black;
 }
