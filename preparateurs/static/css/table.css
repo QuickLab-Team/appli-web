@@ -1,0 +1,24 @@
+.cadre-table-scroll{
+    display: inline-block;
+    height: 30em;
+    overflow-y: scroll;
+    width: 100%;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+.table-scroll thead th{
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+.table-scroll tfoot td{
+    position: sticky;
+    bottom: 0;
+}
+.table-scroll {
+    width: 100%;
+}
+.table-scroll tbody td {
+    border-bottom: 1px solid black;
+    padding: 12px;
+    text-align: center;
+}

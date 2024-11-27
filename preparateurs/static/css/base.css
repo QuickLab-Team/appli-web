@@ -77,3 +77,7 @@ html, body{
 .nav .button a{
     color: var(--primary-color)
 }
+
+.nav{
+    min-height: 4em;
+}

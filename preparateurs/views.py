@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from reservation_models.models import Produit
 
 def home(request):
     return render(request, 'base.html', {
@@ -12,6 +13,13 @@ def home(request):
 def accueil(request):
     return render(request, 'accueil.html', {
         'titre': '',
+    })
+
+def produits(request):
+    produits = Produit.objects.all()
+    return render(request, 'produits.html', {
+        'titre': 'QuickLab',
+        'produits': produits
     })
 
 def inscription(request):
