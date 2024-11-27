@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'reservation_models',
-    'preparateurs'
+    'preparateurs',
+    'etudiants',
 ]
 
 MIDDLEWARE = [
