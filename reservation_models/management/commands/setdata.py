@@ -13,6 +13,11 @@ class Command(BaseCommand):
         Service.objects.all().delete()
         Stockage.objects.all().delete()
         Produit.objects.all().delete()
+        Utilisateur.objects.all().delete()
+        Reservation.objects.all().delete()
+        ReservationProduit.objects.all().delete()
+
+        self.stdout.write('Données supprimées avec succès !')
 
         self.stdout.write('Création des données...')
 
@@ -33,6 +38,7 @@ class Command(BaseCommand):
         # Produits
         for i in range(1, 5):
             produit = Produit.objects.create(
+                id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
                 description='Description produit {0}'.format(i),
@@ -42,6 +48,7 @@ class Command(BaseCommand):
         
         for i in range(5, 10):
             produit = Produit.objects.create(
+                id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
                 description='Description produit {0}'.format(i),
@@ -51,11 +58,40 @@ class Command(BaseCommand):
 
         for i in range(10, 15):
             produit = Produit.objects.create(
+                id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
                 description='Description produit {0}'.format(i),
                 famille=famille1,
                 stockage=stockage2
+            )
+
+        # Utilisateurs
+        for i in range(1, 20):
+            utilisateur = Utilisateur.objects.create(
+                id=i,
+                nom='Utilisateur {0}'.format(i),
+                prenom='Prenom {0}'.format(i),
+                email='nom{0}.prenom{0}@gmail.com'.format(i),
+                role='Role {0}'.format(i)
+            )
+            utilisateur.set_password('password{0}'.format(i))
+            utilisateur.save()
+
+        # Réservations
+        for i in range(1, 5):
+            reservation = Reservation.objects.create(
+                id=i,
+                utilisateur=Utilisateur.objects.get(id=random.randint(1, 19)),
+                date='2021-01-01'
+            )
+
+        #Réservations Produits
+        for i in range(1, 15):
+            reservation_produit = ReservationProduit.objects.create(
+                reservation=Reservation.objects.get(id=random.randint(1, 4)),
+                produit=Produit.objects.get(id=random.randint(1, 14)),
+                quantite=random.randint(1, 10)
             )
 
         self.stdout.write('Données créées avec succès !')
