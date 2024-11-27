@@ -1,5 +1,10 @@
 # appli-web
 
+### Données de test
+
+```bash
+python3 manage.py setdata
+```
 
 ### Lancement sur puce intel
 
