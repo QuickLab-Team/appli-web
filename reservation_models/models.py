@@ -40,7 +40,7 @@ class Produit(models.Model):
     stockage = models.ForeignKey('Stockage', on_delete=models.CASCADE)
     
     def __str__(self):
-        return "{0} {1}".format(self.id, self.nom, self.description)
+        return "{0} {1} {2}".format(self.id, self.nom, self.description)
     
 class Stockage(models.Model):
     """

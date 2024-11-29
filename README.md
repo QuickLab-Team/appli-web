@@ -1,5 +1,11 @@
 # appli-web
 
+### Lancement des tests
+
+```bash
+python manage.py test reservation_models.tests
+```
+
 ### Données de test
 
 ```bash
