@@ -14,9 +14,11 @@ import os
 from pathlib import Path
 from datetime import timedelta
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +41,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-AUTH_USER_MODEL = 'reservation_models.Utilisateur'
+AUTH_USER_MODEL = 'utilisateurs.Utilisateur'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -60,9 +62,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'reservation_models',
-    'preparateurs',
-    'etudiants',
+    'apps.api',
+    'apps.produits',
+    'apps.reservations',
+    'apps.utilisateurs',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +83,12 @@ ROOT_URLCONF = 'quicklab.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'templates/produits',
+            BASE_DIR / 'templates/reservations',
+            BASE_DIR / 'templates/utilisateurs',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
