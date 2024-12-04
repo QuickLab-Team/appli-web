@@ -1,0 +1,17 @@
+.produits{
+    overflow-y: scroll;
+    height: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+
+.produit{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 10px;
+}

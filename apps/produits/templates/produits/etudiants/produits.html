@@ -1,0 +1,33 @@
+{% extends 'etudiants/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/produits/etudiants/produits.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <p></p>
+        <h1>QuickLab</h1>
+    </div>
+
+    {% include 'etudiants/search_bar.html' %}
+
+    <div class="boutons">
+        <button></button>
+        <button>Disponibilité</button>
+        <button>Catégorie</button>
+    </div>
+
+    <h2>Tous les produits :</h2>
+
+    <div class="produits">
+        {% for produit in produits %}
+            <div class="produit">
+                <h3>{{ produit.nom }}</h3>
+                <a href="">Voir plus</a>
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

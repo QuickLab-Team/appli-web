@@ -1,0 +1,12 @@
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/etudiants/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/couleur.css' %}">
+{% endblock %}
+
+<div class="menu">
+    <a href=""><img src="{% static 'images/etudiants/menu/accueil.png' %}" alt="accueil"></a>
+    <a href=""><img src="{% static 'images/etudiants/menu/reservation.png' %}" alt="réservations"></a>
+    <a href=""><img src="{% static 'images/etudiants/menu/profil.png' %}" alt="profil"></a>
+    <a href=""><img src="{% static 'images/etudiants/menu/parametre.png' %}" alt="paramètres"></a>
+</div>

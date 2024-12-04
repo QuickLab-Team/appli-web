@@ -1,0 +1,12 @@
+{% load static %}
+
+{% block js %}
+<script src="{% static 'js/produits/etudiants/search.js' %}"></script>
+{% endblock %}
+
+<div class="search-bar">
+    <form action="" method="get">
+        <input type="text" name="search" id="search" placeholder="Rechercher un produit">
+        <button type="submit">Rechercher</button>
+    </form>
+</div>
