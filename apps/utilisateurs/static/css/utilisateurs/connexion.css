@@ -61,10 +61,6 @@ html{
     align-items: center;
 }
 
-.bouton__connexion:hover{
-    background-color: #0734C9;
-    color: #ffffff;
-}
 
 .form-section input{
     height: 2.5rem;
@@ -89,4 +85,9 @@ html{
     padding: 0.5rem 1rem;
     border-radius: 20px;
     cursor: pointer;
+}
+
+.form-section button:hover{
+    background-color: #0734C9;
+    color: #FFFFFF;
 }
