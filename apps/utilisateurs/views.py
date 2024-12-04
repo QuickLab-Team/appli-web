@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 def home(request):
     return render(request, 'base.html', {
@@ -37,4 +38,12 @@ def inscription(request):
     return render(request, 'preparateurs/inscription.html', {'form': form})
 
 class ConnexionView(LoginView):
-    template_name = 'connexion.html'
+    template_name = 'utilisateurs/connexion.html'
+
+def liste_utilisateurs(request):
+    User = get_user_model()
+    utilisateurs = User.objects.all()
+    return render(request, 'utilisateurs/liste_utilisateurs.html', {
+        'utilisateurs': utilisateurs
+    })
+
