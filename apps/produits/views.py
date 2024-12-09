@@ -5,7 +5,7 @@ from .models import Produit
 
 def produits(request):
     produits = Produit.objects.all()
-    return render(request, 'produits/produits.html', {
+    return render(request, 'produits/etudiants/produits.html', {
         'titre': 'QuickLab',
         'produits': produits
     })
