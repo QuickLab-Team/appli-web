@@ -1,7 +1,19 @@
 .menu{
+    display: flex;
+    justify-content: center;
+}
+
+.menu-boutons{
     padding: 10px;
+    margin: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-grow: 1;
+    max-width: 600px;
+    width: 100%;
+}
+
+.menu-boutons img{
+    width: 25px;
+    height: 25px;
 }

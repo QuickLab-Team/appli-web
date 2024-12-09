@@ -1,10 +1,19 @@
-.produits{
-    overflow-y: scroll;
-    height: 500px;
-    width: 100%;
+.content .top{
+    flex-basis: 40%;
+}
+
+.content .top .boutons{
     display: flex;
+    justify-content: space-evenly;
+    margin: 20px;
+}
+
+.produits{
+    margin-top: 20px;
+    overflow-y: scroll;
+    flex-grow: 1;
+    width: 100%;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     scrollbar-color: var(--primary-color) var(--secondary-color);
 }
@@ -13,5 +22,36 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-left: 10px;
+    background-color: var(--fourth-color);
+    margin: 0 20px;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.produit div{
+    display: flex;
+    align-items: center;
+}
+
+.produit a{
+    text-decoration: none;
+    color: white;
+    background-color: var(--primary-color);
+    padding: 5px 10px;
+    border-radius: 7px;
+}
+
+.top .boutons select{
+    padding: 3px 10px;
+    border-radius: 7px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.boutons .filtre{
+    padding: 3px;
+    border-radius: 7px;
+    background-color: var(--primary-color);
 }

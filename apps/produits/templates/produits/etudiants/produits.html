@@ -6,26 +6,33 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        <p></p>
-        <h1>QuickLab</h1>
+    <div class="top">
+        <div>
+            <p></p>
+            <h1 class="titre">QuickLab</h1>
+        </div>
+
+        {% include 'etudiants/search_bar.html' %}
+
+        <div class="boutons">
+            <img class="filtre" src="{% static 'images/etudiants/filtre.png' %}" alt="" height="35px" width="35px">
+            <select name="categorie" id="categorie-select">
+                <option value="">Catégorie</option>
+            </select>
+            <select name="disponibilite" id="disponibilite">
+                <option value="">Disponibilité</option>
+            </select>
+        </div>
     </div>
-
-    {% include 'etudiants/search_bar.html' %}
-
-    <div class="boutons">
-        <button></button>
-        <button>Disponibilité</button>
-        <button>Catégorie</button>
-    </div>
-
-    <h2>Tous les produits :</h2>
 
     <div class="produits">
         {% for produit in produits %}
             <div class="produit">
-                <h3>{{ produit.nom }}</h3>
-                <a href="">Voir plus</a>
+                <div>
+                    <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="" height="40px" width="40px">
+                    <h3>{{ produit.nom }}</h3>
+                </div>
+                <a href="">Voir +</a>
             </div>
         {% endfor %}
     </div>
