@@ -32,7 +32,7 @@
                     <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="" height="40px" width="40px">
                     <h3>{{ produit.nom }}</h3>
                 </div>
-                <a href="">Voir +</a>
+                <a href="{% url 'produit' produit.id %}">Voir +</a>
             </div>
         {% endfor %}
     </div>

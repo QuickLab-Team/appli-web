@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
-                description='Description produit {0}'.format(i),
+                description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
                 famille=famille1,
                 stockage=stockage1
             )
@@ -52,7 +52,7 @@ class Command(BaseCommand):
                 id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
-                description='Description produit {0}'.format(i),
+                description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
                 famille=famille2,
                 stockage=stockage2
             )
@@ -62,7 +62,7 @@ class Command(BaseCommand):
                 id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
-                description='Description produit {0}'.format(i),
+                description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
                 famille=famille1,
                 stockage=stockage2
             )
