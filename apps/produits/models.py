@@ -38,10 +38,32 @@ class Produit(models.Model):
     """
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100)
-    quantite = models.IntegerField()
+    quantite = models.FloatField()
     description = models.TextField()
     famille = models.ForeignKey(Famille, on_delete=models.CASCADE)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)
+    type = models.CharField(max_length=10, choices=[('liquide', 'Liquide'), ('solide', 'Solide'), ('unite', 'Unité')], default='unite')
     
     def __str__(self):
         return "{0} {1} {2}".format(self.id, self.nom, self.description)
+    
+    def add_quantite(self, quantite, unite):
+        if self.type == 'liquide':
+            switch = {
+                'l': 1,
+                'cl': 100,
+                'ml': 1000
+            }
+        elif self.type == 'solide':
+            switch = {
+                'kg': 1,
+                'g': 1000,
+                'mg': 1000000
+            }
+        else:
+            switch = {
+                'unite': 1
+            }
+        quantite = quantite * switch[unite]
+        self.quantite += quantite
+        self.save()
