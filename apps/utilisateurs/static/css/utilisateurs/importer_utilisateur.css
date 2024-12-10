@@ -1,5 +1,16 @@
-.center-button button {
-    font-size: 100%;
+.import-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15rem auto;
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.custom-file-upload {
+    font-size: 120%;
     font-family: 'Nunito';
     color: #ffffff;
     background-color: #0B1E5C;
@@ -8,4 +19,35 @@
     padding: 0.5rem 1rem;
     border-radius: 20px;
     cursor: pointer;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#file_name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+button {
+    font-size: 120%;
+    font-family: 'Nunito';
+    color: #ffffff;
+    background-color: #0B1E5C;
+    border: #0B1E5C;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
 }

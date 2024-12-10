@@ -8,19 +8,11 @@
 {% block content %}
 <h1>Importer des utilisateurs</h1>
 
-<form method="post" class="import-utilisateurs" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="import-form">
     {% csrf_token %}
-    <table>
-        <tr>
-            <td>{{ form.fichier.label_tag }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.fichier }}</td>
-        </tr>
-        <tr>
-            <td class="center-button">
-                <button>Importer</button>
-            </td>
-        </tr>
-    </table>
+    <label for="file_input" class="custom-file-upload">Choisir un fichier</label>
+    <input type="file" id="file_input" name="fichier" accept=".csv, .xlsx">
+    <span id="file_name">Aucun fichier sélectionné</span>
+    <button type="submit">Importer</button>
+</form>
 {% endblock %}

@@ -85,3 +85,6 @@ html{
     border-radius: 20px;
     cursor: pointer;
 }
+.center-button {
+    text-align: center;
+}   
