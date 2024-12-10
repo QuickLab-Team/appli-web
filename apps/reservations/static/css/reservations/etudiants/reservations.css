@@ -1,57 +1,62 @@
 .content .top{
-    flex-basis: 40%;
+    flex-basis: 25%;
 }
 
-.content .top .boutons{
+/* Style des réservations */
+.reservation {
     display: flex;
-    justify-content: space-evenly;
-    margin: 20px;
-}
-
-.produits{
-    margin-top: 20px;
-    overflow-y: scroll;
-    flex-grow: 1;
-    width: 100%;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
-    scrollbar-color: var(--primary-color) var(--secondary-color);
+    gap: 20px;
 }
 
-.produit{
+.reservations .box {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    background-color: var(--fourth-color);
-    margin: 0 20px;
-    border-radius: 7px;
-    padding: 10px;
-    margin-bottom: 10px;
+    text-align: center;
 }
 
-.produit div{
-    display: flex;
-    align-items: center;
+.reservations .box h3 {
+    font-size: 16px;
+    color: #333;
+    margin: 5px 0;
 }
 
-.produit a{
+.reservations .box h3:first-child {
+    font-weight: bold;
+}
+
+.reservations .box h3:nth-child(2) {
+    color: #555;
+}
+
+.reservations .box h3:nth-child(4) {
+    color: #3b5998;
+    font-weight: bold;
+}
+
+/* Bouton Détail */
+.reservations .box a {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #333;
+    border-radius: 5px;
     text-decoration: none;
-    color: white;
-    background-color: var(--primary-color);
-    padding: 5px 10px;
-    border-radius: 7px;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-.top .boutons select{
-    padding: 3px 10px;
-    border-radius: 7px;
-    border: none;
+.reservations .box a:hover {
     background-color: var(--primary-color);
     color: white;
-}
-
-.boutons .filtre{
-    padding: 3px;
-    border-radius: 7px;
-    background-color: var(--primary-color);
+    border: 1px solid #333;
 }

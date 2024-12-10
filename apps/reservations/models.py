@@ -9,6 +9,18 @@ class Reservation(models.Model):
     Reservation
     """
     id = models.AutoField(primary_key=True)
+    titre = models.CharField(max_length=255, default='Réservation')
+    ETAT_CHOICES = [
+        ('pret', 'Prêt'),
+        ('en_cours', 'En cours'),
+        ('termine', 'Terminé'),
+        ('en_attente', 'En attente'),
+    ]
+    etat = models.CharField(
+        max_length=20,
+        choices=ETAT_CHOICES,
+        default='en_attente',
+    )
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     
