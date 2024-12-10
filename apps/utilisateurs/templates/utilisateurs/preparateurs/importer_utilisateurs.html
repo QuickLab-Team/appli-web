@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/utilisateurs/importer_utilisateur.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Importer des utilisateurs</h1>
+
+<form method="post" enctype="multipart/form-data" class="import-form">
+    {% csrf_token %}
+    <label for="file_input" class="custom-file-upload">Choisir un fichier</label>
+    <input type="file" id="file_input" name="fichier" accept=".csv, .xlsx">
+    <span id="file_name">Aucun fichier sélectionné</span>
+    <button type="submit">Importer</button>
+</form>
+{% endblock %}

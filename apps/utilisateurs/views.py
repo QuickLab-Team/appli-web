@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 
+
 def home(request):
     return render(request, 'base.html', {
         'titre': 'QuickLab',
@@ -46,9 +47,27 @@ def deconnexion(request):
     return redirect('connexion')
 
 class ConnexionView(LoginView):
-    template_name = 'utilisateurs/connexion.html'
-    success_url = 'accueil'
-    redirect_authenticated_user = False
+    template_name = 'connexion.html'
 
-    def get_success_url(self):
-        return self.success_url
+def liste_utilisateurs(request):
+    User = get_user_model()
+    utilisateurs = User.objects.all()
+    return render(request, 'utilisateurs/preparateurs/liste_utilisateurs.html', {
+        'utilisateurs': utilisateurs
+    })
+
+
+def ajouter_utilisateur(request):
+    if request.method == 'POST':
+        form = UtilisateurForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('utilisateurs:liste_utilisateurs')
+    else:
+        form = UtilisateurForm()
+    return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})
+
+def importer_utilisateurs(request):
+    return render(request, 'utilisateurs/preparateurs/importer_utilisateurs.html', {
+        'titre': 'QuickLab',
+    })

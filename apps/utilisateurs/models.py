@@ -8,11 +8,17 @@ class Utilisateur(AbstractUser):
     """
     Utilisateur
     """
+    ROLES = [
+        ('utilisateur', 'Utilisateur'),
+        ('preparateur', 'Préparateur'),
+        ('administrateur', 'Administrateur'),
+    ]
+    
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
-    role = models.CharField(max_length=100)
+    role = models.CharField(max_length=100, choices=ROLES, default='utilisateur')
     username = None 
 
     USERNAME_FIELD = "email"

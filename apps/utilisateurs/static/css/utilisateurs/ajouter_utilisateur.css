@@ -1,0 +1,46 @@
+.ajout-utilisateur {
+    margin: 20px auto;
+    width: 50%;
+}
+
+.ajout-utilisateur table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ajout-utilisateur td {
+    padding: 10px;
+    text-align: left;
+}
+
+.ajout-utilisateur td input,
+.ajout-utilisateur td select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.center-button {
+    text-align: center;
+    padding-top: 15px;
+}
+
+.center-button button {
+    font-size: 120%;
+    font-family: 'Nunito';
+    color: #ffffff;
+    background-color: #0B1E5C;
+    border: #0B1E5C;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+

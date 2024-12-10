@@ -1,7 +1,5 @@
 __pycache__/
-<<<<<<< HEAD
-=======
 path/
 .vscode
->>>>>>> cb4b8c7 (modif pour puce ARM)
 env/
+venv/
