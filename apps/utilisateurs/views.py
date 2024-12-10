@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from .forms import UtilisateurForm
 
 def home(request):
     return render(request, 'base.html', {
@@ -43,7 +44,22 @@ class ConnexionView(LoginView):
 def liste_utilisateurs(request):
     User = get_user_model()
     utilisateurs = User.objects.all()
-    return render(request, 'utilisateurs/liste_utilisateurs.html', {
+    return render(request, 'utilisateurs/preparateurs/liste_utilisateurs.html', {
         'utilisateurs': utilisateurs
     })
 
+
+def ajouter_utilisateur(request):
+    if request.method == 'POST':
+        form = UtilisateurForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('utilisateurs:liste_utilisateurs')
+    else:
+        form = UtilisateurForm()
+    return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})
+
+def importer_utilisateurs(request):
+    return render(request, 'utilisateurs/preparateurs/importer_utilisateurs.html', {
+        'titre': 'QuickLab',
+    })

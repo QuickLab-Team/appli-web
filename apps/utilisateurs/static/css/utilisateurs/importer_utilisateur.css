@@ -1,0 +1,11 @@
+.center-button button {
+    font-size: 100%;
+    font-family: 'Nunito';
+    color: #ffffff;
+    background-color: #0B1E5C;
+    border: #0B1E5C;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
