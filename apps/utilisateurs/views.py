@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from .forms import UtilisateurForm
+from django.contrib.auth import get_user_model
 
 
 def home(request):
@@ -44,10 +46,15 @@ def inscription(request):
 def deconnexion(request):
 
     logout(request)
-    return redirect('connexion')
+    return redirect('utilisateurs:connexion')
 
 class ConnexionView(LoginView):
-    template_name = 'connexion.html'
+    template_name = 'utilisateurs/connexion.html'
+    success_url = 'accueil'
+    redirect_authenticated_user = False
+
+    def get_success_url(self):
+        return self.success_url
 
 def liste_utilisateurs(request):
     User = get_user_model()

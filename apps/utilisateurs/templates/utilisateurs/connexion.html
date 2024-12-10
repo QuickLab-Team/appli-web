@@ -18,7 +18,7 @@
         <div class="form-section">
             <div>
                 <h2>QuickLab</h2>
-                <form method="post" action="{% url 'connexion' %}">
+                <form method="post" action="{% url 'utilisateurs:connexion' %}">
                     {% csrf_token %}
                     <div class="username">
                         <label for="username">Identifiant</label>
