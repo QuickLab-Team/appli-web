@@ -21,7 +21,7 @@
                     <h3>{{ reservation.date }}</h3>
                     <h3>{{ reservation.titre }}</h3>
                     <h3>{{ reservation.etat }}</h3>
-                    <a href="">Detail de la réservation</a>
+                    <a href="{% url 'detail_reservation' reservation.id %}">Détail de la réservation</a>
                 </div>
             </div>
         {% endfor %}
