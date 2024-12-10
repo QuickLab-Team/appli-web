@@ -67,3 +67,21 @@ class Produit(models.Model):
         quantite = quantite * switch[unite]
         self.quantite += quantite
         self.save()
+
+    def get_unite(self):
+        if self.type == 'liquide':
+            if self.quantite >= 1:
+                return 'l'
+            elif self.quantite >= 0.1:
+                return 'cl'
+            else:
+                return 'ml'
+        elif self.type == 'solide':
+            if self.quantite >= 1:
+                return 'kg'
+            elif self.quantite >= 0.001:
+                return 'g'
+            else:
+                return 'mg'
+        else:
+            return 'unite'
