@@ -9,3 +9,10 @@ def produits(request):
         'titre': 'QuickLab',
         'produits': produits
     })
+
+def produit(request, produit_id):
+    produit = Produit.objects.get(id=produit_id)
+    return render(request, 'produits/etudiants/produit.html', {
+        'titre': 'QuickLab',
+        'produit': produit
+    })
