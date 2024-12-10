@@ -19,14 +19,7 @@ def accueil(request):
             'titre': 'QuickLab',
         })
     else:
-        return redirect('connexion')
-
-def produits(request):
-    produits = Produit.objects.all()
-    return render(request, 'produits.html', {
-        'titre': 'QuickLab',
-        'produits': produits
-    })
+        return redirect('utilisateurs:connexion')
 
 def inscription(request):
     if request.method == 'POST':
@@ -51,7 +44,7 @@ def deconnexion(request):
 class ConnexionView(LoginView):
     template_name = 'utilisateurs/connexion.html'
     success_url = 'accueil'
-    redirect_authenticated_user = False
+    redirect_authenticated_user = True
 
     def get_success_url(self):
         return self.success_url
