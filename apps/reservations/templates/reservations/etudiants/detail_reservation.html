@@ -9,16 +9,16 @@
 <div class="detail-container">
     <div class="header">
         <a href="{% url 'reservations' %}" class="back-button">←</a>
-        <h2>Détail de la réservation</h2>
+        <h2>Historique des réservations</h2>
     </div>
     <div class="reservation-info">
-        <h1 class="title">{{ reservation.titre }}</h1>
-        <p class="status">{{ reservation.etat }}</p>
+        <h1 class="titre">Détail de la réservation</h1>
+        <h1 class="second-titre">{{ reservation.titre }}</h1>
+        <p class="etat">{{ reservation.etat }}</p>
         <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y" }}</p>
-        <p><strong>Date de réponse :</strong> {{ reservation.date_reponse|date:"d / m / Y" }}</p>
     </div>
     <div class="products">
-        <h3>Produits réservés</h3>
+        <h3>Produits réservés :</h3>
         <ul>
             {% for produit in reservation.produits.all %}
                 <li>{{ produit.produit.nom }} - {{ produit.quantite }}ml</li>

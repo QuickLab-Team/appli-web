@@ -9,18 +9,17 @@
     <div class="top">
         <div>
             <h1 class="titre">QuickLab</h1>
-            <h1 class="titre">Vos réservations</h1>
+            <h1 class="second-titre">Vos réservations</h1>
         </div>
     </div>
 
     <div class="reservation">
         {% for reservation in reservations %}
             <div class="reservations">
+                <h3>Réservation {{ reservation.etat }}</h3>
                 <div class="box">
-                    <h3>{{ reservation.id }}</h3>
-                    <h3>{{ reservation.date }}</h3>
+                    <p class="date" >{{ reservation.date }}</p>
                     <h3>{{ reservation.titre }}</h3>
-                    <h3>{{ reservation.etat }}</h3>
                     <a href="{% url 'detail_reservation' reservation.id %}">Détail de la réservation</a>
                 </div>
             </div>
