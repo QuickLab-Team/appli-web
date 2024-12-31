@@ -3,4 +3,4 @@ djangorestframework
 djangorestframework-simplejwt
 mysqlclient
 coverage
-pandas
+# pandas
