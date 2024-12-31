@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/produits/preparateurs/importer.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Importer des produits</h1>
+
+<form method="post" enctype="multipart/form-data" class="import-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Importer</button>
+</form>
+{% endblock %}
