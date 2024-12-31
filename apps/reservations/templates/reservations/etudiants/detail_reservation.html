@@ -1,0 +1,29 @@
+{% extends 'etudiants/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/reservations/etudiants/detail_reservation.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="header">
+        <a href="{% url 'reservations' %}" class="back-button">←</a>
+        <h2>Historique des réservations</h2>
+    </div>
+    <div class="reservation-info">
+        <h1 class="titre">Détail de la réservation</h1>
+        <h1 class="second-titre">{{ reservation.titre }}</h1>
+        <p class="etat">{{ reservation.etat }}</p>
+        <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y" }}</p>
+    </div>
+    <div class="products">
+        <h3>Produits réservés :</h3>
+        <ul>
+            {% for produit in reservation.produits.all %}
+                <li>{{ produit.produit.nom }} - {{ produit.quantite }}ml</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

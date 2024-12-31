@@ -1,0 +1,29 @@
+{% extends 'etudiants/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/reservations/etudiants/reservations.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="top">
+        <div>
+            <h1 class="titre">QuickLab</h1>
+            <h1 class="second-titre">Vos réservations</h1>
+        </div>
+    </div>
+
+    <div class="reservation">
+        {% for reservation in reservations %}
+            <div class="reservations">
+                <h3>Réservation {{ reservation.etat }}</h3>
+                <div class="box">
+                    <p class="date" >{{ reservation.date }}</p>
+                    <h3>{{ reservation.titre }}</h3>
+                    <a href="{% url 'detail_reservation' reservation.id %}">Détail de la réservation</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

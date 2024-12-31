@@ -7,14 +7,21 @@ html, body{
     display: flex;
 }
 
-.titre{
+.titre, .second-titre{
     font-size: 2em;
     font-weight: bold;
     color: var(--primary-color);
 }
 
-.content .top h1{
+.second-titre{
+    margin-top: 10px;
+}
+
+.content .top .titre{
     margin-top: 20px;
+}
+
+.content .top h1{
     justify-content: center;
     display: flex;
 }
