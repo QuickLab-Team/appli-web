@@ -8,10 +8,20 @@ from .forms import FileImportForm
 
 def produits(request):
     produits = Produit.objects.all()
-    return render(request, 'produits/etudiants/produits.html', {
+
+    if request.user.role == 'etudiant':
+        return render(request, 'produits/etudiants/produits.html', {
         'titre': 'QuickLab',
         'produits': produits
     })
+
+    elif request.user.role == 'preparateur':
+        return render(request, 'produits/preparateurs/produits.html', {
+        'titre': 'QuickLab',
+        'produits': produits
+    })
+
+    
 
 # def importer(request):
 #     if request.method == 'POST':

@@ -18,7 +18,7 @@ class Utilisateur(AbstractUser):
     ]
     
     id = models.AutoField(primary_key=True)
-    role = models.CharField(max_length=100, choices=ROLES, default='utilisateur')
+    role = models.CharField(max_length=100, choices=ROLES, default='etudiant')
     email = models.EmailField(unique=True)
     prenom = models.CharField(max_length=30)
     nom = models.CharField(max_length=30)

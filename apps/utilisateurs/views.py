@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from .forms import UtilisateurForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -12,14 +13,20 @@ def home(request):
         'titre': 'QuickLab',
     })
 
+@login_required
 def accueil(request):
 
-    if request.user.is_authenticated:
-        return render(request, 'utilisateurs/accueil.html', {
-            'titre': 'QuickLab',
-        })
-    else:
-        return redirect('utilisateurs:connexion')
+    if request.user.role == 'Etudiant':
+            return render(request, 'produits/etudiants/produits.html', {
+                'titre': 'QuickLab',
+            })
+        
+    elif request.user.role == 'Preparateur' or request.user.role == 'Administrateur': 
+            return render(request, 'utilisateurs/accueil.html', {
+                'titre': 'QuickLab',
+            })
+
+    
 
 def inscription(request):
     if request.method == 'POST':
