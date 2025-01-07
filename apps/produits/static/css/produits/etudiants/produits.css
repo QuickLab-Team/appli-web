@@ -1,57 +1,89 @@
-.content .top{
-    flex-basis: 40%;
+.dispo {
+    color: green;
 }
 
-.content .top .boutons{
+.non-dispo {
+    color: red;
+}
+
+
+/* Liste des produits */
+.produits {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    margin-top: 2%;
+}
+
+.produit {
     display: flex;
-    justify-content: space-evenly;
-    margin: 20px;
-}
-
-.produits{
-    margin-top: 20px;
-    overflow-y: scroll;
-    flex-grow: 1;
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    scrollbar-color: var(--primary-color) var(--secondary-color);
-}
-
-.produit{
-    display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     background-color: var(--fourth-color);
-    margin: 0 20px;
-    border-radius: 7px;
-    padding: 10px;
-    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 0.5%;
+    margin: 0 10% 1% 10%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.produit div{
+.produit .left {
     display: flex;
     align-items: center;
+    flex-basis: 45%;
+    flex-grow: 0;
 }
 
-.produit a{
+.produit .right {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    flex-grow: 1;
+}
+
+.produit a {
+    margin-right: 5%;
     text-decoration: none;
-    color: white;
-    background-color: var(--primary-color);
-    padding: 5px 10px;
-    border-radius: 7px;
+    font-size: 1rem;
+    color: var(--primary-color);
+    position: relative;
+    transition: color 0.3s;
 }
 
-.top .boutons select{
-    padding: 3px 10px;
-    border-radius: 7px;
-    border: none;
+.produit a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
     background-color: var(--primary-color);
-    color: white;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-in-out;
 }
 
-.boutons .filtre{
-    padding: 3px;
-    border-radius: 7px;
-    background-color: var(--primary-color);
+.produit a:hover {
+    color: var(--primary-color);
+}
+
+.produit a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.produit img {
+    margin-left: 10%;
+}
+
+.produit h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.produit .produit-nom {
+    margin-left: 5%;
+    flex-grow: 1;
+}
+
+.produit .right h3 {
+    margin-right: 10%;
 }

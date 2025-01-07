@@ -6,35 +6,25 @@
 {% endblock %}
 
 {% block content %}
-    <div class="top">
-        <div>
-            <p></p>
-            <h1 class="titre">QuickLab</h1>
-        </div>
-
-        {% include 'etudiants/search_bar.html' %}
-
-        <div class="boutons">
-            <img class="filtre" src="{% static 'images/etudiants/filtre.png' %}" alt="" height="35px" width="35px">
-            <select name="categorie" id="categorie-select">
-                <option value="">Catégorie</option>
-            </select>
-            <select name="disponibilite" id="disponibilite">
-                <option value="">Disponibilité</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="produits">
+        {% include 'etudiants/header.html' %}
+        <div class="produits">
         {% for produit in produits %}
-            <div class="produit">
-                <div>
-                    <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="" height="40px" width="40px">
-                    <h3>{{ produit.nom }}</h3>
+                <div class="produit">
+                        <div class="left">
+                                <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" height="40px" width="40px">
+                                <h3 class="produit-nom">{{ produit.nom }}</h3>
+                        </div>
+                        <div class="right">
+                                <h3>{{ produit.quantite }}ml en stock</h3>
+                                {% if produit.quantite != null and produit.quantite > 0 %}
+                                        <h3 class="dispo">Disponible</h3>
+                                {% else %}
+                                        <h3 class="non-dispo">Non disponible</h3>
+                                {% endif %}
+                                <a href="{% url 'produit' produit.id %}">Voir +</a>
+                        </div>
+                        
                 </div>
-                <a href="{% url 'produit' produit.id %}">Voir +</a>
-            </div>
         {% endfor %}
-    </div>
-    
+        </div>
 {% endblock %}

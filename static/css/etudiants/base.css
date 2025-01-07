@@ -35,23 +35,27 @@ html, body{
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: 'Nunito', sans-serif;
 }
 
-.page{
-    background-color: var(--secondary-color);
-    width: 100%;
+/* Structure générale */
+html, body {
     height: 100%;
-    max-width: 900px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.content{
-    height: 92%;
+.page {
+    width: 100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.menu{
-    height: 8%;
-    width: 100%;
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }

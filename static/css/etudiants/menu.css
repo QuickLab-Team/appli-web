@@ -1,19 +1,127 @@
-.menu{
+/* Style global du menu */
+.menu {
+    width: 300px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Nunito', sans-serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
 }
 
-.menu-boutons{
-    padding: 10px;
-    margin: 0 20px;
+/* Header du menu */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.menu-header h1 {
+    margin: 0;
+}
+
+.close-menu {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #000000;
+}
+
+/* Ligne de séparation */
+hr {
+    border: 0.5px solid #ddd;
+    margin: 10px 0;
+}
+
+/* Liens principaux */
+.menu-links a {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    max-width: 600px;
-    width: 100%;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000000;
+    text-decoration: none;
+    transition: color 0.3s, border-bottom 0.3s;
+    border-bottom: 2px solid transparent; /* Effet ligne au survol */
 }
 
-.menu-boutons img{
-    width: 25px;
-    height: 25px;
+.menu-links a:hover {
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.menu-links i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* Section des catégories */
+.menu-categories {
+    padding: 0 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.category {
+    margin-bottom: 20px;
+}
+
+.category h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+/* Liste des éléments dans chaque catégorie */
+.category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category ul li {
+    margin-bottom: 10px;
+}
+
+.category ul li a {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s, border-bottom 0.3s;
+    border-bottom: 2px solid transparent; /* Effet ligne au survol */
+}
+
+.category ul li a:hover {
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Scroll dans les catégories si nécessaire */
+.menu-categories {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+.menu-categories::-webkit-scrollbar {
+    width: 6px;
+}
+
+.menu-categories::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 768px) {
+    .menu {
+        width: 100%;
+    }
 }
