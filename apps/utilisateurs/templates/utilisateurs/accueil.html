@@ -6,6 +6,8 @@
 
 {% block titre %}Accueil{% endblock %}
 
+
+{% csrf_token %}
 {% block content %}
 <div class="accueil">
     <h2>Bonjour, {{ user.nom }} 👋 !</h2>
