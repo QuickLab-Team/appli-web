@@ -18,17 +18,8 @@
 }
 
 .top-produit{
-    margin-top: 17.5%;
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-}
-
-.boutons{
-    display: flex;
-    margin: 20px;
-    z-index: 1;
-    position: relative;
 }
 
 .boutons a, .retour{
@@ -47,14 +38,21 @@
 
 .produit{
     margin: 20px;
+    max-width: 800px;
+    width: 100%;
+}
+
+.produit-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-produit-container{
+    display: flex;
+    justify-content: center;
 }
 
 .produit > *:nth-child(n) {
     margin-bottom: 20px;
-}
-
-.details {
-    margin-top: 5%;
-    display: flex;
-    justify-content: space-evenly;
 }

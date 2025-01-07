@@ -6,37 +6,17 @@
 {% endblock %}
 
 {% block content %}
+{% include 'etudiants/header.html' %}
 <div class="info-produit-container">
-    <!-- Section supérieure -->
-    <div class="top">
-        <div class="img-fond">
-            <img src="{% static 'images/etudiants/fond-logo.png' %}" alt="Fond du logo">
-        </div>
-        <div>
-            <a href="{% url 'produits' %}" class="back-button">
-                <span>&larr;</span>
-            </a>
-            <h1 class="titre">Quick Lab</h1>
-            <!-- <div class="search-bar">
-                <input type="text" placeholder="Recherche ...">
-            </div> -->
-            <a href="{% url 'produits' %}" class="retour">
-                Changer de produit
-            </a>
-        </div>
-    </div>
-
-    <!-- Section produit -->
     <div class="produit">
-        <div class="top-produit">
-            <h2>Produit : {{ produit.nom }}</h2>
+        <div class="produit-header">
+            <h2>{{ produit.nom }}</h2>
             <div class="boutons">
                 <a href="#" class="action-button">Favoris</a>
                 <a href="#" class="action-button">Réserver</a>
             </div>
         </div>
-        <p>{{ produit.description }}</p>
-        <div class="details">
+        <div class="produit-details">
             <p><strong>Stock :</strong> {{ produit.quantite }}</p>
             <p><strong>Localisation :</strong> {{ produit.stockage.nom }}</p>
         </div>
