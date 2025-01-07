@@ -1,0 +1,72 @@
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/etudiants/header.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/produits/etudiants/header.js' %}"></script>
+{% endblock %}
+
+<header class="header">
+    <div class="top">
+        <div class="logo">
+            <a href="{% url 'produits' %}">
+                Quick Lab
+            </a>
+        </div>
+        {% include 'etudiants/search_bar.html' %}
+        <nav class="nav">
+            <ul>
+                <li><a href="{% url 'produits' %}">Accueil</a></li>
+                <li><a href="#">Réservations</a></li>
+                <li><a href="#">Messagerie</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="#">Compte</a></li>
+                {% else %}
+                <li><a href="#">Connexion</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <div class="top-mobile">
+        <div class="nav">
+            <div class="menu-burger">
+                <a href="#">
+                    <img src="{% static 'images/etudiants/menu/menu_burger.png' %}" alt="menu">
+                </a>
+            </div>
+            <div class="logo">
+                <a href="#">
+                    Quick Lab
+                </a>
+            </div>
+            <div class="reservations">
+                <a href="#">
+                    <img src="{% static 'images/etudiants/menu/reservations.png' %}" alt="reservations">
+                </a>
+            </div>
+        </div>
+        {% include 'etudiants/search_bar.html' %}
+    </div>
+    <div class="bottom">
+        <div class="filtres">
+            <ul>
+
+                <li><a href="#">Tous les produits</a></li>
+                <li><a href="#">Catégories</a></li>
+                <li><a href="#">Disponible</a></li>
+                <li><a href="#">Localisation</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Favoris</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- 
+    Liste de la nav :
+"{% url 'produits' %}"
+"{% url 'produits' %}?etat=1">Catégories 
+"{% url 'produits' %}?etat=2">Disponible 
+-->
