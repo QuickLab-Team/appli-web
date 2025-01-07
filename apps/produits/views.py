@@ -15,7 +15,7 @@ def produits(request):
         'produits': produits
     })
 
-    elif request.user.role == 'preparateur':
+    elif request.user.role == 'preparateur' or request.user.role == 'administrateur': 
         return render(request, 'produits/preparateurs/produits.html', {
         'titre': 'QuickLab',
         'produits': produits

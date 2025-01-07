@@ -77,7 +77,6 @@ class Command(BaseCommand):
                 nom='Utilisateur {0}'.format(i),
                 prenom='Prenom {0}'.format(i),
                 email='nom{0}.prenom{0}@gmail.com'.format(i),
-                role='Role {0}'.format(i)
             )
             utilisateur.set_password('password{0}'.format(i))
             utilisateur.save()

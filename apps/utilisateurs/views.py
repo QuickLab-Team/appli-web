@@ -16,12 +16,12 @@ def home(request):
 @login_required
 def accueil(request):
 
-    if request.user.role == 'Etudiant':
+    if request.user.role == 'etudiant':
             return render(request, 'produits/etudiants/produits.html', {
                 'titre': 'QuickLab',
             })
         
-    elif request.user.role == 'Preparateur' or request.user.role == 'Administrateur': 
+    elif request.user.role == 'preparateur' or request.user.role == 'administrateur': 
             return render(request, 'utilisateurs/accueil.html', {
                 'titre': 'QuickLab',
             })
