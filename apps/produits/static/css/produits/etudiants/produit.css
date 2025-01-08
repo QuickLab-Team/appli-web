@@ -1,27 +1,12 @@
-.content .top{
-    flex-basis: 20%;
-}
-
-.img-fond img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 20%;
-}
-
-.titre {
-    text-align: center;
-    margin-bottom: 20px;
-    z-index: 1;
-    position: relative;
-}
-
 .top-produit{
-    margin-top: 17.5%;
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    margin: 2%;
+}
+
+.top-produit .mobile {
+    display: none;
 }
 
 .boutons{
@@ -31,7 +16,7 @@
     position: relative;
 }
 
-.boutons a, .retour{
+.boutons a {
     text-decoration: none;
     color: white;
     background-color: var(--primary-color);
@@ -46,15 +31,98 @@
 }
 
 .produit{
-    margin: 20px;
+    margin: 2%;
 }
 
-.produit > *:nth-child(n) {
-    margin-bottom: 20px;
+.produit > p {
+    font-size: 1.1em;
+    line-height: 1.5;
+    text-align: justify;
+    margin: 3%;
 }
 
 .details {
-    margin-top: 5%;
+    margin: 5%;
     display: flex;
     justify-content: space-evenly;
+}
+
+.details > div {
+    text-align: center;
+}
+
+.details div p {
+    font-size: 1.1em;
+    margin-top: 5%;
+}
+
+
+@media (max-width: 768px) {
+    .top-produit .mobile {
+        display: block;
+    }
+
+    .top-produit .pc {
+        display: none;
+    }
+
+    .boutons a {
+        font-size: 0.7rem;
+    }
+
+    .produit h2{
+        font-size: 1.3rem;
+        margin-left: 3%;
+    }
+
+    .produit > p {
+        font-size: 0.9rem;
+    }
+
+    .details {
+        margin: 10% 12.5%;
+        justify-content: space-between;
+    }
+
+    .details div p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-produit {
+        margin: 2%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        text-align: center;
+        gap: 0;
+    }
+
+    .boutons a {
+        font-size: 0.6rem;
+    }
+
+    .produit h2{
+        font-size: 1.2rem;
+        margin: 2.5%;
+    }
+
+    .produit > p {
+        font-size: 0.7rem;
+        margin: 5%;
+    }
+
+    .details div p {
+        font-size: 0.7rem;
+    }
+
+    .details {
+        margin: 10% 5%;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
 }
