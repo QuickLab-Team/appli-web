@@ -6,17 +6,10 @@
 {% endblock %}
 
 {% block content %}
-    <div class="top">
-        <div>
-            <h1 class="titre">QuickLab</h1>
-            <h1 class="second-titre">Vos réservations</h1>
-        </div>
-    </div>
-
+    {% include 'etudiants/header.html' %}
     <div class="reservation">
         {% for reservation in reservations %}
             <div class="reservations">
-                <h3>Réservation {{ reservation.etat }}</h3>
                 <div class="box">
                     <p class="date" >{{ reservation.date }}</p>
                     <h3>{{ reservation.titre }}</h3>

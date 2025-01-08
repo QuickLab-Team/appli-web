@@ -13,7 +13,7 @@
             <h2>{{ produit.nom }}</h2>
             <div class="boutons">
                 <a href="#" class="action-button">Favoris</a>
-                <a href="#" class="action-button">Réserver</a>
+                <a href="{% url 'ajout_panier' produit.id %}" class="action-button">Réserver</a>
             </div>
         </div>
         <div class="produit-details">

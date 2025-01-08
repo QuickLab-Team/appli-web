@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Reservation
+from .models import Reservation, ReservationProduit
+from produits.models import Produit
+from django.shortcuts import redirect
 
 # Vue pour la liste des réservations
 def reservations(request):
@@ -15,3 +17,9 @@ def detail_reservation(request, reservation_id):
     return render(request, 'reservations/etudiants/detail_reservation.html', {
         'reservation': reservation
     })
+
+def ajout_panier(request, produit_id):
+    produit = get_object_or_404(Produit, id=produit_id)
+    panier = Reservation.objects.get_or_create(utilisateur=request.user, etat='panier')[0]
+    ReservationProduit.objects.create(reservation=panier, produit=produit, quantite=1)
+    return redirect('produit', produit_id=produit_id)
