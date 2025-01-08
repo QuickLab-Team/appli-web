@@ -87,3 +87,53 @@
 .produit .right h3 {
     margin-right: 10%;
 }
+
+
+/* Responsive design */
+@media (max-width: 1010px) {
+    .produit h3 {
+        font-size: 0.9rem;
+        font-weight: 350;
+    }
+
+    .produit a {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .produit .right h3 {
+        display: none;
+    }
+
+    .produit .right {
+        justify-content: center;
+    }
+
+    .produit .left {
+        flex-basis: 80%;
+    }
+
+    .produit a {
+        font-size: 0.9rem;
+    }
+
+    .produit {
+        margin: 0 10% 2% 10%;
+    }
+}
+
+@media (max-width: 456px) {
+    .produit h3 {
+        font-size: 0.7rem;
+    }
+
+    .produit a {
+        font-size: 0.7rem;
+    }
+
+    .produit {
+        margin: 0 10% 3% 10%;
+    }
+}
+
