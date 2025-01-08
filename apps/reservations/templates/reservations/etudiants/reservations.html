@@ -7,14 +7,12 @@
 
 {% block content %}
     {% include 'etudiants/header.html' %}
-    <div class="reservation">
+    <div class="reservation-content">
         {% for reservation in reservations %}
-            <div class="reservations">
-                <div class="box">
-                    <p class="date" >{{ reservation.date }}</p>
-                    <h3>{{ reservation.titre }}</h3>
-                    <a href="{% url 'detail_reservation' reservation.id %}">Détail de la réservation</a>
-                </div>
+            <div class="box">
+                <p class="date" >{{ reservation.date }}</p>
+                <h3>{{ reservation.titre }}</h3>
+                <a href="{% url 'detail_reservation' reservation.id %}">Détail de la réservation</a>
             </div>
         {% endfor %}
     </div>
