@@ -1,24 +1,5 @@
-/* Styles généraux */
-.header {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-}
-
-.back-button {
-    text-decoration: none;
-    font-size: 20px;
-    margin-right: 10px;
-    color: #333;
-}
-
-.header h2 {
-    font-size: 18px;
-    color: #333;
-    margin: 0;
-}
-
 .reservation-info {
+    margin-top: 3%;
     padding: 20px;
     text-align: center;
 }
@@ -30,9 +11,12 @@
 }
 
 .products {
-    padding: 20px;
+    margin: 0 10%;
+    padding: 2%;
     background-color: #f9f9f9;
     border-radius: 10px;
+    max-height: 45vh;
+    overflow-y: auto;
 }
 
 .products h3 {
@@ -52,14 +36,6 @@
 }
 
 @media (max-width: 768px) {
-    .back-button {
-        font-size: 18px;
-    }
-
-    .header h2 {
-        font-size: 16px;
-    }
-
     .reservation-info {
         padding: 15px;
     }
@@ -86,18 +62,6 @@
 }
 
 @media (max-width: 480px) {
-    .header {
-        padding: 5px;
-    }
-
-    .back-button {
-        font-size: 16px;
-    }
-
-    .header h2 {
-        font-size: 14px;
-    }
-
     .reservation-info {
         padding: 10px;
     }
@@ -111,7 +75,10 @@
     }
 
     .products {
-        padding: 10px;
+        margin: 5%;
+        padding: 2%;
+        background-color: #f9f9f9;
+        border-radius: 10px;
     }
 
     .products h3 {
@@ -120,5 +87,9 @@
 
     .products li {
         font-size: 12px;
+    }
+    
+    p {
+        font-size: 13px;
     }
 }
