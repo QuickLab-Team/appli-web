@@ -11,6 +11,7 @@ class Reservation(models.Model):
     id = models.AutoField(primary_key=True)
     titre = models.CharField(max_length=255, default='Réservation')
     ETAT_CHOICES = [
+        ('panier', 'Panier'),
         ('pret', 'Prêt'),
         ('en_cours', 'En cours'),
         ('termine', 'Terminé'),
@@ -19,7 +20,7 @@ class Reservation(models.Model):
     etat = models.CharField(
         max_length=20,
         choices=ETAT_CHOICES,
-        default='en_attente',
+        default='panier',
     )
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
