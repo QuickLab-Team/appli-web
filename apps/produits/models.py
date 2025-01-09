@@ -31,7 +31,17 @@ class Famille(models.Model):
     
     def __str__(self):
         return "{0} {1}".format(self.id, self.nom)
+
+class Fournisseur(models.Model):
+    """
+    Fournisseur
+    """
+    id = models.AutoField(primary_key=True)
+    nom = models.CharField(max_length=100)
     
+    def __str__(self):
+        return "{0} {1}".format(self.id, self.nom)
+
 class Produit(models.Model):
     """
     Produit
@@ -39,6 +49,8 @@ class Produit(models.Model):
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100)
     quantite = models.FloatField()
+    fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE, null=True, blank=True)
+    fonctions = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     famille = models.ForeignKey(Famille, on_delete=models.CASCADE)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)

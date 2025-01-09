@@ -81,6 +81,15 @@ class Command(BaseCommand):
             utilisateur.set_password('password{0}'.format(i))
             utilisateur.save()
 
+        Utilisateur.objects.create_superuser(
+            nom='Admin',
+            prenom='Admin',
+            email='admin@gmail.com',
+            password='admin',
+            role='administrateur'
+        )
+
+
         # Réservations
         for i in range(1, 5):
             reservation = Reservation.objects.create(

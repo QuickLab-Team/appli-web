@@ -21,7 +21,7 @@ docker compose up
 ### Lancement sur puce ARM
 
 ```bash
-docker compose -f  docker-compose-arm.yml up
+docker compose -f docker-compose-arm.yml up
 ```
 
 Dans le terminal du container web
