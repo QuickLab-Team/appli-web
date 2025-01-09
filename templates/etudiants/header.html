@@ -20,9 +20,8 @@
             <ul>
                 <li><a href="{% url 'produits' %}">Accueil</a></li>
                 <li><a href="#">Réservations</a></li>
-                <li><a href="#">Messagerie</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="#">Compte</a></li>
+                <li><a href="#">Déconnexion</a></li>
                 {% else %}
                 <li><a href="#">Connexion</a></li>
                 {% endif %}
@@ -33,7 +32,7 @@
         <div class="nav">
             <div class="menu-burger">
                 <a href="#">
-                    <img src="{% static 'images/etudiants/menu/menu_burger.png' %}" alt="menu">
+                    <img src="{% static 'images/etudiants/menu/menu_burger.webp' %}" alt="menu">
                 </a>
             </div>
             <div class="logo">
