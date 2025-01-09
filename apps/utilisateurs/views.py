@@ -147,11 +147,13 @@ def importer_utilisateurs(request):
 
         for utilisateur in utilisateurs_preview:
             Utilisateur.objects.create(
+                password=utilisateur["prenom"],
                 prenom=utilisateur["prenom"],
                 nom=utilisateur["nom"],
                 email=utilisateur["email"],
                 groupe=utilisateur["groupe"],
                 annee=annee,
+                role="etudiant"
             )
 
         del request.session["utilisateurs_preview"]
