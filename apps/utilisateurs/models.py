@@ -12,17 +12,23 @@ class Utilisateur(AbstractUser):
     ]
     
     ANNEES = [
-        ('1A', '1ère Année'),
-        ('2A', '2ème Année'),
-        ('3A', '3ème Année'),
+        ('1ère année', '1ère année'),
+        ('2ème année', '2ème année'),
+        ('3ème année', '3ème année'),
     ]
-    
+    GROUPS = [
+        ('Groupe 1', 'Groupe 1'),
+        ('Groupe 2', 'Groupe 2'),
+        ('Groupe 3', 'Groupe 3'),
+        ('Groupe 4', 'Groupe 4'),
+    ]
     id = models.AutoField(primary_key=True)
     role = models.CharField(max_length=100, choices=ROLES, default='etudiant')
     email = models.EmailField(unique=True)
     prenom = models.CharField(max_length=30)
     nom = models.CharField(max_length=30)
-    annee = models.CharField(max_length=2, choices=ANNEES, blank=True, null=True)
+    annee = models.CharField(max_length=100, choices=ANNEES, blank=True, null=True)
+    groupe = models.CharField(max_length=100, choices=GROUPS, blank=True, null=True)
     username = None 
 
     USERNAME_FIELD = 'email'

@@ -1,0 +1,19 @@
+<tbody>
+    {% for utilisateur in utilisateurs %}
+    <tr>
+        <td>{{ utilisateur.nom }}</td>
+        <td>{{ utilisateur.prenom }}</td>
+        <td>{{ utilisateur.email }}</td>
+        <td>{{ utilisateur.get_role_display }}</td>
+        <td>{{ utilisateur.annee }}</td>
+        <td>{{ utilisateur.groupe }}</td>
+        <td>
+            {% if utilisateur.last_login %}
+                {{ utilisateur.last_login|date:"d/m/Y H:i" }}
+            {% else %}
+                Jamais connecté
+            {% endif %}
+        </td>                
+    </tr>
+    {% endfor %}
+</tbody>

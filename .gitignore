@@ -3,3 +3,4 @@ path/
 .vscode
 env/
 venv/
+.sqlite3

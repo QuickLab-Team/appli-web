@@ -7,6 +7,31 @@
 
 {% block content %}
 
+<div class="filters">
+    <input type="text" name="q" placeholder="Rechercher un utilisateur" value="{{ query }}">
+    
+    <select name="role">
+        <option value="">Tous les rôles</option>
+        {% for key, value in roles %}
+            <option value="{{ key }}" {% if key == selected_role %}selected{% endif %}>{{ value }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="annee">
+        <option value="">Toutes les années</option>
+        {% for key, value in annees %}
+            <option value="{{ key }}" {% if key == selected_annee %}selected{% endif %}>{{ value }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="groupe">
+        <option value="">Tous les groupes</option>
+        {% for key, value in groupes %}
+            <option value="{{ key }}" {% if key == selected_groupe %}selected{% endif %}>{{ value }}</option>
+        {% endfor %}
+    </select>
+</div>
+
 <div class="cadre-table-scroll">
     <table class="table-scroll">
         <thead>
@@ -15,27 +40,43 @@
                 <th>Prénom</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Année</th>
+                <th>Groupe</th>
                 <th>Dernière connexion</th>
             </tr>
         </thead>
-        <tbody>
-            {% for utilisateur in utilisateurs %}
-            <tr>
-                <td>{{ utilisateur.nom }}</td>
-                <td>{{ utilisateur.prenom }}</td>
-                <td>{{ utilisateur.email }}</td>
-                <td>{{ utilisateur.role }}</td>
-                <td>
-                    {% if utilisateur.last_login %}
-                        {{ utilisateur.last_login|date:"d/m/Y H:i" }}
-                    {% else %}
-                        Jamais connecté
-                    {% endif %}
-                </td>                
-            </tr>
-            {% endfor %}
-        </tbody>
+        {% include 'utilisateurs/includes/utilisateurs_table.html' %}
     </table>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const filters = document.querySelectorAll('input[name="q"], select[name="role"], select[name="annee"], select[name="groupe"]');
+        
+        filters.forEach(filter => {
+            filter.addEventListener("input", function() {
+                updateTable();
+            });
+        });
+    
+        function updateTable() {
+            const query = document.querySelector('input[name="q"]').value;
+            const role = document.querySelector('select[name="role"]').value;
+            const annee = document.querySelector('select[name="annee"]').value;
+            const groupe = document.querySelector('select[name="groupe"]').value;
+    
+            const params = new URLSearchParams({ q: query, role: role, annee: annee, groupe: groupe });
+    
+            fetch("?" + params.toString(), {
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector("table.table-scroll tbody").innerHTML = data.html;
+            })
+            .catch(error => console.error("Erreur:", error));
+        }
+    });
+</script>    
 
 {% endblock %}
