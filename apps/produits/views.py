@@ -8,6 +8,7 @@ import csv
 from io import TextIOWrapper
 import pandas as pd
 
+from paniers.models import Panier
 
 # Create your views here.
 
@@ -72,7 +73,9 @@ def importer_produits(request):
 
 def produit(request, produit_id):
     produit = Produit.objects.get(id=produit_id)
+    panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
     return render(request, 'produits/etudiants/produit.html', {
         'titre': 'QuickLab',
-        'produit': produit
+        'produit': produit,
+        'in_panier': panier.produits.filter(produit=produit).exists()
     })

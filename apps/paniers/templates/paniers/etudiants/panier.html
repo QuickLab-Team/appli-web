@@ -1,0 +1,29 @@
+{% extends 'etudiants/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/paniers/etudiants/panier.css' %}">
+{% endblock %}
+
+{% block content %}
+        {% include 'etudiants/header.html' %}
+        <div class="produits">
+            {% for produit_panier in panier.produits.all %}
+                <div class="produit">
+                    <div class="left">
+                        <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" height="40px" width="40px">
+                        <h3 class="produit-nom">{{ produit_panier.produit.nom }}</h3>
+                    </div>
+                    <div class="right">
+                        <h3>{{ produit_panier.get_quantite }} {{ produit_panier.get_unite }}</h3>
+                        {% if produit_panier.quantite != null and produit_panier.produit.quantite > 0 %}
+                                <h3 class="dispo">Disponible</h3>
+                        {% else %}
+                                <h3 class="non-dispo">Non disponible</h3>
+                        {% endif %}
+                        <a href="{% url 'produit' produit_panier.produit.id %}">Voir +</a>
+                    </div>
+                </div>
+        {% endfor %}
+        </div>
+{% endblock %}
