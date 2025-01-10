@@ -5,6 +5,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.menu {
+    display: none;
+}
+
 /* Partie supérieure du header */
 .header .top {
     display: flex;
