@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .models import Produit
 from django.contrib import messages
 from .forms import FileImportForm
+from paniers.models import Panier
 
 # Create your views here.
 
@@ -55,7 +56,9 @@ def produits(request):
 
 def produit(request, produit_id):
     produit = Produit.objects.get(id=produit_id)
+    panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
     return render(request, 'produits/etudiants/produit.html', {
         'titre': 'QuickLab',
-        'produit': produit
+        'produit': produit,
+        'in_panier': panier.produits.filter(produit=produit).exists()
     })

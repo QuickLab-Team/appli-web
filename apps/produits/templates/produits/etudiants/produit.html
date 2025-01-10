@@ -12,8 +12,12 @@
             <h2 class="pc">Produit : {{ produit.nom }}</h2>
             <h2 class="mobile">{{ produit.nom }}</h2>
             <div class="boutons">
-                <a href="#" class="action-button">Favoris</a>
-                <a href="#" class="action-button">Réserver</a>
+                <a href="#" class="action-bouton">Favoris</a>
+                {% if in_panier %}
+                    <a href="{% url 'suppression_panier' produit.id %}" class="action-bouton">Supprimer du panier</a>
+                {% else %}
+                    <a href="#" class="action-bouton" id="reserver-bouton">Ajouter au panier</a>
+                {% endif %}
             </div>
         </div>
         <p>{{ produit.description }}</p>
@@ -29,4 +33,29 @@
         </div>
     </div>
 </div>
+
+<div id="popup" style="display: none;">
+    <form action="{% url 'ajout_panier' produit.id %}" method="POST">
+        {% csrf_token %}
+        <label for="quantite">Quantité :</label>
+        <input type="number" id="quantite" name="quantite">
+        <select name="unite">
+            {% for unite in produit.get_unites %}
+                <option value="{{ unite }}">{{ unite }}</option>
+            {% endfor %}
+        </select>
+        <button id="confirmer-bouton">Confirmer</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("reserver-bouton").addEventListener("click", function() {
+        document.getElementById("popup").style.display = "block";
+    });
+
+    document.getElementById("confirmer-bouton").addEventListener("click", function() {
+        var quantity = document.getElementById("quantite").value;
+        document.getElementById("popup").style.display = "none";
+    });
+</script>
 {% endblock %}
