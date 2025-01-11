@@ -4,26 +4,38 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/paniers/etudiants/panier.css' %}">
 {% endblock %}
+{% block js %}
+<script src="{% static 'js/paniers/etudiants/panier.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+{% endblock %}
 
 {% block content %}
         {% include 'etudiants/header.html' %}
-        <div class="produits">
-            {% for produit_panier in panier.produits.all %}
-                <div class="produit">
-                    <div class="left">
-                        <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" height="40px" width="40px">
-                        <h3 class="produit-nom">{{ produit_panier.produit.nom }}</h3>
+        {% if panier.produits.count > 0 %}
+            <h1>Votre panier</h1>
+            <div class="produits">
+                {% for produit_panier in panier.produits.all %}
+                    <div class="produit">
+                        <div class="left">
+                            <h3>{{ produit_panier.produit.nom }}</h3>
+                            <h4>{{ produit_panier.produit.famille.nom }}</h4>
+                        </div>
+                        <div class="right">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="update-lien" value="{% url 'modifier_quantite' produit_panier.id %}">
+                            <input id="quantite-input" type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="quantite-input">
+                            <select name="unite" class="unite-input">
+                                {% for unite in produit_panier.produit.get_unites %}
+                                    <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
+                                {% endfor %}
+                            </select>
+                            <a href="{% url 'suppression_panier' produit_panier.produit.id %}">Supprimer</a>
+                        </div>
                     </div>
-                    <div class="right">
-                        <h3>{{ produit_panier.get_quantite }} {{ produit_panier.get_unite }}</h3>
-                        {% if produit_panier.quantite != null and produit_panier.produit.quantite > 0 %}
-                                <h3 class="dispo">Disponible</h3>
-                        {% else %}
-                                <h3 class="non-dispo">Non disponible</h3>
-                        {% endif %}
-                        <a href="{% url 'produits:produit' produit_panier.produit.id %}">Voir +</a>
-                    </div>
-                </div>
-        {% endfor %}
-        </div>
+            {% endfor %}
+            <a href="{% url 'reserver_panier' %}">Reserver</a>
+            </div>
+        {% else %}
+            <h1>Votre panier est vide</h1>
+        {% endif %}
 {% endblock %}

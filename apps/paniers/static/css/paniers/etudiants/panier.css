@@ -6,6 +6,10 @@
     color: red;
 }
 
+h1{
+    text-align: center;
+    margin-top: 2%;
+}
 
 /* Liste des produits */
 .produits {
@@ -27,9 +31,13 @@
 
 .produit .left {
     display: flex;
-    align-items: center;
     flex-basis: 45%;
     flex-grow: 0;
+    flex-direction: column;
+}
+
+.produit .left h4{
+    margin-left: 10px;
 }
 
 .produit .right {
@@ -77,11 +85,6 @@
 .produit h3 {
     font-size: 1.2rem;
     font-weight: 400;
-}
-
-.produit .produit-nom {
-    margin-left: 5%;
-    flex-grow: 1;
 }
 
 .produit .right h3 {

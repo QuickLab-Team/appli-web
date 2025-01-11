@@ -19,12 +19,9 @@
         <nav class="nav">
             <ul>
                 <li><a href="{% url 'produits:produits' %}">Accueil</a></li>
-                <li><a href="#">Réservations</a></li>
-                {% if user.is_authenticated %}
+                <li><a href="{% url 'reservations' %}">Réservations</a></li>
+                <li><a href="{% url 'panier' %}">Panier</a></li>
                 <li><a href="#">Déconnexion</a></li>
-                {% else %}
-                <li><a href="#">Connexion</a></li>
-                {% endif %}
             </ul>
         </nav>
     </div>

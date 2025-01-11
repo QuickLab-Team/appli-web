@@ -17,8 +17,8 @@
         <div class="products">
             <h3>Produits réservés :</h3>
             <ul>
-                {% for produit in reservation.produits.all %}
-                    <li>{{ produit.produit.nom }} - {{ produit.quantite }}ml</li>
+                {% for produit_reservation in reservation.produits.all %}
+                    <li>{{ produit_reservation.produit.nom }} - {{ produit_reservation.get_quantite }} {{ produit_reservation.get_unite }}</li>
                 {% endfor %}
             </ul>
         </div>

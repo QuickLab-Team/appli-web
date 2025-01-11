@@ -1,5 +1,6 @@
 from django.test import TestCase
-from reservation_models.models import *
+from reservations.models import *
+from produits.models import *
 import datetime
 
 class ReservationModelTest(TestCase):
