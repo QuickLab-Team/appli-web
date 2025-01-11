@@ -11,14 +11,14 @@
 <header class="header">
     <div class="top">
         <div class="logo">
-            <a href="{% url 'produits' %}">
+            <a href="{% url 'produits:produits' %}">
                 Quick Lab
             </a>
         </div>
         {% include 'etudiants/search_bar.html' %}
         <nav class="nav">
             <ul>
-                <li><a href="{% url 'produits' %}">Accueil</a></li>
+                <li><a href="{% url 'produits:produits' %}">Accueil</a></li>
                 <li><a href="#">Réservations</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="#">Déconnexion</a></li>
@@ -84,10 +84,3 @@
         menu.style.display = 'none';
     });
 </script>
-
-<!-- 
-    Liste de la nav :
-"{% url 'produits' %}"
-"{% url 'produits' %}?etat=1">Catégories 
-"{% url 'produits' %}?etat=2">Disponible 
--->
