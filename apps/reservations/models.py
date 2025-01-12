@@ -4,6 +4,19 @@ from produits.models import Produit, conversion_liquides, conversion_solides
 
 # Create your models here.
 
+class MessageReservation(models.Model):
+    """
+    MessageReservation
+    """
+    id = models.AutoField(primary_key=True)
+    message = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    reservation = models.ForeignKey('Reservation', related_name='messages', on_delete=models.CASCADE)
+    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return "{0}".format(self.message)
+
 class Reservation(models.Model):
     """
     Reservation
@@ -11,7 +24,6 @@ class Reservation(models.Model):
     id = models.AutoField(primary_key=True)
     titre = models.CharField(max_length=255, default='Réservation')
     ETAT_CHOICES = [
-        ('panier', 'Panier'),
         ('pret', 'Prêt'),
         ('en_cours', 'En cours'),
         ('termine', 'Terminé'),
@@ -20,10 +32,10 @@ class Reservation(models.Model):
     etat = models.CharField(
         max_length=20,
         choices=ETAT_CHOICES,
-        default='panier',
+        default='en_cours',
     )
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return "{0}".format(self.utilisateur)

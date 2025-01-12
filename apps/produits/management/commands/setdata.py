@@ -90,20 +90,20 @@ class Command(BaseCommand):
         )
 
 
-        # Réservations
-        for i in range(1, 5):
-            reservation = Reservation.objects.create(
-                id=i,
-                utilisateur=Utilisateur.objects.get(id=random.randint(1, 19)),
-                date='2021-01-01'
-            )
+        # # Réservations
+        # for i in range(1, 5):
+        #     reservation = Reservation.objects.create(
+        #         id=i,
+        #         utilisateur=Utilisateur.objects.get(id=random.randint(1, 19)),
+        #         date='2021-01-01'
+        #     )
 
-        #Réservations Produits
-        for i in range(1, 15):
-            reservation_produit = ReservationProduit.objects.create(
-                reservation=Reservation.objects.get(id=random.randint(1, 4)),
-                produit=Produit.objects.get(id=random.randint(1, 14)),
-                quantite=random.randint(1, 10)
-            )
+        # #Réservations Produits
+        # for i in range(1, 15):
+        #     reservation_produit = ReservationProduit.objects.create(
+        #         reservation=Reservation.objects.get(id=random.randint(1, 4)),
+        #         produit=Produit.objects.get(id=random.randint(1, 14)),
+        #         quantite=random.randint(1, 10)
+        #     )
 
         self.stdout.write('Données créées avec succès !')

@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateQuantite(quantite, unite, lien){
-    console.log(quantite, lien);
     $.ajax({
         url: lien,
         method: 'POST',
