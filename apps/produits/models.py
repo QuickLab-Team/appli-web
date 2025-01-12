@@ -63,7 +63,6 @@ class Produit(models.Model):
     nom = models.CharField(max_length=100)
     quantite = models.FloatField()
     fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE, null=True, blank=True)
-    fonctions = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     famille = models.ForeignKey(Famille, on_delete=models.CASCADE)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)
@@ -84,9 +83,22 @@ class Produit(models.Model):
             else:
                 raise ValueError(f"Unité invalide pour un solide : {unite}")
         else:
-            self.quantite += quantite
-            
+            switch = {
+                'unite': 1
+            }
+        quantite = quantite / switch[unite]
+        self.quantite += quantite
         self.save()
+
+    
+    def add_type(self, unite):
+        if 'l' in unite:
+            self.type = 'liquide'
+        elif 'g' in unite:
+            self.type = 'solide'
+        else:
+            self.type = 'unite'
+
 
     def get_quantite(self):
         if self.type == 'liquide':

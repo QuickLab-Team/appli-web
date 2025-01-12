@@ -19,7 +19,7 @@
     </select>
 
     <select name="stockage" class="dropdown" title="Stockages des produits" onchange="this.form.submit()">
-        <option value="">Stockages</option>
+        <option value="">Tous les stockages</option>
         {% for s in stockage %}
         <option value="{{ s.id }}">{{ s.nom }}</option>
         {% endfor %}
@@ -48,8 +48,8 @@
             <tr>
                 <td>{{ produit.nom }}</td>
                 <td>{{ produit.quantite }}</td>
-                <td>{{ produit.fournisseur }}</td>
-                <td></td>
+                <td> {{produit.get_unite}}</td>
+                <td>{{ produit.fournisseur.nom }}</td>
                 <td>{{ produit.famille.nom }}</td>
                 <td>{{ produit.stockage.nom }}</td>
                 <td></td>
@@ -60,3 +60,6 @@
 </div>
 
 {% endblock %}
+
+
+

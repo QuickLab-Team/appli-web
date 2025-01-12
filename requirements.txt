@@ -4,3 +4,4 @@ djangorestframework-simplejwt
 mysqlclient
 coverage
 pandas
+openpyxl

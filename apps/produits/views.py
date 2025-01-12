@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 import csv
 from io import TextIOWrapper
 import pandas as pd
+import openpyxl
 
 from paniers.models import Panier
 
@@ -70,6 +71,62 @@ def importer_produits(request):
         })
     
     return render(request, 'produits/preparateurs/importer.html')
+
+
+def importer_utilisateurs(request):
+    produits_preview = []
+
+    if request.method == "POST" and "fichier" in request.FILES:
+        fichier = request.FILES["fichier"]
+        df = pd.read_excel(fichier, skiprows=3)
+
+        for _, row in df.iterrows():
+
+            quantite = 0.0
+
+            if row["Quantité"]:
+                quantite_str = str(row["Quantité"])
+                quantite = ''.join(filter(str.isdigit, quantite_str))
+                unite = ''.join(filter(str.isalpha, quantite_str)).lower()
+                quantite = float(quantite) if quantite else 0.0
+
+            
+            produits_preview.append({
+                "nom": row["Produits"],
+                "fournisseur": row["Fournisseur"],
+                "quantite": quantite,
+                "unite": unite,
+                "famille": row["Fonction"],
+                "stockage": row["Lieu de stockage"],
+            })
+
+        request.session["produits_preview"] = produits_preview
+
+    elif request.method == "POST" and "importer" in request.POST:
+        produits_preview = request.session.get("produits_preview", [])
+
+        for produit in produits_preview:
+                
+                
+                p = Produit.objects.create(
+                    nom=produit["nom"],
+                    famille=Famille.objects.get_or_create(nom=produit["famille"])[0],
+                    fournisseur=Fournisseur.objects.get_or_create(nom=produit["fournisseur"])[0],
+                    quantite=0.0,
+                    stockage=Stockage.objects.get_or_create(nom=produit["stockage"], service=Stockage.objects.first().service)[0],
+                )
+
+                if produit["quantite"] and produit["unite"]:
+                    p.add_type(produit["unite"])
+                    p.add_quantite(produit["quantite"], produit["unite"])
+
+        del request.session["produits_preview"]
+        return redirect("liste_produits")
+
+    return render(request, "produits/preparateurs/importer.html", {
+        "produits_preview": produits_preview
+    })
+
 
 def produit(request, produit_id):
     produit = Produit.objects.get(id=produit_id)
