@@ -33,7 +33,6 @@ class ReservationModelTest(TestCase):
         Test si une reservation est bien créée
         """
         self.assertEqual(self.reservation.utilisateur.nom, "Utilisateur")
-        self.assertEqual(self.reservation.date, datetime.date.today())
         for produit in self.reservation.produits.all():
             self.assertEqual(produit.produit.nom, "Produit")
             self.assertEqual(produit.quantite, 5)

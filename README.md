@@ -3,7 +3,7 @@
 ### Lancement des tests
 
 ```bash
-python manage.py test reservation_models.tests
+python manage.py test apps
 ```
 
 ### Données de test
