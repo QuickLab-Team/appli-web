@@ -1,7 +1,10 @@
 from django.core.management.base import BaseCommand
+from django.db import connection
 from produits.models import *
 from reservations.models import *
 import random
+from paniers.models import PanierProduit, Panier
+
 
 class Command(BaseCommand):
     help = 'Ajoute des données en BD'
@@ -10,13 +13,18 @@ class Command(BaseCommand):
 
         self.stdout.write('Suppression des données...')
 
+        with connection.cursor() as cursor:
+            cursor.execute("DROP TABLE IF EXISTS produits_fournisseur")
+
+        PanierProduit.objects.all().delete()
+        Panier.objects.all().delete()
+        ReservationProduit.objects.all().delete()
+        Reservation.objects.all().delete()
+        Produit.objects.all().delete()
+        Stockage.objects.all().delete()
         Famille.objects.all().delete()
         Service.objects.all().delete()
-        Stockage.objects.all().delete()
-        Produit.objects.all().delete()
         Utilisateur.objects.all().delete()
-        Reservation.objects.all().delete()
-        ReservationProduit.objects.all().delete()
 
         self.stdout.write('Données supprimées avec succès !')
 
@@ -90,7 +98,7 @@ class Command(BaseCommand):
         )
 
 
-        # # Réservations
+        #  Réservations
         # for i in range(1, 5):
         #     reservation = Reservation.objects.create(
         #         id=i,

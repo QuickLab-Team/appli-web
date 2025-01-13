@@ -9,6 +9,9 @@
     border-radius: 8px;
 }
 
+
+
+
 .custom-file-upload {
     font-size: 120%;
     font-family: 'Nunito';
@@ -79,15 +82,27 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    color: #333;
 }
 
 table th, table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px;
     text-align: left;
 }
 
 table th {
-    background-color: #f2f2f2;
+    background-color: #0B1E5C;
+    color: #ffffff;
     font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
 }

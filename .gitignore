@@ -3,3 +3,5 @@ path/
 .vscode
 env/
 venv/
+.csv
+.xlsx

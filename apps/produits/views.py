@@ -88,15 +88,21 @@ def importer_utilisateurs(request):
                 quantite_str = str(row["Quantité"])
                 quantite = ''.join(filter(str.isdigit, quantite_str))
                 unite = ''.join(filter(str.isalpha, quantite_str)).lower()
-                quantite = float(quantite) if quantite else 0.0
+                quantite = float(quantite) if quantite else 0
 
-            
+            famille = row.get("Fonction")
+            fournisseur = row.get("Fournisseur")
+
+            famille = famille if pd.notna(famille) and famille != "-"else "Pas de famille"
+            fournisseur = fournisseur if pd.notna(fournisseur) and fournisseur != "-" else "Pas de fournisseur"
+
+
             produits_preview.append({
                 "nom": row["Produits"],
-                "fournisseur": row["Fournisseur"],
+                "fournisseur": fournisseur,
                 "quantite": quantite,
                 "unite": unite,
-                "famille": row["Fonction"],
+                "famille": famille,
                 "stockage": row["Lieu de stockage"],
             })
 
@@ -110,13 +116,19 @@ def importer_utilisateurs(request):
                 
                 p = Produit.objects.create(
                     nom=produit["nom"],
-                    famille=Famille.objects.get_or_create(nom=produit["famille"])[0],
-                    fournisseur=Fournisseur.objects.get_or_create(nom=produit["fournisseur"])[0],
-                    quantite=0.0,
+                    quantite=0,
+                    
                     stockage=Stockage.objects.get_or_create(nom=produit["stockage"], service=Stockage.objects.first().service)[0],
                 )
 
-                if produit["quantite"] and produit["unite"]:
+                if produit["famille"] != "Pas de famille":
+                    p.add_famille(produit["famille"])
+            
+
+                if produit["fournisseur"] != "Pas de fournisseur":
+                    p.add_fournisseur(produit["fournisseur"])
+
+                if produit["quantite"]  and produit["unite"]:
                     p.add_type(produit["unite"])
                     p.add_quantite(produit["quantite"], produit["unite"])
 

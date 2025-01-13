@@ -64,7 +64,7 @@ class Produit(models.Model):
     quantite = models.FloatField()
     fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField()
-    famille = models.ForeignKey(Famille, on_delete=models.CASCADE)
+    famille = models.ForeignKey(Famille, on_delete=models.CASCADE, null=True, blank=True)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)
     type = models.CharField(max_length=10, choices=[('liquide', 'Liquide'), ('solide', 'Solide'), ('unite', 'Unité')], default='unite')
     
@@ -135,3 +135,14 @@ class Produit(models.Model):
                 return unite
             
         return None
+    
+    def add_famille(self, famille):
+        familles = [nom.strip() for nom in famille.replace('/', '+').split('+')]
+        for nom_famille in familles:
+            famille_obj, _ = Famille.objects.get_or_create(nom=nom_famille)
+            self.famille = famille_obj
+            self.save()
+
+    def add_fournisseur(self, fournisseur):
+        self.fournisseur = Fournisseur.objects.get_or_create(nom=fournisseur)[0]
+        self.save()
