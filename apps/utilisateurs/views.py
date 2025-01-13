@@ -1,4 +1,5 @@
 # preparateurs/views.py
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -12,7 +13,10 @@ from django.db.models import Q
 import openpyxl
 from django.shortcuts import render, redirect
 from .models import Utilisateur
-
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 def home(request):
     return render(request, 'base.html', {
         'titre': 'QuickLab',
@@ -89,7 +93,7 @@ def liste_utilisateurs(request):
         return JsonResponse({'html': html})
 
     return render(request, 'utilisateurs/preparateurs/liste_utilisateurs.html', {
-        'utilisateurs': utilisateurs,
+        'utilisateurs': utilisateurs,  # Les utilisateurs sont transmis au template
         'roles': User.ROLES,
         'annees': User.ANNEES,
         'groupes': User.GROUPS,
@@ -163,3 +167,96 @@ def importer_utilisateurs(request):
     return render(request, "utilisateurs/preparateurs/importer_utilisateurs.html", {
         "utilisateurs_preview": utilisateurs_preview
     })
+    
+from django.http import JsonResponse
+
+@login_required
+def supprimer_utilisateurs(request):
+    if request.method == "POST":
+        utilisateurs_ids = request.POST.getlist('utilisateurs')
+        utilisateur_connecte = request.user
+
+        # Filtrer les utilisateurs sélectionnés
+        utilisateurs_a_supprimer = Utilisateur.objects.filter(id__in=utilisateurs_ids)
+        utilisateurs_autorises = []
+
+        for utilisateur in utilisateurs_a_supprimer:
+            # Règles pour les préparateurs
+            if utilisateur_connecte.role == "preparateur":
+                if utilisateur.role == "etudiant":  # Préparateurs peuvent supprimer uniquement les étudiants
+                    utilisateurs_autorises.append(utilisateur)
+
+            # Règles pour les administrateurs
+            elif utilisateur_connecte.role == "administrateur":
+                if utilisateur.role in ["etudiant", "preparateur"]:  # Administrateurs peuvent supprimer étudiants et préparateurs
+                    utilisateurs_autorises.append(utilisateur)
+
+        # Suppression des utilisateurs autorisés
+        if utilisateurs_autorises:
+            count = len(utilisateurs_autorises)
+            Utilisateur.objects.filter(id__in=[u.id for u in utilisateurs_autorises]).delete()
+
+            # Réponse JSON pour les requêtes AJAX
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    "success": True,
+                    "count": count,
+                    "message": f"{count} utilisateur(s) supprimé(s) avec succès."
+                })
+
+            # Message classique pour les requêtes non AJAX
+            messages.success(request, f"{count} utilisateur(s) supprimé(s) avec succès.")
+        else:
+            error_message = "Vous n'êtes pas autorisé à supprimer les utilisateurs sélectionnés."
+
+            # Réponse JSON pour les requêtes AJAX
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    "success": False,
+                    "message": error_message
+                })
+
+            # Message classique pour les requêtes non AJAX
+            messages.error(request, error_message)
+
+        return redirect('utilisateurs:liste_utilisateurs')
+
+    return JsonResponse({"error": "Requête invalide."}, status=400)
+
+@login_required
+def modifier_utilisateur(request, utilisateur_id):
+    utilisateur_connecte = request.user
+
+    # Récupérer l'utilisateur ou renvoyer une erreur 404
+    utilisateur = get_object_or_404(Utilisateur, id=utilisateur_id)
+
+    # Vérifier les autorisations
+    if utilisateur_connecte.role == "preparateur" and utilisateur.role != "etudiant":
+        return JsonResponse({"success": False, "message": "Vous n’êtes pas autorisé à modifier cet utilisateur."}, status=403)
+    elif utilisateur_connecte.role == "administrateur" and utilisateur.role == "administrateur" and utilisateur != utilisateur_connecte:
+        return JsonResponse({"success": False, "message": "Vous ne pouvez pas modifier un autre administrateur."}, status=403)
+
+    # Si c'est une requête GET, envoyer les données utilisateur
+    if request.method == "GET":
+        return JsonResponse({
+            "success": True,
+            "nom": utilisateur.nom,
+            "prenom": utilisateur.prenom,
+            "email": utilisateur.email,
+            "annee": utilisateur.annee,
+            "groupe": utilisateur.groupe,
+        })
+
+    # Si c'est une requête POST, mettre à jour l'utilisateur
+    if request.method == "POST":
+        data = json.loads(request.body)
+        utilisateur.nom = data.get('nom')
+        utilisateur.prenom = data.get('prenom')
+        utilisateur.email = data.get('email')
+        utilisateur.annee = data.get('annee')
+        utilisateur.groupe = data.get('groupe')
+        utilisateur.save()
+
+        return JsonResponse({"success": True, "message": "Utilisateur modifié avec succès."})
+
+    return JsonResponse({"success": False, "message": "Requête invalide."}, status=400)

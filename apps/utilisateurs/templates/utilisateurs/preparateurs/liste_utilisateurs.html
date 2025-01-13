@@ -2,10 +2,11 @@
 {% load static %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'css/utilisateurs/liste_utilisateur.css' %}">
 {% endblock %}
 
 {% block content %}
+<h1>Liste des utilisateurs</h1>
 
 <div class="filters">
     <input type="text" name="q" placeholder="Rechercher un utilisateur" value="{{ query }}">
@@ -30,23 +31,35 @@
             <option value="{{ key }}" {% if key == selected_groupe %}selected{% endif %}>{{ value }}</option>
         {% endfor %}
     </select>
+    <button type="submit" id="btn-supprimer" class="icon-button" title="Supprimer les utilisateurs sélectionnés">
+        <i class="fas fa-trash-alt"></i> 
+    </button>
+    <button type="button" id="btn-edit" class="icon-button" title="Modifier un utilisateur">
+        <i class="fas fa-edit"></i>
+    </button>
 </div>
 
 <div class="cadre-table-scroll">
-    <table class="table-scroll">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Année</th>
-                <th>Groupe</th>
-                <th>Dernière connexion</th>
-            </tr>
-        </thead>
-        {% include 'utilisateurs/includes/utilisateurs_table.html' %}
-    </table>
+    <form id="form-supprimer-utilisateurs" method="POST" action="{% url 'utilisateurs:supprimer_utilisateurs' %}">
+        {% csrf_token %}
+        <table class="table-scroll">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select-all">
+                    </th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Année</th>
+                    <th>Groupe</th>
+                    <th>Dernière connexion</th>
+                </tr>
+            </thead>
+            {% include 'utilisateurs/includes/utilisateurs_table.html' %}
+        </table>
+    </form>
 </div>
 
 <script>
@@ -78,5 +91,223 @@
         }
     });
 </script>    
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllCheckbox = document.getElementById("select-all");
+        const checkboxes = document.querySelectorAll('input[name="utilisateurs"]');
 
+        selectAllCheckbox.addEventListener("change", function () {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("form-supprimer-utilisateurs");
+        const checkboxes = document.querySelectorAll('#form-supprimer-utilisateurs input[name="utilisateurs"]');
+        const deleteButton = document.getElementById("btn-supprimer");
+    
+        // Gérer l'action du bouton de suppression
+        deleteButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Empêche le comportement par défaut
+    
+            const selectedCheckboxes = Array.from(checkboxes).filter(cb => cb.checked);
+            const count = selectedCheckboxes.length;
+    
+            if (count === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Aucune sélection',
+                    text: 'Veuillez sélectionner au moins un utilisateur à supprimer.',
+                });
+                return;
+            }
+    
+            // Confirmation avant la suppression
+            Swal.fire({
+                title: `Êtes-vous sûr ?`,
+                text: `Vous êtes sur le point de supprimer ${count} utilisateur(s). Cette action est irréversible.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Soumettre le formulaire via AJAX
+                    const formData = new FormData(form);
+    
+                    fetch(form.action, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest", // Indique une requête AJAX
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Succès',
+                                    text: data.message,
+                                }).then(() => {
+                                    location.reload(); // Recharger la page après suppression
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur',
+                                    text: data.message,
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: "Une erreur est survenue. Veuillez réessayer.",
+                            });
+                        });
+                }
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editButton = document.getElementById("btn-edit");
+        const checkboxes = document.querySelectorAll('#form-supprimer-utilisateurs input[name="utilisateurs"]');
+    
+        // Gérer le clic sur le bouton d'édition
+        editButton.addEventListener("click", function () {
+            const selectedCheckboxes = Array.from(checkboxes).filter(cb => cb.checked);
+            const count = selectedCheckboxes.length;
+    
+            if (count === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Aucune sélection',
+                    text: 'Veuillez sélectionner un utilisateur à modifier.',
+                });
+                return;
+            }
+    
+            if (count > 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Trop de sélections',
+                    text: 'Vous ne pouvez modifier qu’un seul utilisateur à la fois.',
+                });
+                return;
+            }
+    
+            // Récupérer l'ID de l'utilisateur sélectionné
+            const userId = selectedCheckboxes[0].value;
+    
+            // Ouvrir une popup pour modifier l'utilisateur
+            fetch(`/modifier/${userId}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || "Une erreur est survenue.");
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Modifier l’utilisateur',
+                            html: `
+                                <form id="edit-user-form">
+                                    <div class="form-group">
+                                        <label>Nom</label>
+                                        <input type="text" id="edit-nom" class="swal2-input" value="${data.nom}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Prénom</label>
+                                        <input type="text" id="edit-prenom" class="swal2-input" value="${data.prenom}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" id="edit-email" class="swal2-input" value="${data.email}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Année</label>
+                                        <input type="text" id="edit-annee" class="swal2-input" value="${data.annee}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Groupe</label>
+                                        <input type="text" id="edit-groupe" class="swal2-input" value="${data.groupe}">
+                                    </div>
+                                </form>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Modifier',
+                            cancelButtonText: 'Annuler',
+                            preConfirm: () => {
+                                return {
+                                    nom: document.getElementById('edit-nom').value,
+                                    prenom: document.getElementById('edit-prenom').value,
+                                    email: document.getElementById('edit-email').value,
+                                    annee: document.getElementById('edit-annee').value,
+                                    groupe: document.getElementById('edit-groupe').value,
+                                };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Envoyer les modifications au serveur
+                                fetch(`/modifier/${userId}/`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                                    },
+                                    body: JSON.stringify(result.value),
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Succès',
+                                                text: data.message,
+                                            }).then(() => {
+                                                location.reload(); // Recharger la page
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Erreur',
+                                                text: data.message,
+                                            });
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Erreur',
+                                            text: "Une erreur est survenue. Veuillez réessayer.",
+                                        });
+                                    });
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    // Gérer les erreurs (autorisation ou autre)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: error.message,
+                    });
+                });
+        });
+    });
+</script>
 {% endblock %}

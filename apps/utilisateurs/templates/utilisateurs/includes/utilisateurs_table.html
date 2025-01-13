@@ -1,6 +1,9 @@
 <tbody>
     {% for utilisateur in utilisateurs %}
     <tr>
+        <td>
+            <input type="checkbox" name="utilisateurs" value="{{ utilisateur.id }}">
+        </td>
         <td>{{ utilisateur.nom }}</td>
         <td>{{ utilisateur.prenom }}</td>
         <td>{{ utilisateur.email }}</td>
@@ -13,7 +16,8 @@
             {% else %}
                 Jamais connecté
             {% endif %}
-        </td>                
+        </td>
+        <td>ID: {{ utilisateur.id }}</td> <!-- Ligne temporaire pour vérifier l'ID -->
     </tr>
     {% endfor %}
 </tbody>
