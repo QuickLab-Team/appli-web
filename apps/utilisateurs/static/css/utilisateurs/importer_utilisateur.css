@@ -52,33 +52,35 @@ button:hover {
     background-color: #0056b3;
 }
 
-.import-form {
-    margin-bottom: 20px;
+.action-bar {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-bar h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.action-bar .buttons {
+    display: flex;
     gap: 10px;
-}
-
-.custom-file-upload {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.custom-file-upload:hover {
-    background-color: #0056b3;
-}
-
-#file_input {
-    display: none;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 table th, table td {

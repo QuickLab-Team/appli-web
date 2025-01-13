@@ -91,7 +91,7 @@ h1 {
 .icon-button {
     background: none;
     border: none;
-    color: #dc3545; /* Rouge */
+    color: #3f3f3f; /* Rouge */
     font-size: 1.5em;
     cursor: pointer;
     display: flex;
@@ -100,7 +100,7 @@ h1 {
 }
 
 .icon-button:hover {
-    color: #a71d2a; /* Rouge plus foncé au survol */
+    color: #000000; /* Rouge plus foncé au survol */
 }
 
 /* Ajout d'un espacement pour aligner correctement les filtres */
@@ -110,3 +110,4 @@ h1 {
     gap: 1em; /* Espacement entre les éléments */
     margin-bottom: 1em;
 }
+
