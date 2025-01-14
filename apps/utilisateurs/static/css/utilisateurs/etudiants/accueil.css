@@ -12,7 +12,7 @@
 .accueil p{
     margin: 20px;
     margin-bottom: 40px;
-    font-size: clamp(12px, 2vw, 30px);
+    font-size: clamp(12px, 2vw, 25px);
 }
 
 .top-accueil{
