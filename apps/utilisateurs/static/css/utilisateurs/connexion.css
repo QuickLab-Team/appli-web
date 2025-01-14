@@ -1,96 +1,115 @@
-body{
+body {
     margin: 0;
     padding: 0;
 }
 
-html{
+html {
     font-family: 'Nunito';
 }
 
-.container{
+/* Desktop Layout */
+.container {
     display: flex;
 }
 
-.image-section{
+.image-section {
     object-fit: cover;
     height: 100vh;
     flex-basis: 60%;
 }
 
-.image-section img{
+.image-section img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.form-section{
+.form-section {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
 }
 
-.form-section h2{
+.form-section h2 {
     text-align: center;
     font-size: 4rem;
-    font-family: 'Nunito';
     color: #0B1E5C;
 }
 
-.username, .password{
+.username,
+.password {
     display: flex;
     flex-direction: column;
+    margin-bottom: 1.5rem;
 }
 
-.username{
-    margin-bottom: 2rem;
-}
-
-.password{
-    margin-bottom: 1rem;
-}
-
-.forgot__password{
+.forgot__password {
     text-align: right;
     margin-bottom: 2rem;
 }
 
-.bouton__connexion{
+.bouton__connexion {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-
-.form-section input{
+.form-section input {
     height: 2.5rem;
     width: 25rem;
     border: 2px solid black;
     border-radius: 10px;
 }
 
-.form-section a{
+.form-section a {
     text-decoration: none;
     color: #0B1E5C;
     font-size: 80%;
 }
 
-.form-section button{
+.form-section button {
     font-size: 120%;
-    font-family: 'Nunito';
     color: #ffffff;
     background-color: #0B1E5C;
-    border: #0B1E5C;
+    border: none;
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 20px;
     cursor: pointer;
 }
 
-.form-section button:hover{
+.form-section button:hover {
     background-color: #0734C9;
-    color: #FFFFFF;
 }
-.center-button {
-    text-align: center;
-}   
+
+
+/* Media Query */
+@media (max-width: 768px) {
+    .image-section {
+        display: none;
+    }
+
+    .form-section {
+        margin-top: 10vh;
+    }
+
+    .username, .password {
+        margin-top: 7.5vh;
+    }
+
+    .form-section button {
+        margin-top: 5vh;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-section > div {
+        margin: 0 5%;
+    }
+
+    .form-section input {
+        width: 100%;
+    }
+}
