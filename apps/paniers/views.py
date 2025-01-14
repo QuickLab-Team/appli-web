@@ -40,6 +40,12 @@ def modifier_quantite(request, produit_panier_id):
 def reserver_panier(request):
     panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
     if panier.produits.count() > 0:
+        etat = 'attente'
+
+        for produit_panier in panier.produits.all():
+            if produit_panier.produit.quantite < produit_panier.quantite:
+                return redirect('panier')
+
         reservation = Reservation.objects.create(
             utilisateur=request.user,
         )

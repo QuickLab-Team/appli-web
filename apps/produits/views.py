@@ -133,7 +133,7 @@ def importer_utilisateurs(request):
                     p.add_quantite(produit["quantite"], produit["unite"])
 
         del request.session["produits_preview"]
-        return redirect("liste_produits")
+        return redirect("produits")
 
     return render(request, "produits/preparateurs/importer.html", {
         "produits_preview": produits_preview
