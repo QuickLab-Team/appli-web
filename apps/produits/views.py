@@ -101,7 +101,6 @@ def importer_produits(request):
                 p = Produit.objects.create(
                     nom=produit["nom"],
                     quantite=0,
-                    
                     stockage=Stockage.objects.get_or_create(nom=produit["stockage"], service=Stockage.objects.first().service)[0],
                 )
 
@@ -114,7 +113,21 @@ def importer_produits(request):
 
                 if produit["quantite"]  and produit["unite"]:
                     p.add_type(produit["unite"])
-                    p.add_quantite(produit["quantite"], produit["unite"])
+                    
+                    if produit["unite"] == "ml":
+                        p.quantite = produit["quantite"] / 1000
+                    elif produit["unite"] == "cl":
+                        p.quantite = produit["quantite"] / 100
+                    elif produit["unite"] == "l":
+                        p.quantite = produit["quantite"]
+                    elif produit["unite"] == "g":
+                        p.quantite = produit["quantite"] / 1000
+                    elif produit["unite"] == "kg":
+                        p.quantite = produit["quantite"]
+                    else:
+                        p.quantite = produit["quantite"]
+
+                    p.save()
 
         del request.session["produits_preview"]
         return produits(request)
@@ -132,3 +145,13 @@ def produit(request, produit_id):
         'produit': produit,
         'in_panier': panier.produits.filter(produit=produit).exists()
     })
+
+
+def produit_detail(request, produit_id):
+    produit = Produit.objects.get(id=produit_id)
+    return render(request, 'produits/preparateurs/produit.html', {
+        'titre': 'QuickLab',
+        'produit': produit,
+    })
+
+

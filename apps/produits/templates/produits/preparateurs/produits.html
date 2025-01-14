@@ -50,19 +50,17 @@
         
         <tbody>
             {% for produit in produits %}
-            <tr>
-                <td>{{ produit.nom }}</td>
-                <td>{{ produit.quantite }}</td>
-                <td> {{produit.get_unite}}</td>
-                <td>{{ produit.fournisseur.nom }}</td>
-
-
-                <td>
-                    {% for famille in produit.familles.all %}
-                    {{ famille.nom }}<br>
-                    {% endfor %}
-                </td>
-                <td>{{ produit.stockage.nom }}</td>
+            <tr onclick="window.location.href='{% url 'produits:produit_detail' produit.id %}'" style="cursor: pointer;">
+            <td>{{ produit.nom }}</td>
+            <td>{{ produit.get_quantite }}</td>
+            <td>{{ produit.get_unite }}</td>
+            <td>{{ produit.fournisseur.nom }}</td>
+            <td>
+                {% for famille in produit.familles.all %}
+                {{ famille.nom }}<br>
+                {% endfor %}
+            </td>
+            <td>{{ produit.stockage.nom }}</td>
             </tr>
             {% endfor %}
         </tbody>
