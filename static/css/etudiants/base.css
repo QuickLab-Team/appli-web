@@ -29,3 +29,41 @@ html, body {
     flex: 1;
     height: 70%;
 }
+
+.bouton{
+    background-color: var(--primary-color);
+    padding: 5px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.etat-annule, 
+.etat-refuse, 
+.etat-pre_reservation_refuse{
+    background-color: #ff4d4d;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.etat-attente, 
+.etat-pre_reservation_attente, 
+.attente_recuperation{
+    background-color: #ffa500;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.etat-valide, 
+.etat-termine{
+    background-color: #28a745;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}

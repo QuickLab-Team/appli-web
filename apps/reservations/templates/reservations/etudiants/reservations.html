@@ -9,8 +9,9 @@
     <div class="reservation-content">
         {% for reservation in reservations %}
             <div class="box">
-                <p class="date" >{{ reservation.date }}</p>
+                <p class="date" >{{ reservation.date|date:"d/m/Y H:i:s" }}</p>
                 <h3>{{ reservation.titre }}</h3>
+                <p class="etat-{{ reservation.etat }}">{{ reservation.get_etat_display }}</p>
                 <a href="{% url 'detail_reservation' reservation.id %}">Détail de la réservation</a>
             </div>
         {% endfor %}

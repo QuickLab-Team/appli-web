@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+    <div class="panier">
         {% if panier.produits.count > 0 %}
             <h1>Votre panier</h1>
             <div class="produits">
@@ -31,10 +32,33 @@
                             <a href="{% url 'suppression_panier' produit_panier.produit.id %}">Supprimer</a>
                         </div>
                     </div>
-            {% endfor %}
-            <a href="{% url 'reserver_panier' %}">Reserver</a>
+                {% endfor %}
             </div>
+            <div class="action">
+                <a class="bouton" id="reserver-bouton">Reserver</a>
+            </div>
+
+            <div id="popup" style="display: none;">
+                <form action="{% url 'reserver_panier' %}" method="GET">
+                    {% csrf_token %}
+                    <label for="titre">Titre de la réservation:</label>
+                    <input type="text" id="titre" name="titre">
+                    <button id="confirmer-bouton" class="bouton">Confirmer</button>
+                </form>
+            </div>
+
+            <script>
+                document.getElementById("reserver-bouton").addEventListener("click", function() {
+                    document.getElementById("popup").style.display = "block";
+                });
+            
+                document.getElementById("confirmer-bouton").addEventListener("click", function() {
+                    document.getElementById("popup").style.display = "none";
+                });
+            </script>
+
         {% else %}
             <h1>Votre panier est vide</h1>
         {% endif %}
+    </div>
 {% endblock %}
