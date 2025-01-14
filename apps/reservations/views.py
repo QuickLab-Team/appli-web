@@ -25,7 +25,8 @@ def detail_reservation(request, reservation_id):
     if request.user.role == 'preparateur':
         return render(request, 'reservations/preparateurs/reservation.html', {
             'reservation': reservation,
-            'messages': reservation.messages.all().order_by('-date')
+            'messages': reservation.messages.all().order_by('-date'),
+            'titre': 'QuickLab'
         })
     else:
         return render(request, 'reservations/etudiants/detail_reservation.html', {
