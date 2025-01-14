@@ -1,6 +1,19 @@
 from django.db import models
 
 # Create your models here.
+
+conversion_liquides = {
+    'l': 1,
+    'cl': 0.01,
+    'ml': 0.001
+}
+
+conversion_solides = {
+    'kg': 1,
+    'g': 0.001,
+    'mg': 0.000001
+}
+
 class Service(models.Model):
     """
     Service
@@ -31,7 +44,17 @@ class Famille(models.Model):
     
     def __str__(self):
         return "{0} {1}".format(self.id, self.nom)
+
+class Fournisseur(models.Model):
+    """
+    Fournisseur
+    """
+    id = models.AutoField(primary_key=True)
+    nom = models.CharField(max_length=100)
     
+    def __str__(self):
+        return "{0} {1}".format(self.id, self.nom)
+
 class Produit(models.Model):
     """
     Produit
@@ -39,8 +62,9 @@ class Produit(models.Model):
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100)
     quantite = models.FloatField()
+    fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField()
-    famille = models.ForeignKey(Famille, on_delete=models.CASCADE)
+    famille = models.ForeignKey(Famille, on_delete=models.CASCADE, null=True, blank=True)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)
     type = models.CharField(max_length=10, choices=[('liquide', 'Liquide'), ('solide', 'Solide'), ('unite', 'Unité')], default='unite')
     
@@ -49,39 +73,76 @@ class Produit(models.Model):
     
     def add_quantite(self, quantite, unite):
         if self.type == 'liquide':
-            switch = {
-                'l': 1,
-                'cl': 100,
-                'ml': 1000
-            }
+            if unite in conversion_liquides:
+                self.quantite += quantite * conversion_liquides[unite]
+            else:
+                raise ValueError(f"Unité invalide pour un liquide : {unite}")
         elif self.type == 'solide':
-            switch = {
-                'kg': 1,
-                'g': 1000,
-                'mg': 1000000
-            }
+            if unite in conversion_solides:
+                self.quantite += quantite * conversion_solides[unite]
+            else:
+                raise ValueError(f"Unité invalide pour un solide : {unite}")
         else:
             switch = {
                 'unite': 1
             }
-        quantite = quantite * switch[unite]
+        quantite = quantite / switch[unite]
         self.quantite += quantite
         self.save()
 
+    
+    def add_type(self, unite):
+        if 'l' in unite:
+            self.type = 'liquide'
+        elif 'g' in unite:
+            self.type = 'solide'
+        else:
+            self.type = 'unite'
+
+
+    def get_quantite(self):
+        if self.type == 'liquide':
+            conversion = dict(sorted(conversion_liquides.items(), key=lambda item:[1]))
+        elif self.type == 'solide':
+            conversion = dict(sorted(conversion_solides.items(), key=lambda item:[1]))
+        else:
+            return self.quantite
+
+        for unite, valeur in conversion.items():
+            if self.quantite >= valeur:
+                return self.quantite / valeur
+            
+        return None
+    
+    def get_unites(self):
+        if self.type == 'liquide':
+            return conversion_liquides.keys()
+        elif self.type == 'solide':
+            return conversion_solides.keys()
+        else:
+            return ['unite']
+    
     def get_unite(self):
         if self.type == 'liquide':
-            if self.quantite >= 1:
-                return 'l'
-            elif self.quantite >= 0.1:
-                return 'cl'
-            else:
-                return 'ml'
+            conversion = dict(sorted(conversion_liquides.items(), key=lambda item:[1]))
         elif self.type == 'solide':
-            if self.quantite >= 1:
-                return 'kg'
-            elif self.quantite >= 0.001:
-                return 'g'
-            else:
-                return 'mg'
+            conversion = dict(sorted(conversion_solides.items(), key=lambda item:[1]))
         else:
             return 'unite'
+
+        for unite, valeur in conversion.items():
+            if self.quantite >= valeur:
+                return unite
+            
+        return None
+    
+    def add_famille(self, famille):
+        familles = [nom.strip() for nom in famille.replace('/', '+').split('+')]
+        for nom_famille in familles:
+            famille_obj, _ = Famille.objects.get_or_create(nom=nom_famille)
+            self.famille = famille_obj
+            self.save()
+
+    def add_fournisseur(self, fournisseur):
+        self.fournisseur = Fournisseur.objects.get_or_create(nom=fournisseur)[0]
+        self.save()

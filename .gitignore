@@ -4,3 +4,5 @@ path/
 env/
 venv/
 .sqlite3
+.csv
+.xlsx

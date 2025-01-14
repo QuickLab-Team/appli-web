@@ -14,5 +14,7 @@ class Migration(migrations.Migration):
             model_name='reservation',
             name='etat',
             field=models.CharField(choices=[('panier', 'Panier'), ('pret', 'Prêt'), ('en_cours', 'En cours'), ('termine', 'Terminé'), ('en_attente', 'En attente')], default='panier', max_length=20),
+
+    
         ),
     ]

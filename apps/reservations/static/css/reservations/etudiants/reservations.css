@@ -1,135 +1,99 @@
-/* Style global pour mobile */
-.content .top {
-    flex-basis: 25%;
-    text-align: center;
-    padding: 10px;
-}
-
-.reservation {
-    overflow-y: scroll;
-}
-
-/* Conteneur des réservations */
-.reservations {
+.reservation-content {
     display: flex;
     flex-direction: column; 
     gap: 15px;
-    overflow-y: auto; 
-    max-height: 50vh;
-    padding: 10px;
-    margin: 2vh 5vh;
+    margin: 3%;
+    overflow-y: auto;
 }
 
 /* Boîte de réservation */
-.reservations .box {
+.box {
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 1.5%;
+    margin: 0 15%;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    width: 100%; 
     box-sizing: border-box;
 }
 
 /* Textes dans la boîte */
-.reservations .box h3 {
-    font-size: 20px;
+.box h3 {
+    font-size: 1.3rem;
     color: #333;
-    margin: 5px 0;
+    margin: 0.5% 0;
     word-wrap: break-word;
 }
 
 /* Style spécifique aux éléments */
-.reservations .box p {
+.box p {
     color: var(--primary-color);
     text-align: left;
-    font-size: 14px;
-    margin: 5px 0;
+    font-size: 0.9rem;
+    margin: 0.5% 0;
 }
 
 /* Bouton Détail */
-.reservations .box a {
-    margin-top: 10px;
-    padding: 8px 15%;
+.box a {
+    margin-top: 1%;
+    padding: 1% 15%;
     background-color: white;
-    color: #333;
+    color: black;
     border: 1px solid #333;
     border-radius: 5px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
 }
 
-.reservations .box a:hover {
+.box a:hover {
     background-color: var(--primary-color);
     color: white;
-    border: 1px solid #333;
+    border: 1px solid black;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .top .second-titre {
-        font-size: 1.75em;
-    }
-
-    .reservation {
+    .box {
         margin: 0 40px;
     }
     
-    .reservations .box h3 {
+    .box h3 {
         font-size: 18px;
     }
 
-    .reservations .box p {
+    .box p {
         font-size: 14px;
     }
 
-    .reservations .box a {
-        font-size: 14px;
-    }
-
-    .reservation-info p {
-        font-size: 14px;
-    }
-
-    .products h3 {
-        font-size: 16px;
-    }
-
-    .products ul {
-        padding-left: 20px;
+    .box a {
         font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
-    .top .second-titre {
-        font-size: 1.5em;
-    }
-
-    .reservations .box p {
+    .box p {
         font-size: 12px;
     }
 
-    .reservations {
-        margin: 2vh 2vh;
+    .reservation-content{
+        margin: 3vh 2vh;
     }
 
-    .reservations .box {
+    .box {
         padding: 8px;
     }
 
-    .reservations .box a {
+    .box a {
         padding: 8px 10%;
         font-size: 12px;
         margin-bottom: 2%;
     }
 
-    .reservations h3 {
+    h3 {
         font-size: 16px;
     }
 }

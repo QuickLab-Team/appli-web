@@ -2,28 +2,53 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/reservations/etudiants/detail_reservation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reservations/etudiants/detail_reservation.css' %}">
+{% endblock %}
+{% block js %}
+    <script src="{% static 'js/reservations/etudiants/reservation.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 {% endblock %}
 
 {% block content %}
-<div class="detail-container">
-    <div class="header">
-        <a href="{% url 'reservations' %}" class="back-button">←</a>
-        <h2>Historique des réservations</h2>
+    <div class="reservation">
+        <div class="reservation-detail">
+            <div class="reservation-info">
+                <h1 class="titre">{{ reservation.titre }}</h1>
+                <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y H:i:s" }}</p>
+                <p><strong>Statut : </strong>{{ reservation.etat }}</p>
+                <img class="bouton-messagerie" onclick="ouvrirMessagerie();" src="{% static 'images/etudiants/icon-messagerie.png' %}" alt="Icon tchat" height="60px" width="60px">
+            </div>
+            <div class="produits">
+                <h3>Produits :</h3>
+                <ul>
+                    {% for produit_reservation in reservation.produits.all %}
+                        <li>{{ produit_reservation.produit.nom }} - {{ produit_reservation.get_quantite }} {{ produit_reservation.get_unite }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="messagerie">
+            <div class="messages">
+                {% for message_reservation in messages %}
+                    <div class="message">
+                        <div class="{% if message_reservation.utilisateur == reservation.utilisateur %}message-sent{% else %}message-received{% endif %}">
+                            <p class="message-text">{{ message_reservation.message }}</p>
+                        </div>
+                        <p class="message-time">{{ message_reservation.date|date:"d M H:i" }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="input-container">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="ajouter_message_reservation_lien" value="{% url 'ajouter_message_reservation' reservation.id %}">
+                <input 
+                    type="text" 
+                    name="message" 
+                    placeholder="Tapez votre message..."
+                    onkeydown="if(event.key === 'Enter'){envoyerMessage();}" 
+                >
+                <button onclick="envoyerMessage();" class="send-btn">Envoyer</button>
+            </div>
+        </div>
     </div>
-    <div class="reservation-info">
-        <h1 class="titre">Détail de la réservation</h1>
-        <h1 class="second-titre">{{ reservation.titre }}</h1>
-        <p class="etat">{{ reservation.etat }}</p>
-        <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y" }}</p>
-    </div>
-    <div class="products">
-        <h3>Produits réservés :</h3>
-        <ul>
-            {% for produit in reservation.produits.all %}
-                <li>{{ produit.produit.nom }} - {{ produit.quantite }}ml</li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
 {% endblock %}

@@ -11,30 +11,24 @@
 <header class="header">
     <div class="top">
         <div class="logo">
-            <a href="{% url 'produits' %}">
+            <a href="{% url 'produits:produits' %}">
                 Quick Lab
             </a>
         </div>
         {% include 'etudiants/search_bar.html' %}
         <nav class="nav">
             <ul>
-                <li><a href="{% url 'produits' %}">Accueil</a></li>
-                <li><a href="#">Réservations</a></li>
-                <li><a href="#">Messagerie</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="#">Compte</a></li>
-                {% else %}
-                <li><a href="#">Connexion</a></li>
-                {% endif %}
+                <li><a href="{% url 'produits:produits' %}">Accueil</a></li>
+                <li><a href="{% url 'reservations' %}">Réservations</a></li>
+                <li><a href="{% url 'panier' %}">Panier</a></li>
+                <li><a href="{% url 'utilisateurs:deconnexion' %}">Déconnexion</a></li>
             </ul>
         </nav>
     </div>
     <div class="top-mobile">
         <div class="nav">
             <div class="menu-burger">
-                <a href="#">
-                    <img src="{% static 'images/etudiants/menu/menu_burger.png' %}" alt="menu">
-                </a>
+                <img src="{% static 'images/etudiants/menu/menu_burger.png' %}" alt="menu">
             </div>
             <div class="logo">
                 <a href="#">
@@ -62,11 +56,28 @@
             </ul>
         </div>
     </div>
+    {% include 'etudiants/menu.html' %}
 </header>
 
-<!-- 
-    Liste de la nav :
-"{% url 'produits' %}"
-"{% url 'produits' %}?etat=1">Catégories 
-"{% url 'produits' %}?etat=2">Disponible 
--->
+<script>
+    const menu = document.querySelector('.menu');
+    const menuBurger = document.querySelector('.menu-burger');
+    const closeMenu = document.querySelector('.close-menu');
+
+    menu.style.position = 'absolute'; 
+    menu.style.top = '0';
+    menu.style.left = '0';
+    menu.style.width = '100%';
+    menu.style.height = '100%';
+    menu.style.zIndex = '1000';
+    menu.style.display = 'none';
+    menu.style.backgroundColor = 'white';
+
+    menuBurger.addEventListener('click', () => {
+        menu.style.display = 'block';
+    });
+
+    closeMenu.addEventListener('click', () => {
+        menu.style.display = 'none';
+    });
+</script>

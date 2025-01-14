@@ -1,9 +1,5 @@
 /* Style global du menu */
 .menu {
-    width: 300px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Nunito', sans-serif;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -20,6 +16,14 @@
     color: var(--primary-color);
 }
 
+
+.menu-links img {
+    width: 24px;
+    height: 24px; 
+    object-fit: contain; 
+    margin-right: 3%;
+}
+
 .menu-header h1 {
     margin: 0;
 }
@@ -27,7 +31,7 @@
 .close-menu {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 3rem;
     cursor: pointer;
     color: #000000;
 }
@@ -41,14 +45,15 @@ hr {
 /* Liens principaux */
 .menu-links a {
     display: flex;
+    font-weight: 700;
     align-items: center;
     padding: 15px 20px;
+    margin-left: 5%;
     font-size: 1rem;
-    font-weight: 500;
     color: #000000;
     text-decoration: none;
     transition: color 0.3s, border-bottom 0.3s;
-    border-bottom: 2px solid transparent; /* Effet ligne au survol */
+    border-bottom: 2px solid transparent;
 }
 
 .menu-links a:hover {
@@ -61,11 +66,11 @@ hr {
     font-size: 1.2rem;
 }
 
-/* Section des catégories */
+/* Section des catégories avec défilement */
 .menu-categories {
     padding: 0 20px;
+    margin-left: 7.5%;
     flex-grow: 1;
-    overflow-y: auto;
 }
 
 .category {
@@ -83,7 +88,7 @@ hr {
 .category ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-left: 5%;
 }
 
 .category ul li {
@@ -95,19 +100,7 @@ hr {
     color: var(--primary-color);
     text-decoration: none;
     transition: color 0.3s, border-bottom 0.3s;
-    border-bottom: 2px solid transparent; /* Effet ligne au survol */
-}
-
-.category ul li a:hover {
-    border-bottom: 2px solid var(--primary-color);
-    color: var(--primary-color);
-}
-
-/* Scroll dans les catégories si nécessaire */
-.menu-categories {
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
+    border-bottom: 2px solid transparent;
 }
 
 .menu-categories::-webkit-scrollbar {
@@ -117,11 +110,4 @@ hr {
 .menu-categories::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 10px;
-}
-
-/* Responsive pour petits écrans */
-@media (max-width: 768px) {
-    .menu {
-        width: 100%;
-    }
 }
