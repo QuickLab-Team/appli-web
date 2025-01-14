@@ -12,17 +12,33 @@
 {% block content %}
     <div class="reservation">
         <div class="reservation-detail">
+            <div>
+                <a class="close" href="{% url 'reservations' %}">&times;</a>
+            </div>
             <div class="reservation-info">
                 <h1 class="titre">{{ reservation.titre }}</h1>
                 <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y H:i:s" }}</p>
-                <p><strong>Statut : </strong>{{ reservation.etat }}</p>
-                <img class="bouton-messagerie" onclick="ouvrirMessagerie();" src="{% static 'images/etudiants/icon-messagerie.png' %}" alt="Icon tchat" height="60px" width="60px">
+                <p><strong>Statut : </strong>{{ reservation.get_etat_display }}</p>
+                <div class="action">
+                    {% if reservation.etat != "annule" and reservation.etat != "termine" %}
+                        <a class="bouton bouton-annuler" href="{% url 'annuler_reservation' reservation.id %}">Annuler</a>
+                    {% endif %}
+                    {% if reservation.etat == "attente_recuperation" and reservation.etat != "termine" %}
+                        <a class="bouton bouton-recuperer" href="{% url 'recuperer_reservation' reservation.id %}">Récupérer</a>
+                    {% endif %}
+                    <a class="bouton bouton-messagerie" onclick="ouvrirMessagerie();">Messagerie</a>
+                </div>
             </div>
             <div class="produits">
                 <h3>Produits :</h3>
                 <ul>
                     {% for produit_reservation in reservation.produits.all %}
-                        <li>{{ produit_reservation.produit.nom }} - {{ produit_reservation.get_quantite }} {{ produit_reservation.get_unite }}</li>
+                        <li>
+                            <div>
+                                <p>{{ produit_reservation.produit.nom }} - {{ produit_reservation.get_quantite }} {{ produit_reservation.get_unite }}</p>
+                                <a class="bouton" href="{% url 'produits:produit' produit_reservation.produit.id %}">Voir plus</a>
+                            </div>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>

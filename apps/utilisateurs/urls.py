@@ -6,7 +6,6 @@ app_name = 'utilisateurs'
 
 urlpatterns = [
     path('accueil', views.accueil, name='accueil'),
-    path('home', views.home, name='home'),
     path('inscription/', views.inscription, name='inscription'),
     path('', ConnexionView.as_view(), name='connexion'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
