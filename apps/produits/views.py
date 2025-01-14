@@ -8,72 +8,58 @@ import csv
 from io import TextIOWrapper
 import pandas as pd
 import openpyxl
-
+from django.http import JsonResponse
 from paniers.models import Panier
+from django.template.loader import render_to_string
 
-# Create your views here.
+
+
 
 def produits(request):
     produits = Produit.objects.all()
     familles = Famille.objects.all()
     stockages = Stockage.objects.all()
+    fournisseurs = Fournisseur.objects.all()
 
+    # Récupération des filtres depuis les paramètres GET
+    query = request.GET.get('q', '')
+    selected_famille = request.GET.get('famille', '')
+    selected_fournisseur = request.GET.get('fournisseur', '')
+    selected_stockage = request.GET.get('stockage', '')
+
+    # Application des filtres dynamiques
+    if query:
+        produits = produits.filter(nom__icontains=query)
+    if selected_famille:
+        produits = produits.filter(familles__id=selected_famille)
+    if selected_fournisseur:
+        produits = produits.filter(fournisseur__id=selected_fournisseur)
+    if selected_stockage:
+        produits = produits.filter(stockage__id=selected_stockage)
+
+    # Gestion des rôles et rendu HTML
     if request.user.role == 'etudiant':
         return render(request, 'produits/etudiants/produits.html', {
-        'titre': 'QuickLab',
-        'produits': produits
-    })
-
-    elif request.user.role == 'preparateur' or request.user.role == 'administrateur':
-        nom_query = request.GET.get('nom')
-        famille_query = request.GET.get('famille')
-        stockage_query = request.GET.get('stockage')
-        if nom_query:
-            produits = produits.filter(nom__icontains=nom_query)
-        if famille_query:
-            produits = produits.filter(famille__nom=famille_query)
-        if stockage_query:
-            produits = produits.filter(stockage__nom=stockage_query)
+            'titre': 'QuickLab',
+            'produits': produits,
+        })
+    elif request.user.role in ['preparateur', 'administrateur']:
+        
         return render(request, 'produits/preparateurs/produits.html', {
             'titre': 'QuickLab',
-            'famille': familles,
-            'stockage': stockages,
             'produits': produits,
-            'nom_query': nom_query,
-            'famille_query': famille_query,
-            'stockage_query': stockage_query
-
+            'familles': familles,
+            'fournisseurs': fournisseurs,
+            'stockages': stockages,
+            'query': query,
+            'selected_famille': selected_famille,
+            'selected_fournisseur': selected_fournisseur,
+            'selected_stockage': selected_stockage,
         })
 
-    
+
 @login_required
 def importer_produits(request):
-    if request.method == 'POST' and request.FILES['fichier']:
-        fichier = request.FILES['fichier']
-        fs = FileSystemStorage()
-        filename = fs.save(fichier.name, fichier)
-        uploaded_file_url = fs.url(filename)
-
-        with open(fs.path(filename), mode='r', encoding='utf-8') as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip the first line
-            for row in reader:
-                Produit.objects.create(
-                    nom=row[0],
-                    famille=Famille.objects.get_or_create(nom=row[1])[0],
-                    quantite=10.0,
-                    fournisseur=Fournisseur.objects.get_or_create(nom=row[1])[0],
-                    stockage=Stockage.objects.get_or_create(nom=row[2], service=Stockage.objects.first().service)[0],
-                )
-        messages.success(request, 'Produits importés avec succès.')
-        return render(request, 'produits/preparateurs/importer.html', {
-            'uploaded_file_url': uploaded_file_url
-        })
-    
-    return render(request, 'produits/preparateurs/importer.html')
-
-
-def importer_utilisateurs(request):
     produits_preview = []
 
     if request.method == "POST" and "fichier" in request.FILES:
@@ -95,8 +81,6 @@ def importer_utilisateurs(request):
 
             famille = famille if pd.notna(famille) and famille != "-"else "Pas de famille"
             fournisseur = fournisseur if pd.notna(fournisseur) and fournisseur != "-" else "Pas de fournisseur"
-
-
             produits_preview.append({
                 "nom": row["Produits"],
                 "fournisseur": fournisseur,
@@ -117,7 +101,6 @@ def importer_utilisateurs(request):
                 p = Produit.objects.create(
                     nom=produit["nom"],
                     quantite=0,
-                    
                     stockage=Stockage.objects.get_or_create(nom=produit["stockage"], service=Stockage.objects.first().service)[0],
                 )
 
@@ -130,10 +113,25 @@ def importer_utilisateurs(request):
 
                 if produit["quantite"]  and produit["unite"]:
                     p.add_type(produit["unite"])
-                    p.add_quantite(produit["quantite"], produit["unite"])
+                    
+                    if produit["unite"] == "ml":
+                        p.quantite = produit["quantite"] / 1000
+                    elif produit["unite"] == "cl":
+                        p.quantite = produit["quantite"] / 100
+                    elif produit["unite"] == "l":
+                        p.quantite = produit["quantite"]
+                    elif produit["unite"] == "g":
+                        p.quantite = produit["quantite"] / 1000
+                    elif produit["unite"] == "kg":
+                        p.quantite = produit["quantite"]
+                    else:
+                        p.quantite = produit["quantite"]
+
+                    p.save()
 
         del request.session["produits_preview"]
-        return redirect("produits")
+        return produits(request)
+
 
     return render(request, "produits/preparateurs/importer.html", {
         "produits_preview": produits_preview
@@ -148,3 +146,13 @@ def produit(request, produit_id):
         'produit': produit,
         'in_panier': panier.produits.filter(produit=produit).exists()
     })
+
+
+def produit_detail(request, produit_id):
+    produit = Produit.objects.get(id=produit_id)
+    return render(request, 'produits/preparateurs/produit.html', {
+        'titre': 'QuickLab',
+        'produit': produit,
+    })
+
+

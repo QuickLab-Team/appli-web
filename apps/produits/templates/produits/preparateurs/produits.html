@@ -1,35 +1,41 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/preparateurs/produits.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<h2>Liste des produits</h2>
+<h1>Liste des produits</h1>
 
-<form method="GET" action=""></form>
-    <input type="text" name="nom" placeholder="Rechercher un produit..." class="search-bar">
-    <select name="famille" class="dropdown" title="Famille de produits" onchange="this.form.submit()">
-        <option value="">Toutes les familles</option>
-        {% for famille in familles %}
-        <option value="{{ famille.id }}">{{ famille.nom }}</option>
-        {% endfor %}
-    </select>
+<form method="get" action="">
+    <div class="filters">
+        <input type="text" name="q" placeholder="Rechercher un produit" value="{{ query }}">
 
-    <select name="stockage" class="dropdown" title="Stockages des produits" onchange="this.form.submit()">
-        <option value="">Tous les stockages</option>
-        {% for s in stockage %}
-        <option value="{{ s.id }}">{{ s.nom }}</option>
-        {% endfor %}
-    </select>
+        <select name="famille" title="Famille" multiple onchange="this.form.submit()">
+            <option value="">Toutes les familles</option>
+            {% for famille in familles %}
+                <option value="{{ famille.id }}" {% if famille.id|stringformat:"s" in selected_famille %}selected{% endif %}>{{ famille.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="fournisseur" title="Fournisseur" multiple onchange="this.form.submit()">
+            <option value="">Tous les fournisseurs</option>
+            {% for fournisseur in fournisseurs %}
+                <option value="{{ fournisseur.id }}" {% if fournisseur.id|stringformat:"s" in selected_fournisseur %}selected{% endif %}>{{ fournisseur.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="stockage" title="Stockage" multiple onchange="this.form.submit()">
+            <option value="">Tous les stockages</option>
+            {% for stockage in stockages %}
+                <option value="{{ stockage.id }}" {% if stockage.id|stringformat:"s" in selected_stockage %}selected{% endif %}>{{ stockage.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
 </form>
 
 <div class="cadre-table-scroll">
-
-   
-
     <table class="table-scroll">
         <thead>
             <tr>
@@ -39,25 +45,28 @@
                 <th>Fournisseur</th>
                 <th>Famille</th>
                 <th>Stockage</th>
-                <th>Actions</th>
             </tr>
         </thead>
         
         <tbody>
             {% for produit in produits %}
-            <tr>
-                <td>{{ produit.nom }}</td>
-                <td>{{ produit.quantite }}</td>
-                <td> {{produit.get_unite}}</td>
-                <td>{{ produit.fournisseur.nom }}</td>
-                <td>{{ produit.famille.nom }}</td>
-                <td>{{ produit.stockage.nom }}</td>
-                <td></td>
+            <tr onclick="window.location.href='{% url 'produits:produit_detail' produit.id %}'" style="cursor: pointer;">
+            <td>{{ produit.nom }}</td>
+            <td>{{ produit.get_quantite }}</td>
+            <td>{{ produit.get_unite }}</td>
+            <td>{{ produit.fournisseur.nom }}</td>
+            <td>
+                {% for famille in produit.familles.all %}
+                {{ famille.nom }}<br>
+                {% endfor %}
+            </td>
+            <td>{{ produit.stockage.nom }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
 
 {% endblock %}
 

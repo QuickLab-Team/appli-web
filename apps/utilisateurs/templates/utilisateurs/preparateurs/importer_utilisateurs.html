@@ -1,18 +1,70 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'css/utilisateurs/importer_utilisateur.css' %}">
-{% endblock %}
-
 {% block content %}
 <h1>Importer des utilisateurs</h1>
+<link rel="stylesheet" href="{% static 'css/utilisateurs/importer_utilisateur.css' %}?v=1.0">
+{% if utilisateurs_preview %}
+    <!-- Barre d'actions -->
+    <div class="action-bar">
+        <h2>Prévisualisation des utilisateurs</h2>
+        <div class="buttons">
+            <form method="post" id="import-form" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="importer" value="true">
+                <select name="annee" id="annee" required>
+                    <option value="1ère année">1ère année</option>
+                    <option value="2ème année">2ème année</option>
+                    <option value="3ème année">3ème année</option>
+                </select>
+                <button type="submit" class="btn btn-success">Importer dans la base de données</button>
+            </form>
+            <form method="get" action="" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Importer un autre fichier</button>
+            </form>
+        </div>
+    </div>
 
-<form method="post" enctype="multipart/form-data" class="import-form">
-    {% csrf_token %}
-    <label for="file_input" class="custom-file-upload">Choisir un fichier</label>
-    <input type="file" id="file_input" name="fichier" accept=".csv, .xlsx">
-    <span id="file_name">Aucun fichier sélectionné</span>
-    <button type="submit">Importer</button>
-</form>
+    <!-- Tableau de prévisualisation -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Groupe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for utilisateur in utilisateurs_preview %}
+            <tr>
+                <td>{{ utilisateur.nom }}</td>
+                <td>{{ utilisateur.prenom }}</td>
+                <td>{{ utilisateur.email }}</td>
+                <td>{{ utilisateur.groupe }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <!-- Formulaire de prévisualisation -->
+    <div class="action-bar">
+        <form method="post" enctype="multipart/form-data" id="preview-form" class="import-form">
+            {% csrf_token %}
+            <label for="file_input" class="custom-file-upload">Choisir un fichier</label>
+            <input type="file" id="file_input" name="fichier" accept=".csv, .xlsx" onchange="updateFileName()">
+            <span id="file_name">Aucun fichier sélectionné</span>
+            <button type="submit" class="btn btn-primary">Prévisualiser</button>
+        </form>
+    </div>
+{% endif %}
+
+<script>
+    // Fonction pour mettre à jour le nom du fichier sélectionné
+    function updateFileName() {
+        const fileInput = document.getElementById('file_input');
+        const fileNameSpan = document.getElementById('file_name');
+        fileNameSpan.textContent = fileInput.files[0].name;
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

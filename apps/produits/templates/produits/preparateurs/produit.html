@@ -3,15 +3,27 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/preparateurs/produit.css' %}">
+
 {% endblock %}
 
 {% block content %}
 
-<h2>Liste des produits</h2>
+<a href="{% url 'produits:liste_produits' %}" class="btn btn-primary">Retour à la liste des produits</a>
 
+<h1>{{ produit.nom }}</h1>
 
+<div class="produit-details">
+    <p><strong>Quantité:</strong> {{ produit.get_quantite }} {{ produit.get_unite }}</p>
+    <p><strong>Fournisseur:</strong> {{ produit.fournisseur.nom }}</p>
+    <p><strong>Familles:</strong></p>
+    <ul>
+        {% for famille in produit.familles.all %}
+            <li>{{ famille.nom }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Date d'ajout:</strong> {{ produit.date_ajout }}</p>
+    <p><strong>Stockage:</strong> {{ produit.stockage.nom }}</p>
+    <p><strong>Type:</strong> {{ produit.get_type_display }}</p>
+</div>
 
 {% endblock %}
-
-
-
