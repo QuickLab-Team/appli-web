@@ -2,29 +2,54 @@
 {% load static %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'css/preparateurs/produits.css' %}">
 {% endblock %}
 
 {% block content %}
 
+<h2>Liste des produits</h2>
+
+<form method="GET" action=""></form>
+    <input type="text" name="nom" placeholder="Rechercher un produit..." class="search-bar">
+    <select name="famille" class="dropdown" title="Famille de produits" onchange="this.form.submit()">
+        <option value="">Toutes les familles</option>
+        {% for famille in familles %}
+        <option value="{{ famille.id }}">{{ famille.nom }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="stockage" class="dropdown" title="Stockages des produits" onchange="this.form.submit()">
+        <option value="">Tous les stockages</option>
+        {% for s in stockage %}
+        <option value="{{ s.id }}">{{ s.nom }}</option>
+        {% endfor %}
+    </select>
+</form>
+
 <div class="cadre-table-scroll">
+
+   
+
     <table class="table-scroll">
         <thead>
             <tr>
                 <th>Nom</th>
                 <th>Quantité</th>
                 <th>Unité</th>
+                <th>Fournisseur</th>
                 <th>Famille</th>
                 <th>Stockage</th>
                 <th>Actions</th>
             </tr>
         </thead>
+        
         <tbody>
             {% for produit in produits %}
             <tr>
                 <td>{{ produit.nom }}</td>
                 <td>{{ produit.quantite }}</td>
-                <td></td>
+                <td> {{produit.get_unite}}</td>
+                <td>{{ produit.fournisseur.nom }}</td>
                 <td>{{ produit.famille.nom }}</td>
                 <td>{{ produit.stockage.nom }}</td>
                 <td></td>
@@ -35,3 +60,6 @@
 </div>
 
 {% endblock %}
+
+
+

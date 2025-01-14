@@ -23,17 +23,28 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 def home(request):
     return render(request, 'base.html', {
         'titre': 'QuickLab',
     })
 
+def test(request):
+    return render(request, 'utilisateurs/etudiants/accueil.html', {
+        'titre': 'QuickLab',
+    })
+
+
 @login_required
 def accueil(request):
 
     if request.user.role == 'etudiant':
-            return render(request, 'produits/etudiants/produits.html', {
+            return render(request, 'utilisateurs/etudiants/accueil.html', {
                 'titre': 'QuickLab',
             })
         
@@ -282,3 +293,25 @@ def modifier_utilisateur(request, utilisateur_id):
 
     return JsonResponse({"success": False, "message": "Requête invalide."}, status=400)
 
+@login_required
+def mon_compte(request):
+    """Vue pour afficher les informations de compte."""
+    return render(request, 'utilisateurs/preparateurs/mon_compte.html', {
+        'user': request.user
+    })
+
+@login_required
+def changer_mot_de_passe(request):
+    """Vue pour permettre à l'utilisateur de changer son mot de passe."""
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Votre mot de passe a été changé avec succès.')
+            return redirect('utilisateurs:mon_compte')
+        else:
+            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'utilisateurs/preparateurs/changer_mot_de_passe.html', {'form': form})

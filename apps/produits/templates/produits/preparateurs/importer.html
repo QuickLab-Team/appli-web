@@ -1,8 +1,7 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/produits/preparateurs/importer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/preparateurs/importer.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +9,51 @@
 
 <form method="post" enctype="multipart/form-data" class="import-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Importer</button>
+    <label for="file_input" class="custom-file-upload">Choisir un fichier</label>
+    <input type="file" id="file_input" name="fichier" accept=".csv, .xlsx" onchange="updateFileName()">
+    <span id="file_name">Aucun fichier sélectionné</span>
+    <button type="submit">Prévisualiser</button>
 </form>
+
+{% if produits_preview %}
+<h2>Prévisualisation des produits</h2>
+<p><strong>Total des produits trouvés :</strong> {{ produits_preview|length }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="importer" value="true">
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Unité</th>
+                <th>Fournisseur</th>
+                <th>Famille</th>
+                <th>Stockage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits_preview %}
+            <tr>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.quantite }}</td>
+                <td>{{ produit.unite}}</td>
+                <td>{{ produit.fournisseur }}</td>
+                <td>{{ produit.famille }}</td>
+                <td>{{ produit.stockage }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Importer dans la base de données</button>
+</form>
+{% endif %}
+<script>
+    function updateFileName() {
+        const fileInput = document.getElementById('file_input');
+        const fileNameSpan = document.getElementById('file_name');
+        fileNameSpan.textContent = fileInput.files[0].name;
+    }
+</script>
 {% endblock %}

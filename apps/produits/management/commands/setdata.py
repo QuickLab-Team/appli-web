@@ -1,7 +1,10 @@
 from django.core.management.base import BaseCommand
+from django.db import connection
 from produits.models import *
 from reservations.models import *
 import random
+from paniers.models import PanierProduit, Panier
+
 
 class Command(BaseCommand):
     help = 'Ajoute des données en BD'
@@ -10,13 +13,18 @@ class Command(BaseCommand):
 
         self.stdout.write('Suppression des données...')
 
+        with connection.cursor() as cursor:
+            cursor.execute("DROP TABLE IF EXISTS produits_fournisseur")
+
+        PanierProduit.objects.all().delete()
+        Panier.objects.all().delete()
+        ReservationProduit.objects.all().delete()
+        Reservation.objects.all().delete()
+        Produit.objects.all().delete()
+        Stockage.objects.all().delete()
         Famille.objects.all().delete()
         Service.objects.all().delete()
-        Stockage.objects.all().delete()
-        Produit.objects.all().delete()
         Utilisateur.objects.all().delete()
-        Reservation.objects.all().delete()
-        ReservationProduit.objects.all().delete()
 
         self.stdout.write('Données supprimées avec succès !')
 
@@ -81,20 +89,29 @@ class Command(BaseCommand):
             utilisateur.set_password('password{0}'.format(i))
             utilisateur.save()
 
-        # Réservations
-        for i in range(1, 5):
-            reservation = Reservation.objects.create(
-                id=i,
-                utilisateur=Utilisateur.objects.get(id=random.randint(1, 19)),
-                date='2021-01-01'
-            )
+        Utilisateur.objects.create_superuser(
+            nom='Admin',
+            prenom='Admin',
+            email='admin@gmail.com',
+            password='admin',
+            role='administrateur'
+        )
 
-        #Réservations Produits
-        for i in range(1, 15):
-            reservation_produit = ReservationProduit.objects.create(
-                reservation=Reservation.objects.get(id=random.randint(1, 4)),
-                produit=Produit.objects.get(id=random.randint(1, 14)),
-                quantite=random.randint(1, 10)
-            )
+
+        #  Réservations
+        # for i in range(1, 5):
+        #     reservation = Reservation.objects.create(
+        #         id=i,
+        #         utilisateur=Utilisateur.objects.get(id=random.randint(1, 19)),
+        #         date='2021-01-01'
+        #     )
+
+        # #Réservations Produits
+        # for i in range(1, 15):
+        #     reservation_produit = ReservationProduit.objects.create(
+        #         reservation=Reservation.objects.get(id=random.randint(1, 4)),
+        #         produit=Produit.objects.get(id=random.randint(1, 14)),
+        #         quantite=random.randint(1, 10)
+        #     )
 
         self.stdout.write('Données créées avec succès !')

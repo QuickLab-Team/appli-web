@@ -1,0 +1,38 @@
+.filters {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.filters input, .filters select, .filters button {
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+.table-scroll {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+.table-scroll th, .table-scroll td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}

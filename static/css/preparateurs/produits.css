@@ -1,0 +1,40 @@
+.cadre-table-scroll{
+    display: inline-block;
+    height: 30em;
+    overflow-y: scroll;
+    width: 100%;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+.table-scroll thead th{
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+.table-scroll tfoot td{
+    position: sticky;
+    bottom: 0;
+}
+.table-scroll {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table-scroll tbody td {
+    padding: 12px;
+    text-align: center;
+    border-right: none;
+    border-bottom: 1px solid black;
+}
+
+.search-bar {
+    width: 30%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.search-bar:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}

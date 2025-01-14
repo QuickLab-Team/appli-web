@@ -62,10 +62,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'apps.api',
+    # 'apps.api',
     'apps.produits',
     'apps.reservations',
     'apps.utilisateurs',
+    'apps.paniers',
 ]
 
 MIDDLEWARE = [
@@ -139,7 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 

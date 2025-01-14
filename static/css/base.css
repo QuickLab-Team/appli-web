@@ -11,6 +11,12 @@
     font-family: 'Nunito', sans-serif;
 }
 
+a{
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+
 html, body{
     margin: 0;
     padding: 0;
@@ -68,10 +74,9 @@ html, body{
 }
 
 .nav .button li{
-    background-color: var(--third-color);
     padding: 5px;
-    border-radius: 7px;
     cursor: pointer;
+    font-size: 250%;
 }
 
 .nav .button a{

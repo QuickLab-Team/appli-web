@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/stockage/liste_stockage.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Liste des lieux de stockage</h1>
+
+<div class="filters">
+    <input type="text" name="q" placeholder="Rechercher un lieu de stockage" value="{{ query }}">
+    
+    <select name="service">
+        <option value="">Tous les services</option>
+        <option value="">Aucun service</option>
+        {% for service in services %}
+            <option value="{{ service.id }}" {% if service.id == selected_service %}selected{% endif %}>{{ service.nom }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="button" id="btn-ajouter" class="btn btn-primary">Ajouter un lieu de stockage</button>
+</div>
+
+<div class="cadre-table-scroll">
+    <table class="table-scroll">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Service</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stockage in stockages %}
+            <tr>
+                <td>{{ stockage.nom }}</td>
+                <td>{% if stockage.service %}{{ stockage.service.nom }}{% else %}Aucun service{% endif %}</td>
+                <td>
+                    <button class="btn btn-edit" data-id="{{ stockage.id }}">Modifier</button>
+                    <button class="btn btn-danger btn-delete" data-id="{{ stockage.id }}">Supprimer</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Gestion du bouton "Ajouter"
+        const ajouterButton = document.getElementById("btn-ajouter");
+        ajouterButton.addEventListener("click", function () {
+            Swal.fire({
+                title: 'Ajouter un lieu de stockage',
+                html: `
+                    <form id="ajouter-stockage-form">
+                        <label>Nom du lieu :</label>
+                        <input type="text" id="nom" class="swal2-input">
+                        <label>Service :</label>
+                        <select id="service" class="swal2-select">
+                            <option value="">Aucun service</option>
+                            {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Ajouter',
+                cancelButtonText: 'Annuler',
+                preConfirm: () => {
+                    const nom = document.getElementById("nom").value.trim();
+                    const service = document.getElementById("service").value;
+                    if (!nom) {
+                        Swal.showValidationMessage('Le nom est obligatoire.');
+                        return false;
+                    }
+                    return { nom, service };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("{% url 'produits:ajouter_stockage' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}",
+                        },
+                        body: JSON.stringify(result.value),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Succès', data.message, 'success').then(() => location.reload());
+                            } else {
+                                Swal.fire('Erreur', data.message, 'error');
+                            }
+                        });
+                }
+            });
+        });
+        document.querySelectorAll(".btn-edit").forEach(button => {
+            button.addEventListener("click", function () {
+                const id = this.dataset.id;
+                fetch("{% url 'produits:details_stockage' stockage_id=0 %}".replace("0", id))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Modifier un lieu de stockage',
+                                html: `
+                                    <form id="modifier-stockage-form">
+                                        <label>Nom du lieu :</label>
+                                        <input type="text" id="nom" class="swal2-input" value="${data.stockage.nom}">
+                                        <label>Service :</label>
+                                        <select id="service" class="swal2-select">
+                                            <option value="">Aucun service</option>
+                                            ${data.services.map(service => `
+                                                <option value="${service.id}" ${service.id == data.stockage.service_id ? 'selected' : ''}>${service.nom}</option>
+                                            `).join('')}
+                                        </select>
+                                    </form>
+                                `,
+                                showCancelButton: true,
+                                confirmButtonText: 'Modifier',
+                                cancelButtonText: 'Annuler',
+                                preConfirm: () => {
+                                    const nom = document.getElementById("nom").value.trim();
+                                    const service = document.getElementById("service").value;
+                                    if (!nom) {
+                                        Swal.showValidationMessage('Le nom est obligatoire.');
+                                        return false;
+                                    }
+                                    return { nom, service };
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    fetch("{% url 'produits:modifier_stockage' stockage_id=0 %}".replace("0", id), {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            "X-CSRFToken": "{{ csrf_token }}",
+                                        },
+                                        body: JSON.stringify(result.value),
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Succès', data.message, 'success').then(() => location.reload());
+                                            } else {
+                                                Swal.fire('Erreur', data.message, 'error');
+                                            }
+                                        });
+                                }
+                            });
+                        } else {
+                            Swal.fire('Erreur', data.message, 'error');
+                        }
+                    });
+            });
+        });
+
+        // Gestion du bouton "Supprimer"
+        document.querySelectorAll(".btn-delete").forEach(button => {
+            button.addEventListener("click", function () {
+                const id = this.dataset.id;
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: 'Cette action est irréversible.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimer',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch("{% url 'produits:supprimer_stockage' stockage_id=0 %}".replace("0", id), {
+                            method: "POST",
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token }}",
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('Succès', data.message, 'success').then(() => location.reload());
+                                } else {
+                                    Swal.fire('Erreur', data.message, 'error');
+                                }
+                            });
+                    }
+                });
+            });
+        });
+
+        function updateTable() {
+            const query = document.querySelector('input[name="q"]').value;
+            const service = document.querySelector('select[name="service"]').value;
+
+            const params = new URLSearchParams({ q: query, service: service });
+
+            fetch("/produits/stockages/?" + params.toString(), {
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector(".table-scroll tbody");
+                    if (data.success) {
+                        tbody.innerHTML = data.html;
+                        attachActionListeners();
+                    } else {
+                        tbody.innerHTML = "<tr><td colspan='3'>Aucun résultat trouvé</td></tr>";
+                    }
+                })
+                .catch(error => console.error("Erreur lors de la mise à jour des résultats :", error));
+        }
+
+        document.querySelector('input[name="q"]').addEventListener("input", updateTable);
+        document.querySelector('select[name="service"]').addEventListener("change", updateTable);
+
+        function attachActionListeners() {
+            document.querySelectorAll(".btn-edit").forEach(button => {
+                button.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                });
+            });
+
+            document.querySelectorAll(".btn-delete").forEach(button => {
+                button.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                });
+            });
+        }
+
+        attachActionListeners();
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% for stockage in stockages %}
+<tr>
+    <td>{{ stockage.nom }}</td>
+    <td>{% if stockage.service %}{{ stockage.service.nom }}{% else %}Aucun service{% endif %}</td>
+    <td>
+        <button class="btn btn-edit" data-id="{{ stockage.id }}">Modifier</button>
+        <button class="btn btn-danger btn-delete" data-id="{{ stockage.id }}">Supprimer</button>
+    </td>
+</tr>
+{% endfor %}

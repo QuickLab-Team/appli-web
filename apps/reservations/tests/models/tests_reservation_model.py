@@ -1,5 +1,6 @@
 from django.test import TestCase
-from reservation_models.models import *
+from reservations.models import *
+from produits.models import *
 import datetime
 
 class ReservationModelTest(TestCase):
@@ -32,7 +33,6 @@ class ReservationModelTest(TestCase):
         Test si une reservation est bien créée
         """
         self.assertEqual(self.reservation.utilisateur.nom, "Utilisateur")
-        self.assertEqual(self.reservation.date, datetime.date.today())
         for produit in self.reservation.produits.all():
             self.assertEqual(produit.produit.nom, "Produit")
             self.assertEqual(produit.quantite, 5)

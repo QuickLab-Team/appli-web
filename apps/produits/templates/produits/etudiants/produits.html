@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block content %}
-        {% include 'etudiants/header.html' %}
         <div class="produits">
         {% for produit in produits %}
                 <div class="produit">
@@ -21,7 +20,7 @@
                                 {% else %}
                                         <h3 class="non-dispo">Non disponible</h3>
                                 {% endif %}
-                                <a href="{% url 'produit' produit.id %}">Voir +</a>
+                                <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
                         </div>
                         
                 </div>
