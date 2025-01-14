@@ -14,7 +14,7 @@
                                 <h3 class="produit-nom">{{ produit.nom }}</h3>
                         </div>
                         <div class="right">
-                                <h3>{{ produit.quantite }}ml en stock</h3>
+                                <h3>{{ produit.get_quantite }} {{ produit.get_unite }} en stock</h3>
                                 {% if produit.quantite != null and produit.quantite > 0 %}
                                         <h3 class="dispo">Disponible</h3>
                                 {% else %}
