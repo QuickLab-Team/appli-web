@@ -8,41 +8,53 @@ import csv
 from io import TextIOWrapper
 import pandas as pd
 import openpyxl
-
+from django.http import JsonResponse
 from paniers.models import Panier
+from django.template.loader import render_to_string
 
-# Create your views here.
+
+
 
 def produits(request):
     produits = Produit.objects.all()
     familles = Famille.objects.all()
     stockages = Stockage.objects.all()
+    fournisseurs = Fournisseur.objects.all()
 
+    # Récupération des filtres depuis les paramètres GET
+    query = request.GET.get('q', '')
+    selected_famille = request.GET.get('famille', '')
+    selected_fournisseur = request.GET.get('fournisseur', '')
+    selected_stockage = request.GET.get('stockage', '')
+
+    # Application des filtres dynamiques
+    if query:
+        produits = produits.filter(nom__icontains=query)
+    if selected_famille:
+        produits = produits.filter(familles__id=selected_famille)
+    if selected_fournisseur:
+        produits = produits.filter(fournisseur__id=selected_fournisseur)
+    if selected_stockage:
+        produits = produits.filter(stockage__id=selected_stockage)
+
+    # Gestion des rôles et rendu HTML
     if request.user.role == 'etudiant':
         return render(request, 'produits/etudiants/produits.html', {
-        'titre': 'QuickLab',
-        'produits': produits
-    })
-
-    elif request.user.role == 'preparateur' or request.user.role == 'administrateur':
-        nom_query = request.GET.get('nom')
-        famille_query = request.GET.get('famille')
-        stockage_query = request.GET.get('stockage')
-        if nom_query:
-            produits = produits.filter(nom__icontains=nom_query)
-        if famille_query:
-            produits = produits.filter(famille__nom=famille_query)
-        if stockage_query:
-            produits = produits.filter(stockage__nom=stockage_query)
+            'titre': 'QuickLab',
+            'produits': produits,
+        })
+    elif request.user.role in ['preparateur', 'administrateur']:
+        
         return render(request, 'produits/preparateurs/produits.html', {
             'titre': 'QuickLab',
-            'famille': familles,
-            'stockage': stockages,
             'produits': produits,
-            'nom_query': nom_query,
-            'famille_query': famille_query,
-            'stockage_query': stockage_query
-
+            'familles': familles,
+            'fournisseurs': fournisseurs,
+            'stockages': stockages,
+            'query': query,
+            'selected_famille': selected_famille,
+            'selected_fournisseur': selected_fournisseur,
+            'selected_stockage': selected_stockage,
         })
 
 
