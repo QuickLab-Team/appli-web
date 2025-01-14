@@ -15,15 +15,14 @@
                 {% if in_panier %}
                     <a href="{% url 'suppression_panier' produit.id %}" class="action-bouton">Supprimer du panier</a>
                 {% else %}
-                    <a href="#" class="action-bouton" id="reserver-bouton">Ajouter au panier</a>
+                    <a class="action-bouton" id="reserver-bouton">Ajouter au panier</a>
                 {% endif %}
             </div>
         </div>
-        <p>{{ produit.description }}</p>
         <div class="details">
             <div>
                 <p><strong>Quantité en stock :</strong></p>
-                <p class="info">{{ produit.quantite }} ml</p>
+                <p class="info">{{ produit.get_quantite }} {{ produit.get_unite }}</p>
             </div>
             <div>
                 <p><strong>Localisation du produit :</strong></p>
@@ -37,13 +36,13 @@
     <form action="{% url 'ajout_panier' produit.id %}" method="POST">
         {% csrf_token %}
         <label for="quantite">Quantité :</label>
-        <input type="number" id="quantite" name="quantite">
+        <input type="number" id="quantite" name="quantite" min="0" step="0.01" required>
         <select name="unite">
             {% for unite in produit.get_unites %}
                 <option value="{{ unite }}">{{ unite }}</option>
             {% endfor %}
         </select>
-        <button id="confirmer-bouton">Confirmer</button>
+        <button id="confirmer-bouton" class="bouton">Confirmer</button>
     </form>
 </div>
 
@@ -53,7 +52,6 @@
     });
 
     document.getElementById("confirmer-bouton").addEventListener("click", function() {
-        var quantity = document.getElementById("quantite").value;
         document.getElementById("popup").style.display = "none";
     });
 </script>

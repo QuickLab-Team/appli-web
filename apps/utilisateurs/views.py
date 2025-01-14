@@ -25,12 +25,12 @@ from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
 
 def home(request):
-    return render(request, 'base.html', {
+    return render(request, 'utilisateurs/etudiants/accueil.html', {
         'titre': 'QuickLab',
     })
 
-def test(request):
-    return render(request, 'utilisateurs/etudiants/accueil.html', {
+def compte(request):
+    return render(request, 'utilisateurs/etudiants/compte.html', {
         'titre': 'QuickLab',
     })
 

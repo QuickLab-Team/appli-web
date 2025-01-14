@@ -132,6 +132,7 @@ def importer_produits(request):
         del request.session["produits_preview"]
         return produits(request)
 
+
     return render(request, "produits/preparateurs/importer.html", {
         "produits_preview": produits_preview
     })

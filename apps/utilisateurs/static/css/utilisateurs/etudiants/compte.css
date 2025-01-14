@@ -1,0 +1,124 @@
+.compte {
+    margin: 3%;
+    padding: 20px;
+}
+
+.top-compte, .top-compte div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.top-compte div {
+    flex-basis: 50%;
+    flex-grow: 1;
+    margin-left: 15%;
+}
+
+/* Header Section */
+.info-compte h3 {
+    font-size: clamp(14px, 3vw, 22px);
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.info-compte ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-compte ul li {
+    margin-bottom: 15px;
+    font-size: clamp(16px, 2.5vw, 18px);
+    color: var(--text-color);
+}
+
+.info-compte ul li strong {
+    color: var(--primary-color);
+}
+
+/* Button Section */
+.btn-action {
+    margin-left: 5%;
+    text-align: center;
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--primary-color);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-action::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-in-out;
+}
+
+.btn-action:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.btn-action:last-child {
+    color: red;
+}
+
+.btn-action:last-child::after {
+    background-color: red;
+}
+
+.btn-action:last-child:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .info-compte ul li {
+        font-size: clamp(14px, 3vw, 16px);
+    }
+
+    .top-compte {
+        flex-direction: column;
+    }
+
+    .top-compte div {
+        margin-left: 0;
+        margin-top: 2%;
+        width: 100%;
+    }
+
+    .btn-action {
+        margin: 0 5%;
+        font-size: clamp(8px, 3vw, 14px);
+    }
+}
+
+@media (max-width: 480px) {
+    .compte {
+        padding: 0;
+        margin: 5%;
+    }
+
+    .btn-action {
+        font-size: clamp(6px, 3vw, 10px);
+    }
+
+    .info-compte h3 {
+        font-size: clamp(18px, 4vw, 22px);
+    }
+}

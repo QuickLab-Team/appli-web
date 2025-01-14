@@ -11,11 +11,11 @@
     </div>
     <hr />
     <div class="menu-links">
-        <a href="#"><img src="{% static 'images/etudiants/menu/home.png' %}" alt="Accueil"> Accueil</a>
-        <a href="#"><img src="{% static 'images/etudiants/menu/reservations.png' %}" alt="Réservations"> Réservations</a>
-        <a href="#"><img src="{% static 'images/etudiants/menu/favoris.png' %}" alt="Favoris"> Favoris</a>
-        <a href="#"><img src="{% static 'images/etudiants/menu/profil.png' %}" alt="Compte"> Compte</a>
-        <a href="#"><img src="{% static 'images/etudiants/menu/setting.png' %}" alt="Paramètres"> Paramètres</a>
+        <a href="{% url 'home' %}"><img src="{% static 'images/etudiants/menu/home.png' %}" alt="Accueil"> Accueil</a>
+        <a href="{% url 'reservations' %}"><img src="{% static 'images/etudiants/menu/reservations.png' %}" alt="Réservations"> Réservations</a>
+        <a href="{% url 'panier' %}"><img src="{% static 'images/etudiants/menu/reservations.png' %}" alt="Panier"> Panier</a>
+        <a href=""><img src="{% static 'images/etudiants/menu/favoris.png' %}" alt="Favoris"> Favoris</a>
+        <a href="{% url 'compte' %}"><img src="{% static 'images/etudiants/menu/profil.png' %}" alt="Compte"> Compte</a>
     </div>
     <hr />
     <div class="menu-categories">

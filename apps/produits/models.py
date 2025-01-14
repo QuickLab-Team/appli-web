@@ -73,13 +73,18 @@ class Produit(models.Model):
     def __str__(self):
         return "{0} {1}".format(self.id, self.nom)
     
-    def add_quantite(self, quantite, unite):
+    def add_quantite(self, quantite, unite = None):
         if self.type == 'liquide':
+            if unite is None:
+                unite = 'l'
+
             if unite in conversion_liquides:
                 self.quantite += quantite * conversion_liquides[unite]
             else:
                 raise ValueError(f"Unité invalide pour un liquide : {unite}")
         elif self.type == 'solide':
+            if unite is None:
+                unite = 'kg'
             if unite in conversion_solides:
                 self.quantite += quantite * conversion_solides[unite]
             else:

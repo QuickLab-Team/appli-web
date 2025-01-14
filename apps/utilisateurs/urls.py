@@ -6,7 +6,6 @@ app_name = 'utilisateurs'
 
 urlpatterns = [
     path('accueil', views.accueil, name='accueil'),
-    path('home', views.test, name='home'),
     path('inscription/', views.inscription, name='inscription'),
     path('', ConnexionView.as_view(), name='connexion'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
@@ -15,4 +14,5 @@ urlpatterns = [
     path('importer_utilisateurs/', views.importer_utilisateurs, name='importer_utilisateurs'),
     path('supprimer/', views.supprimer_utilisateurs, name='supprimer_utilisateurs'),
     path('modifier/<int:utilisateur_id>/', views.modifier_utilisateur, name='modifier_utilisateur'),
+    path('compte', views.compte, name='compte'),
 ]

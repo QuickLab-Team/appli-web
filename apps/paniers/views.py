@@ -13,7 +13,7 @@ def panier(request):
 
 def ajout_panier(request, produit_id):
     if request.method == 'POST':
-        quantite = int(request.POST.get('quantite'))
+        quantite = float(request.POST.get('quantite'))
         unite = request.POST.get('unite')
         produit = get_object_or_404(Produit, id=produit_id)
         panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
@@ -40,8 +40,21 @@ def modifier_quantite(request, produit_panier_id):
 def reserver_panier(request):
     panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
     if panier.produits.count() > 0:
+
+        titre = 'Réservation'
+
+        if request.GET.get('titre'):
+            titre = request.GET.get('titre')
+
+        etat = 'attente'
+        for produit_panier in panier.produits.all():
+            if produit_panier.produit.quantite < produit_panier.quantite:
+                etat = 'pre_reservation_attente'
+
         reservation = Reservation.objects.create(
             utilisateur=request.user,
+            titre=titre,
+            etat=etat
         )
         for produit_panier in panier.produits.all():
             reservation_produit = ReservationProduit.objects.create(
@@ -49,6 +62,8 @@ def reserver_panier(request):
                 produit=produit_panier.produit,
                 quantite=produit_panier.quantite,
             )
+
+            produit_panier.produit.add_quantite(-produit_panier.quantite)
         
         panier.produits.all().delete()
         return redirect('detail_reservation', reservation.id)

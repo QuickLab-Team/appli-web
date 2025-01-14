@@ -30,7 +30,6 @@
 
 /* Style spécifique aux éléments */
 .box p {
-    color: var(--primary-color);
     text-align: left;
     font-size: 0.9rem;
     margin: 0.5% 0;
