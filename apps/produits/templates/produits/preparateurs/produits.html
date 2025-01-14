@@ -50,7 +50,13 @@
                 <td>{{ produit.quantite }}</td>
                 <td> {{produit.get_unite}}</td>
                 <td>{{ produit.fournisseur.nom }}</td>
-                <td>{{ produit.famille.nom }}</td>
+
+
+                <td>
+                    {% for famille in produit.familles.all %}
+                    {{ famille.nom }}<br>
+                    {% endfor %}
+                </td>
                 <td>{{ produit.stockage.nom }}</td>
                 <td></td>
             </tr>

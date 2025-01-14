@@ -45,35 +45,9 @@ def produits(request):
 
         })
 
-    
+
 @login_required
 def importer_produits(request):
-    if request.method == 'POST' and request.FILES['fichier']:
-        fichier = request.FILES['fichier']
-        fs = FileSystemStorage()
-        filename = fs.save(fichier.name, fichier)
-        uploaded_file_url = fs.url(filename)
-
-        with open(fs.path(filename), mode='r', encoding='utf-8') as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip the first line
-            for row in reader:
-                Produit.objects.create(
-                    nom=row[0],
-                    famille=Famille.objects.get_or_create(nom=row[1])[0],
-                    quantite=10.0,
-                    fournisseur=Fournisseur.objects.get_or_create(nom=row[1])[0],
-                    stockage=Stockage.objects.get_or_create(nom=row[2], service=Stockage.objects.first().service)[0],
-                )
-        messages.success(request, 'Produits importés avec succès.')
-        return render(request, 'produits/preparateurs/importer.html', {
-            'uploaded_file_url': uploaded_file_url
-        })
-    
-    return render(request, 'produits/preparateurs/importer.html')
-
-
-def importer_utilisateurs(request):
     produits_preview = []
 
     if request.method == "POST" and "fichier" in request.FILES:
@@ -95,8 +69,6 @@ def importer_utilisateurs(request):
 
             famille = famille if pd.notna(famille) and famille != "-"else "Pas de famille"
             fournisseur = fournisseur if pd.notna(fournisseur) and fournisseur != "-" else "Pas de fournisseur"
-
-
             produits_preview.append({
                 "nom": row["Produits"],
                 "fournisseur": fournisseur,
@@ -133,7 +105,7 @@ def importer_utilisateurs(request):
                     p.add_quantite(produit["quantite"], produit["unite"])
 
         del request.session["produits_preview"]
-        return redirect("liste_produits")
+        return produits(request)
 
     return render(request, "produits/preparateurs/importer.html", {
         "produits_preview": produits_preview

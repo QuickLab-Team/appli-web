@@ -12,10 +12,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         self.stdout.write('Suppression des données...')
-
-        with connection.cursor() as cursor:
-            cursor.execute("DROP TABLE IF EXISTS produits_fournisseur")
-
         PanierProduit.objects.all().delete()
         Panier.objects.all().delete()
         ReservationProduit.objects.all().delete()
@@ -23,6 +19,7 @@ class Command(BaseCommand):
         Produit.objects.all().delete()
         Stockage.objects.all().delete()
         Famille.objects.all().delete()
+        Fournisseur.objects.all().delete()
         Service.objects.all().delete()
         Utilisateur.objects.all().delete()
 
@@ -50,33 +47,30 @@ class Command(BaseCommand):
                 id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
-                description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
-                famille=famille1,
                 stockage=stockage1,
                 type='liquide'
             )
+            produit.familles.set([famille1, famille2])
         
         for i in range(5, 10):
             produit = Produit.objects.create(
                 id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
-                description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
-                famille=famille2,
                 stockage=stockage2,
                 type='solide'
             )
+            produit.familles.set([famille1, famille2])
 
         for i in range(10, 15):
             produit = Produit.objects.create(
                 id=i,
                 nom='Produit {0}'.format(i),
                 quantite=random.randint(1, 1000),
-                description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
-                famille=famille1,
                 stockage=stockage2,
                 type='unite'
             )
+            produit.familles.set([famille1, famille2])
 
         # Utilisateurs
         for i in range(1, 20):

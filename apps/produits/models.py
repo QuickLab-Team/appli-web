@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -63,13 +65,13 @@ class Produit(models.Model):
     nom = models.CharField(max_length=100)
     quantite = models.FloatField()
     fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE, null=True, blank=True)
-    description = models.TextField()
-    famille = models.ForeignKey(Famille, on_delete=models.CASCADE, null=True, blank=True)
+    familles = models.ManyToManyField(Famille, blank=True)
+    date_ajout = models.DateTimeField(default=timezone.now)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)
     type = models.CharField(max_length=10, choices=[('liquide', 'Liquide'), ('solide', 'Solide'), ('unite', 'Unité')], default='unite')
     
     def __str__(self):
-        return "{0} {1} {2}".format(self.id, self.nom, self.description)
+        return "{0} {1}".format(self.id, self.nom)
     
     def add_quantite(self, quantite, unite):
         if self.type == 'liquide':
@@ -83,11 +85,8 @@ class Produit(models.Model):
             else:
                 raise ValueError(f"Unité invalide pour un solide : {unite}")
         else:
-            switch = {
-                'unite': 1
-            }
-        quantite = quantite / switch[unite]
-        self.quantite += quantite
+            self.quantite += quantite
+            
         self.save()
 
     
@@ -140,8 +139,8 @@ class Produit(models.Model):
         familles = [nom.strip() for nom in famille.replace('/', '+').split('+')]
         for nom_famille in familles:
             famille_obj, _ = Famille.objects.get_or_create(nom=nom_famille)
-            self.famille = famille_obj
-            self.save()
+            self.familles.add(famille_obj)
+        self.save()
 
     def add_fournisseur(self, fournisseur):
         self.fournisseur = Fournisseur.objects.get_or_create(nom=fournisseur)[0]
