@@ -13,11 +13,17 @@ def home(request):
         'titre': 'QuickLab',
     })
 
+def test(request):
+    return render(request, 'utilisateurs/etudiants/accueil.html', {
+        'titre': 'QuickLab',
+    })
+
+
 @login_required
 def accueil(request):
 
     if request.user.role == 'etudiant':
-            return render(request, 'produits/etudiants/produits.html', {
+            return render(request, 'utilisateurs/etudiants/accueil.html', {
                 'titre': 'QuickLab',
             })
         
