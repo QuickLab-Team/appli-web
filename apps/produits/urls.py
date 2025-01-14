@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
-from reservations.views import ajout_panier
-
+from paniers.views import ajout_panier
 
 app_name = 'produits'
 

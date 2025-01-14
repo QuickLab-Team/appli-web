@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/table.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2>Liste des réservations</h2>
+<div class="cadre-table-scroll">
+    <table class="table-scroll">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Etat</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Année</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.titre }}</td>
+                <td>
+                    <select name="etat_reservation">
+                        {% for k, etat in reservation.get_etats %}
+                            <option value="{{ k }}">{{ etat }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>{{ reservation.utilisateur.nom }}</td>
+                <td>{{ reservation.utilisateur.prenom }}</td>
+                <td>{{ reservation.utilisateur.annee }}</td>
+                <td>{{ reservation.date|date:"d/m/Y H:i:s" }}</td>
+                <td>
+                    <a href="{% url 'detail_reservation' reservation.id %}">Détails</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
