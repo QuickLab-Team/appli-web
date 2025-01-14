@@ -11,17 +11,17 @@
 <header class="header">
     <div class="top">
         <div class="logo">
-            <a href="{% url 'produits:produits' %}">
+            <a href="{% url 'home' %}">
                 Quick Lab
             </a>
         </div>
         {% include 'etudiants/search_bar.html' %}
         <nav class="nav">
             <ul>
-                <li><a href="{% url 'produits:produits' %}">Accueil</a></li>
+                <li><a href="{% url 'home' %}">Accueil</a></li>
                 <li><a href="{% url 'reservations' %}">Réservations</a></li>
                 <li><a href="{% url 'panier' %}">Panier</a></li>
-                <li><a href="{% url 'utilisateurs:deconnexion' %}">Déconnexion</a></li>
+                <li><a href="{% url 'utilisateurs:compte' %}">Compte</a></li>
             </ul>
         </nav>
     </div>
