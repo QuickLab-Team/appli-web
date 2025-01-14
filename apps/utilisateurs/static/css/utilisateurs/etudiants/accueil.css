@@ -1,0 +1,134 @@
+.accueil {
+    margin: 2% 3%;
+}
+
+.accueil h2{
+    font-size: clamp(16px, 3.75vw, 40px);
+    font-weight: bold;
+    margin-left: 20px;
+    color: var(--primary-color);
+}
+
+.accueil p{
+    margin: 20px;
+    margin-bottom: 40px;
+    font-size: clamp(12px, 2vw, 30px);
+}
+
+.top-accueil{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2%;
+}
+
+/* Section Informations */
+.informations {
+    margin-top: 5%;
+}
+
+.informations h2{
+    margin-bottom: 2%;
+}
+
+.informations h3{
+    font-weight: 400;
+}
+
+.informations .box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2%;
+}
+
+.informations .info-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--fourth-color);
+    border-radius: 10px;
+    padding: 0.5%;
+    margin: 0% 7.5% 1% 7.5%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    flex-basis: 40%;
+}
+
+.info-card img {
+    margin-left: 1%;
+    width: 5%;
+    height: auto;
+}
+
+.info-card a {
+    margin-right: 5%;
+    text-decoration: none;
+    font-size: 1rem;
+    color: var(--primary-color);
+    position: relative;
+    transition: color 0.3s;
+}
+
+.info-card a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-in-out;
+}
+
+.info-card a:hover {
+    color: var(--primary-color);
+}
+
+.info-card a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+@media (max-width: 768px) {
+    .top-accueil a {
+        padding: 1% 1.5% !important;
+    }
+
+    .informations h3 {
+        font-size: 1rem;
+    }
+
+    .informations a {
+        font-size: 0.8rem;
+    }
+
+    .info-card {
+        margin: 0% 5% 1% 5% !important;
+        flex-basis: auto !important;
+    } 
+}
+
+@media (max-width: 480px) {
+    .accueil {
+        margin-top: 7.5% !important;
+    }
+
+    .informations h3 {
+        font-size: 0.8rem;
+    }
+
+    .informations a {
+        font-size: 0.6rem;
+    }
+
+    .box {
+        flex-direction: column;
+        margin-top: 0% !important;
+    }
+
+    .info-card {
+        margin: 3% 7.5% 1% 7.5% !important;
+    } 
+}
