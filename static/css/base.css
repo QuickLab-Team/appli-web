@@ -50,3 +50,8 @@
     color: white;
     text-decoration: none;
 }
+.nav .button{
+    list-style: none;
+    display: flex;
+    margin-right: 30px;
+}

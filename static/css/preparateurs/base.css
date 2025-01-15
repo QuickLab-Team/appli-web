@@ -61,9 +61,9 @@ html, body{
 }
 
 .nav .button li{
-    background-color: var(--third-color);
     padding: 5px;
-    border-radius: 7px;
+    cursor: pointer;
+    font-size: 250%;
     cursor: pointer;
 }
 

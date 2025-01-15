@@ -1,0 +1,74 @@
+.compte-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Nunito', sans-serif;
+}
+
+.compte-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0B1E5C;
+}
+
+.compte-header h2 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.compte-details {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    
+}
+
+.detail-row {
+    display: flex;
+    padding: 10px 0;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #555;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.detail-value {
+    color: #333;
+}
+
+.compte-actions {
+    text-align: center;
+}
+
+.compte-actions .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    margin: 10px;
+    transition: all 0.3s ease;
+    color: #fff;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.compte-actions .btn-primary {
+    background-color: #0B1E5C;
+}
+
+.compte-actions .btn-danger {
+    background-color: #dc3545;
+}
+
+.compte-actions .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+}
