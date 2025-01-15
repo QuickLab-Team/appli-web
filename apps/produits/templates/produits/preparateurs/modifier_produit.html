@@ -41,7 +41,7 @@
         <select id="familles" name="familles" multiple>
             <option value="">Pas de famille</option>
             {% for famille in familles %}
-                <option value="{{ famille.id }}" {% if famille in produit.familles.all %}selected{% endif %}>{{ famille.nom }}</option>
+                <option value="{{ famille.nom }}" {% if famille in produit.familles.all %}selected{% endif %}>{{ famille.nom }}</option>
             {% endfor %}
         </select>
     </div>

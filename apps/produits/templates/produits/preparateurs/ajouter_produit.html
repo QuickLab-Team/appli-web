@@ -45,26 +45,19 @@
         <select id="familles" name="familles" multiple>
             <option value="">Pas de famille</option>
             {% for famille in familles %}
-                <option value="{{ famille.id }}">{{ famille.nom }}</option>
+                <option value="{{ famille.nom }}">{{ famille.nom }}</option>
             {% endfor %}
         </select>
     </div>
     <div>
-        <label for="stockage">Stockage:</label>
+        <label for="stockage">Lieu de stockage:</label>
         <select id="stockage" name="stockage" required>
             {% for stockage in stockages %}
                 <option value="{{ stockage.nom }}">{{ stockage.nom }}</option>
             {% endfor %}
         </select>
     </div>
-    <div>
-        <label for="type">Type:</label>
-        <select id="type" name="type" required>
-            <option value="liquide">Liquide</option>
-            <option value="solide">Solide</option>
-            <option value="unite">Unité</option>
-        </select>
-    </div>
+
     <button type="submit">Ajouter</button>
 </form>
 

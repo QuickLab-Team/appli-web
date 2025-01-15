@@ -141,6 +141,9 @@ class Produit(models.Model):
         return None
     
     def add_famille(self, famille):
+
+        if famille is None or famille == '':
+            return
         familles = [nom.strip() for nom in famille.replace('/', '+').split('+')]
         for nom_famille in familles:
             famille_obj, _ = Famille.objects.get_or_create(nom=nom_famille)

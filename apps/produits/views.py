@@ -10,6 +10,7 @@ import pandas as pd
 import openpyxl
 from django.http import JsonResponse
 from paniers.models import Panier
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 
 @login_required
@@ -156,34 +157,57 @@ def produit_detail(request, produit_id):
     return render(request, 'produits/preparateurs/produit.html', {
         'titre': 'QuickLab',
         'produit': produit,
-        'familles': Famille.objects.all().distinct(),
     })
 
 
 def ajouter_produit(request):
 
+   
     fournisseurs = Fournisseur.objects.all().order_by('nom')
     familles = Famille.objects.all().order_by('nom')
     stockages = Stockage.objects.all().order_by('nom')
 
     if request.method == 'POST':
         nom = request.POST.get('nom')
-        quantite = request.POST.get('quantite')
+        quantite = int(request.POST.get('quantite'))
         stockage = request.POST.get('stockage')
-        famille = request.POST.get('famille')
+        unite = request.POST.get('unite')
+        famille = request.POST.get('familles')
         fournisseur = request.POST.get('fournisseur')
+
+        if unite == "ml":
+            type = 'liquide'
+            quantite = quantite / 1000
+        elif unite == "cl":
+            type = 'liquide'
+            quantite = quantite / 100
+        elif unite == "l":
+            type = 'liquide'
+            quantite = quantite
+        elif unite == "g":
+            type = 'solide'
+            quantite = quantite / 1000
+        elif unite == "kg":
+            type = 'solide'
+            quantite = quantite
+        else:
+            type = 'unite'
+            quantite = quantite
 
         p = Produit.objects.create(
             nom=nom,
             quantite=quantite,
+            type=type,
             stockage=Stockage.objects.get_or_create(nom=stockage, service=Stockage.objects.first().service)[0],
         )
 
-        if famille:
-            p.add_famille(famille)
-
         if fournisseur:
             p.add_fournisseur(fournisseur)
+        
+        
+        p.add_famille(famille)
+        p.save()
+
 
         return redirect('produits:produits')
    
@@ -204,14 +228,14 @@ def modifier_produit(request, produit_id):
         produit.nom = request.POST.get('nom')
         produit.quantite = request.POST.get('quantite')
         produit.stockage = Stockage.objects.get_or_create(nom=request.POST.get('stockage'), service=Stockage.objects.first().service)[0]
-        produit.familles.clear()
-        produit.fournisseur = None
+        produit.fournisseur = Fournisseur.objects.get_or_create(nom=request.POST.get('fournisseur'))[0]
 
-        famille = request.POST.get('famille')
+        famille = request.POST.get('familles')
         fournisseur = request.POST.get('fournisseur')
 
-        if famille:
-            produit.add_famille(famille)
+        produit.familles.clear()
+
+        produit.add_famille(famille)
 
         if fournisseur:
             produit.add_fournisseur(fournisseur)
@@ -226,6 +250,8 @@ def modifier_produit(request, produit_id):
         'stockages': stockages,
     })
 
-def supprimer_produit(produit_id):
-    Produit.objects.get(id=produit_id).delete()
+def supprimer_produit(request, produit_id):
+    produit = get_object_or_404(Produit, id=produit_id)
+    produit.delete()
+    messages.success(request, "Produit supprimé avec succès.")
     return redirect('produits:produits')
