@@ -1,9 +1,5 @@
-{% extends "base.html" %}
+{% extends "preparateurs/base.html" %}
 {% load static %}
-
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'css/table.css' %}">
-{% endblock %}
 
 {% block content %}
 
@@ -37,7 +33,7 @@
                 <td>{{ reservation.utilisateur.annee }}</td>
                 <td>{{ reservation.date|date:"d/m/Y H:i:s" }}</td>
                 <td>
-                    <a href="{% url 'detail_reservation' reservation.id %}">Détails</a>
+                    <a href="{% url 'reservation' reservation.id %}">Détails</a>
                 </td>
             </tr>
             {% endfor %}

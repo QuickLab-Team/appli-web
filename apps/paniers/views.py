@@ -27,7 +27,7 @@ def suppression_panier(request, produit_id):
     PanierProduit.objects.filter(panier=panier, produit=produit).delete()
     return redirect('panier')
 
-def modifier_quantite(request, produit_panier_id):
+def modifier_quantite_panier(request, produit_panier_id):
     if request.method == 'POST':
         quantite = int(request.POST.get('quantite'))
         unite = request.POST.get('unite')
@@ -66,5 +66,5 @@ def reserver_panier(request):
             produit_panier.produit.add_quantite(-produit_panier.quantite)
         
         panier.produits.all().delete()
-        return redirect('detail_reservation', reservation.id)
+        return redirect('reservation', reservation.id)
     return redirect('panier')

@@ -1,89 +1,79 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-:root{
-    --primary-color: #0B1E5C;
-    --secondary-color: #FFFFFF;
-    --third-color: #D9E7F0;
-}
-
 *{
     margin: 0;
     font-family: 'Nunito', sans-serif;
 }
 
-a{
-    text-decoration: none;
-    color: var(--primary-color);
+:root{
+    --primary-color: #0B1E5C;
+    --secondary-color: #FFFFFF;
+    --third-color: #D9E7F0;
+    --fourth-color: #F5F5F5;
+    --fifth-color: #EAE6E6;
 }
 
-
-html, body{
-    margin: 0;
-    padding: 0;
-    height: 100%;
+.cadre-table-scroll{
+    display: inline-block;
+    height: 30em;
+    overflow-y: scroll;
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+.table-scroll thead th{
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+.table-scroll tfoot td{
+    position: sticky;
+    bottom: 0;
+}
+.table-scroll {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table-scroll tbody td {
+    padding: 12px;
+    text-align: center;
+    border-right: none;
+    border-bottom: 1px solid black;
 }
 
-.page{
-    height: 100%;
-    display: flex;
-}
-
-.menu{
+.bouton{
     background-color: var(--primary-color);
-    height: 100%;
-    width: 20%;
-    overflow: hidden;
-    position: fixed;
-}
-
-.right-page{
-    width: 100%;
-    margin-left: 20%;
-}
-
-.nav{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.nav .titre{
-    font-size: 3em;
-    font-weight: bold;
-    margin-left: 30px;
-    color: var(--primary-color);
-}
-
-.nav .button{
-    list-style: none;
-    display: flex;
-    margin-right: 30px;
-}
-
-.nav a{
+    padding: 5px;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
     text-decoration: none;
 }
 
-.content{
-    margin-left: 20px;
-    margin-top: 3%;
+.etat-annule, 
+.etat-refuse, 
+.etat-pre_reservation_refuse{
+    background-color: #ff4d4d;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
 }
 
-.nav .button li{
-    background-color: var(--third-color);
-    padding: 5px;
-    border-radius: 7px;
-    cursor: pointer;
+.etat-attente, 
+.etat-pre_reservation_attente, 
+.attente_recuperation{
+    background-color: #ffa500;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
 }
 
-.nav .button a{
-    color: var(--primary-color)
-}
-
-.nav{
-    min-height: 4em;
+.etat-valide, 
+.etat-termine{
+    background-color: #28a745;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
 }

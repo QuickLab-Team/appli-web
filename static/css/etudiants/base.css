@@ -1,14 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-
-/* Reset global */
 * {
-    margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Nunito', sans-serif;
 }
 
-/* Structure générale */
 html, body {
     height: 100%;
     width: 100%;
@@ -28,42 +22,4 @@ html, body {
     flex-direction: column;
     flex: 1;
     height: 70%;
-}
-
-.bouton{
-    background-color: var(--primary-color);
-    padding: 5px;
-    border-radius: 2px;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.etat-annule, 
-.etat-refuse, 
-.etat-pre_reservation_refuse{
-    background-color: #ff4d4d;
-    padding: 3px 10px;
-    border-radius: 5px;
-    color: white;
-    text-decoration: none;
-}
-
-.etat-attente, 
-.etat-pre_reservation_attente, 
-.attente_recuperation{
-    background-color: #ffa500;
-    padding: 3px 10px;
-    border-radius: 5px;
-    color: white;
-    text-decoration: none;
-}
-
-.etat-valide, 
-.etat-termine{
-    background-color: #28a745;
-    padding: 3px 10px;
-    border-radius: 5px;
-    color: white;
-    text-decoration: none;
 }

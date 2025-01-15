@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block styles %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>{{ titre }}</title>
 </head>
 <body>
     <div class="page">
-        {% include 'menu.html' %}
+        {% include 'preparateurs/menu.html' %}
         <div class="right-page">
             <div class="nav">
                 <h1 class="titre"><a href="{% url 'utilisateurs:accueil' %}">{{titre}}</a></h1>

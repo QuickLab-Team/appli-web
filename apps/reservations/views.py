@@ -21,7 +21,7 @@ def reservations(request):
 
 # Vue pour les détails d'une réservation
 @login_required
-def detail_reservation(request, reservation_id):
+def reservation(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
     if request.user.role == 'preparateur':
         return render(request, 'reservations/preparateurs/reservation.html', {
@@ -30,7 +30,7 @@ def detail_reservation(request, reservation_id):
             'titre': 'QuickLab'
         })
     else:
-        return render(request, 'reservations/etudiants/detail_reservation.html', {
+        return render(request, 'reservations/etudiants/reservation.html', {
             'reservation': reservation,
             'messages': reservation.messages.all().order_by('-date')
         })
@@ -54,4 +54,4 @@ def annuler_reservation(request, reservation_id):
         produit_reservation.produit.add_quantite(produit_reservation.quantite)
         produit_reservation.produit.save()
 
-    return redirect('detail_reservation', reservation_id=reservation_id)
+    return redirect('reservation', reservation_id=reservation_id)

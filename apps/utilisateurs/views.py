@@ -78,7 +78,7 @@ class ConnexionView(LoginView):
     def get_success_url(self):
         return self.success_url
 
-def liste_utilisateurs(request):
+def utilisateurs(request):
     User = get_user_model()
     query = request.GET.get('q', '')  # Recherche
     role = request.GET.get('role', '')  # Filtre par rôle
@@ -126,7 +126,7 @@ def ajouter_utilisateur(request):
         form = UtilisateurForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('utilisateurs:liste_utilisateurs')
+            return redirect('utilisateurs:utilisateurs')
     else:
         form = UtilisateurForm()
     return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})

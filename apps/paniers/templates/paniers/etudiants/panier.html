@@ -22,7 +22,7 @@
                         </div>
                         <div class="right">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                            <input type="hidden" name="update-lien" value="{% url 'modifier_quantite' produit_panier.id %}">
+                            <input type="hidden" name="update-lien" value="{% url 'modifier_quantite_panier' produit_panier.id %}">
                             <input id="quantite-input" type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="quantite-input">
                             <select name="unite" class="unite-input">
                                 {% for unite in produit_panier.produit.get_unites %}
