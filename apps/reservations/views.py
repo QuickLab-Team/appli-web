@@ -27,7 +27,7 @@ def reservation(request, reservation_id):
         return render(request, 'reservations/preparateurs/reservation.html', {
             'reservation': reservation,
             'messages': reservation.messages.all().order_by('-date'),
-            'titre': 'QuickLab'
+            'titre': 'QuickLab',
         })
     else:
         return render(request, 'reservations/etudiants/reservation.html', {
@@ -55,3 +55,13 @@ def annuler_reservation(request, reservation_id):
         produit_reservation.produit.save()
 
     return redirect('reservations:reservation', reservation_id=reservation_id)
+
+@login_required
+def modifier_reservation_etat(request, reservation_id):
+    if request.method == 'POST':
+        reservation = get_object_or_404(Reservation, id=reservation_id)
+        etat = request.POST.get('etat')
+        reservation.etat = etat
+        reservation.save()
+        return JsonResponse({'erreur': False, 'message': 'État modifié'}, status=200)
+    return HttpResponseNotAllowed(['POST'], 'Méthode non autorisée.')

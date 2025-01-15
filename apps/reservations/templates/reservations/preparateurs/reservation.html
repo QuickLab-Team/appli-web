@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'js/reservations/etudiants/reservation.js' %}"></script>
+    <script src="{% static 'js/reservations/preparateurs/reservation.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 {% endblock %}
 
@@ -16,7 +16,17 @@
             <div class="reservation-info">
                 <h1 class="titre">{{ reservation.titre }}</h1>
                 <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y H:i:s" }}</p>
-                <p><strong>Statut : </strong>{{ reservation.get_etat_display }}</p>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="update_etat_reservation_lien" value="{% url 'reservations:modifier_reservation_etat' reservation.id %}">
+                <select name="etat_reservation">
+                    {% for k, etat in reservation.get_etats %}
+                        <option value="{{ k }}"
+                        {% if k == reservation.etat %}
+                            selected
+                        {% endif %}
+                        >{{ etat }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="produits">
                 <h3>Produits :</h3>
