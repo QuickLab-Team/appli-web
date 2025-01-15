@@ -9,7 +9,7 @@ from produits.models import Famille, Service
 @login_required
 def reservations(request):
     reservations = Reservation.objects.all().order_by('-date')
-    if request.user.role == 'preparateur':
+    if request.user.role in ['preparateur', 'administrateur']:
         return render(request, 'reservations/preparateurs/reservations.html', {
             'titre': 'QuickLab',
             'reservations': reservations
@@ -26,7 +26,7 @@ def reservations(request):
 @login_required
 def reservation(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
-    if request.user.role == 'preparateur':
+    if request.user.role in ['preparateur', 'administrateur']:
         return render(request, 'reservations/preparateurs/reservation.html', {
             'reservation': reservation,
             'messages': reservation.messages.all().order_by('-date'),
