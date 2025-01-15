@@ -42,20 +42,71 @@
     <div class="bottom">
         <div class="filtres">
             <ul>
-
                 <li><a href="{% url 'produits:produits' %}">Tous les produits</a></li>
-                <li><a href="#">Catégories</a></li>
-                <li><a href="#">Disponible</a></li>
-                <li><a href="#">Localisation</a></li>
-                <li><a href="#">Service</a></li>
-                <li><a href="#">Favoris</a></li>
+                <li><a href="#" id="familles-bouton">Familles</a></li>
+                <li><a href="#" id="services-bouton">Service</a></li>
             </ul>
         </div>
     </div>
     {% include 'etudiants/menu.html' %}
 </header>
+<div id="popup-familles" style="display: none;">
+    <div>
+        <select name="filtre_famille">
+            <option value="0" selected>Toutes les familles</option>
+            {% for famille in familles %}
+                <option value="{{ famille.id }}">{{ famille.nom }}</option>
+            {% endfor %}
+        </select>
+        <button id="confirmer-bouton" class="bouton">Confirmer</button>
+    </div>
+</div>
+
+<div id="popup-services" style="display: none;">
+    <div>
+        <select name="filtre_service">
+            <option value="0" selected>Tous les services</option>
+            {% for service in services %}
+                <option value="{{ service.id }}">{{ service.nom }}</option>
+            {% endfor %}
+        </select>
+        <button id="confirmer-bouton-service" class="bouton">Confirmer</button>
+    </div>
+</div>
 
 <script>
+    document.getElementById("familles-bouton").addEventListener("click", function() {
+        document.getElementById("popup-familles").style.display = "block";
+    });
+
+    document.getElementById("confirmer-bouton").addEventListener("click", function() {
+        let select = document.querySelector('select[name="filtre_famille"]');
+        let famille = select.options[select.selectedIndex].value;
+        let url = "{% url 'produits:produits' %}";
+
+        if(famille != 0) {
+            url += "?famille=" + famille;
+        }
+
+        window.location.href = url;
+    });
+
+    document.getElementById("services-bouton").addEventListener("click", function() {
+        document.getElementById("popup-services").style.display = "block";
+    });
+
+    document.getElementById("confirmer-bouton-service").addEventListener("click", function() {
+        let select = document.querySelector('select[name="filtre_service"]');
+        let service = select.options[select.selectedIndex].value;
+        let url = "{% url 'produits:produits' %}";
+
+        if(service != 0) {
+            url += "?service=" + service;
+        }
+
+        window.location.href = url;
+    });
+
     const menu = document.querySelector('.menu');
     const menuBurger = document.querySelector('.menu-burger');
     const closeMenu = document.querySelector('.close-menu');

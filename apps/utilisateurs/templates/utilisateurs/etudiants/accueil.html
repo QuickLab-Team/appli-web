@@ -8,7 +8,7 @@
 {% block content %}
     <div class="accueil">
         <div class="top-accueil">
-            <h2>Bonjour, {{ user.nom }} 👋 !</h2>
+            <h2>Bonjour, {{ user.prenom }} 👋 !</h2>
         </div>
         
 
@@ -17,21 +17,16 @@
             conçu pour vous offrir une expérience fluide, efficace et adaptée à vos besoins.</p>
 
         <div class="informations">
-            <h2>Informations</h2>
-            {% for produit in produits|slice:":4" %}
+            <h3>Derniers produits ajoutés</h3>
                 <div class="box">
-                    <div class="info-card">
-                        <img src="{% static 'images/ajout.png' %}" alt="Ajout de produit">
-                        <h3>{{ produit.date_ajout }}</h3>
-                        <a href="">Voir +</a>
-                    </div>
-                    <div class="info-card">
-                        <img src="{% static 'images/ajout.png' %}" alt="Ajout de produit">
-                        <h3>{{ produit.date_ajout }}</h3>
-                        <a href="">Voir +</a>
-                    </div>
+                    {% for produit in produits|slice:":2" %}
+                        <div class="info-card">
+                            <p>{{ produit.nom }}</p>
+                            <p>{{ produit.date_ajout|date:"d/m/Y H:i:s" }}</p>
+                            <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
         </div>
     </div>
 {% endblock %}

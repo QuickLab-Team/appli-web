@@ -7,14 +7,18 @@
 
 {% block content %}
     <div class="reservation-content">
-        {% for reservation in reservations %}
-            <div class="box">
-                <p class="date" >{{ reservation.date|date:"d/m/Y H:i:s" }}</p>
-                <h3>{{ reservation.titre }}</h3>
-                <p class="etat-{{ reservation.etat }}">{{ reservation.get_etat_display }}</p>
-                <a href="{% url 'reservations:reservation' reservation.id %}">Détail de la réservation</a>
-            </div>
-        {% endfor %}
+        {% if reservations.count > 0 %}
+            {% for reservation in reservations %}
+                <div class="box">
+                    <p class="date" >{{ reservation.date|date:"d/m/Y H:i:s" }}</p>
+                    <h3>{{ reservation.titre }}</h3>
+                    <p class="etat-{{ reservation.etat }}">{{ reservation.get_etat_display }}</p>
+                    <a href="{% url 'reservations:reservation' reservation.id %}">Détail de la réservation</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h1>Aucune réservation</h1>
+        {% endif %}
     </div>
     
 {% endblock %}

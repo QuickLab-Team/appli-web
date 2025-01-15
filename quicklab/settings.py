@@ -165,3 +165,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'utilisateurs:connexion'
 LOGIN_REDIRECT_URL = 'utilisateurs:accueil'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'quicklab.app@gmail.com'
+EMAIL_HOST_PASSWORD = 'hbbq tuzo rbrm uiuo'
+DEFAULT_FROM_EMAIL = 'QuickLab <quicklab.app@gmail.com>'

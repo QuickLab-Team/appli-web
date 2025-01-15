@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Panier, PanierProduit
+from produits.models import Famille, Service
 from produits.models import Produit
 from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponse
 from reservations.models import Reservation, ReservationProduit
@@ -9,7 +10,11 @@ from django.views.decorators.cache import never_cache
 @never_cache
 def panier(request):
     panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
-    return render(request, 'paniers/etudiants/panier.html', {'panier': panier})
+    return render(request, 'paniers/etudiants/panier.html', {
+        'panier': panier,
+        'familles': Famille.objects.all().distinct(),
+        'services': Service.objects.all().distinct(),
+    })
 
 def ajout_panier(request, produit_id):
     if request.method == 'POST':
