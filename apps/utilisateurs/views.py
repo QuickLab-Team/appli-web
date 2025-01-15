@@ -25,12 +25,15 @@ from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.http import Http404
 from django.utils.crypto import get_random_string
+from produits.models import Famille, Service, Produit
 
 @login_required
 def compte(request):
     if request.user.role == 'etudiant':
         return render(request, 'utilisateurs/etudiants/compte.html', {
             'titre': 'QuickLab',
+            'familles': Famille.objects.all().distinct(),
+            'services': Service.objects.all().distinct(),
         })
     return redirect('utilisateurs:accueil')
 
@@ -39,6 +42,9 @@ def accueil(request):
     if request.user.role == 'etudiant':
         return render(request, 'utilisateurs/etudiants/accueil.html', {
             'titre': 'QuickLab',
+            'familles': Famille.objects.all().distinct(),
+            'services': Service.objects.all().distinct(),
+            'produits': Produit.objects.all(),
         })
         
     return render(request, 'utilisateurs/preparateurs/accueil.html', {

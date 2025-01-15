@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Produit, Famille, Stockage, Fournisseur
+from .models import Produit, Famille, Stockage, Fournisseur, Service
 from django.contrib import messages
 from .forms import FileImportForm
 from django.contrib.auth.decorators import login_required
@@ -12,9 +12,7 @@ from django.http import JsonResponse
 from paniers.models import Panier
 from django.template.loader import render_to_string
 
-
-
-
+@login_required
 def produits(request):
     produits = Produit.objects.all()
     familles = Famille.objects.all()
@@ -26,6 +24,7 @@ def produits(request):
     selected_famille = request.GET.get('famille', '')
     selected_fournisseur = request.GET.get('fournisseur', '')
     selected_stockage = request.GET.get('stockage', '')
+    selected_service = request.GET.get('service', '')
 
     # Application des filtres dynamiques
     if query:
@@ -36,12 +35,16 @@ def produits(request):
         produits = produits.filter(fournisseur__id=selected_fournisseur)
     if selected_stockage:
         produits = produits.filter(stockage__id=selected_stockage)
+    if selected_service:
+        produits = produits.filter(stockage__service__id=selected_service)
 
     # Gestion des rôles et rendu HTML
     if request.user.role == 'etudiant':
         return render(request, 'produits/etudiants/produits.html', {
             'titre': 'QuickLab',
             'produits': produits,
+            'familles': familles,
+            'services': Service.objects.all().distinct(),
         })
     elif request.user.role in ['preparateur', 'administrateur']:
         
@@ -137,22 +140,24 @@ def importer_produits(request):
         "produits_preview": produits_preview
     })
 
-
+@login_required
 def produit(request, produit_id):
     produit = Produit.objects.get(id=produit_id)
     panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
     return render(request, 'produits/etudiants/produit.html', {
         'titre': 'QuickLab',
         'produit': produit,
-        'in_panier': panier.produits.filter(produit=produit).exists()
+        'in_panier': panier.produits.filter(produit=produit).exists(),
+        'familles': Famille.objects.all().distinct(),
     })
 
-
+@login_required
 def produit_detail(request, produit_id):
     produit = Produit.objects.get(id=produit_id)
     return render(request, 'produits/preparateurs/produit.html', {
         'titre': 'QuickLab',
         'produit': produit,
+        'familles': Famille.objects.all().distinct(),
     })
 
 

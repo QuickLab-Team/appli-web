@@ -9,6 +9,13 @@
     color: var(--primary-color);
 }
 
+.accueil h3{
+    font-size: clamp(14px, 3.75vw, 30px);
+    font-weight: bold;
+    margin-left: 20px;
+    color: var(--primary-color);
+}
+
 .accueil p{
     margin: 20px;
     margin-bottom: 40px;

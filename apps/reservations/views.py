@@ -3,6 +3,7 @@ from .models import Reservation, MessageReservation
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from produits.models import Famille, Service
 
 # Vue pour la liste des réservations
 @login_required
@@ -16,7 +17,9 @@ def reservations(request):
     else:
         return render(request, 'reservations/etudiants/reservations.html', {
             'titre': 'QuickLab',
-            'reservations': reservations
+            'reservations': reservations,
+            'familles': Famille.objects.all().distinct(),
+            'services': Service.objects.all().distinct(),
         })
 
 # Vue pour les détails d'une réservation
@@ -32,7 +35,9 @@ def reservation(request, reservation_id):
     else:
         return render(request, 'reservations/etudiants/reservation.html', {
             'reservation': reservation,
-            'messages': reservation.messages.all().order_by('-date')
+            'messages': reservation.messages.all().order_by('-date'),
+            'familles': Famille.objects.all().distinct(),
+            'services': Service.objects.all().distinct(),
         })
 
 @login_required
