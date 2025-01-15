@@ -54,4 +54,4 @@ def annuler_reservation(request, reservation_id):
         produit_reservation.produit.add_quantite(produit_reservation.quantite)
         produit_reservation.produit.save()
 
-    return redirect('reservation', reservation_id=reservation_id)
+    return redirect('reservations:reservation', reservation_id=reservation_id)

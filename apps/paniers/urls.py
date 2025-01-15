@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'paniers'
+
 urlpatterns = [
     path('', views.panier, name='panier'),
     path('ajout/<int:produit_id>/', views.ajout_panier, name='ajout_panier'),

@@ -12,7 +12,7 @@
                 <p class="date" >{{ reservation.date|date:"d/m/Y H:i:s" }}</p>
                 <h3>{{ reservation.titre }}</h3>
                 <p class="etat-{{ reservation.etat }}">{{ reservation.get_etat_display }}</p>
-                <a href="{% url 'reservation' reservation.id %}">Détail de la réservation</a>
+                <a href="{% url 'reservations:reservation' reservation.id %}">Détail de la réservation</a>
             </div>
         {% endfor %}
     </div>

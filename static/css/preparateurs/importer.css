@@ -9,22 +9,6 @@
     border-radius: 8px;
 }
 
-.custom-file-upload {
-    font-size: 120%;
-    font-family: 'Nunito';
-    color: #ffffff;
-    background-color: #0B1E5C;
-    border: #0B1E5C;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.custom-file-upload:hover {
-    background-color: #0056b3;
-}
-
 input[type="file"] {
     display: none;
 }
@@ -35,40 +19,11 @@ input[type="file"] {
     color: #555;
 }
 
-button {
-    font-size: 120%;
-    font-family: 'Nunito';
-    color: #ffffff;
-    background-color: #0B1E5C;
-    border: #0B1E5C;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
 .import-form {
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.custom-file-upload {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.custom-file-upload:hover {
-    background-color: #0056b3;
 }
 
 #file_input {

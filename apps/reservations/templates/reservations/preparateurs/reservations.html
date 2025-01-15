@@ -33,7 +33,7 @@
                 <td>{{ reservation.utilisateur.annee }}</td>
                 <td>{{ reservation.date|date:"d/m/Y H:i:s" }}</td>
                 <td>
-                    <a href="{% url 'reservation' reservation.id %}">Détails</a>
+                    <a href="{% url 'reservations:reservation' reservation.id %}">Détails</a>
                 </td>
             </tr>
             {% endfor %}

@@ -31,7 +31,12 @@
             <div class="messages">
                 {% for message_reservation in messages %}
                     <div class="message">
-                        <div class="{% if message_reservation.utilisateur == reservation.utilisateur %}message-sent{% else %}message-received{% endif %}">
+                        {% if message_reservation.utilisateur.id == user.id %}
+                            <div class="message-sent">
+                        {% else %}
+                            <div class="message-received">
+                        {% endif %}
+
                             <p class="message-text">{{ message_reservation.message }}</p>
                         </div>
                         <p class="message-time">{{ message_reservation.date|date:"d M H:i" }}</p>
@@ -40,7 +45,7 @@
             </div>
             <div class="input-container">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <input type="hidden" name="ajouter_message_reservation_lien" value="{% url 'ajouter_message_reservation' reservation.id %}">
+                <input type="hidden" name="ajouter_message_reservation_lien" value="{% url 'reservations:ajouter_message_reservation' reservation.id %}">
                 <input 
                     type="text" 
                     name="message" 

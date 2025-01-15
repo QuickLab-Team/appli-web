@@ -4,7 +4,6 @@ from paniers.views import ajout_panier
 
 app_name = 'produits'
 
-
 urlpatterns = [
     path('', views.produits, name='produits'),
     path('<int:produit_id>/', views.produit, name='produit'),

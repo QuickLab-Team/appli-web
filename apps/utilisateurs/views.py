@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 from quicklab import settings
 from .forms import UtilisateurForm
@@ -22,62 +23,41 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
+from django.http import Http404
 from django.utils.crypto import get_random_string
 
-def home(request):
-    return render(request, 'utilisateurs/etudiants/accueil.html', {
-        'titre': 'QuickLab',
-    })
-
+@login_required
 def compte(request):
-    return render(request, 'utilisateurs/etudiants/compte.html', {
-        'titre': 'QuickLab',
-    })
-
+    if request.user.role == 'etudiant':
+        return render(request, 'utilisateurs/etudiants/compte.html', {
+            'titre': 'QuickLab',
+        })
+    return redirect('utilisateurs:accueil')
 
 @login_required
 def accueil(request):
-
     if request.user.role == 'etudiant':
-            return render(request, 'utilisateurs/etudiants/accueil.html', {
-                'titre': 'QuickLab',
-            })
+        return render(request, 'utilisateurs/etudiants/accueil.html', {
+            'titre': 'QuickLab',
+        })
         
-    elif request.user.role == 'preparateur' or request.user.role == 'administrateur': 
-            return render(request, 'utilisateurs/accueil.html', {
-                'titre': 'QuickLab',
-            })
-
-    
-
-def inscription(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('accueil')
-    else:
-        form = UserCreationForm()
-    return render(request, 'preparateurs/inscription.html', {'form': form})
-
+    return render(request, 'utilisateurs/preparateurs/accueil.html', {
+        'titre': 'QuickLab',
+    })
 
 def deconnexion(request):
-
     logout(request)
     return redirect('utilisateurs:connexion')
 
 class ConnexionView(LoginView):
     template_name = 'utilisateurs/connexion.html'
-    success_url = 'accueil'
+    success_url = reverse_lazy('utilisateurs:accueil')
     redirect_authenticated_user = True
 
     def get_success_url(self):
         return self.success_url
 
+@login_required
 def utilisateurs(request):
     User = get_user_model()
     query = request.GET.get('q', '')  # Recherche
@@ -108,7 +88,7 @@ def utilisateurs(request):
         html = render_to_string('utilisateurs/includes/utilisateurs_table.html', {'utilisateurs': utilisateurs})
         return JsonResponse({'html': html})
 
-    return render(request, 'utilisateurs/preparateurs/liste_utilisateurs.html', {
+    return render(request, 'utilisateurs/preparateurs/utilisateurs.html', {
         'utilisateurs': utilisateurs,
         'roles': User.ROLES,
         'annees': User.ANNEES,
@@ -118,9 +98,10 @@ def utilisateurs(request):
         'selected_annee': annee,
         'selected_groupe': groupe,
         'student_count': student_count,
+        'titre': 'QuickLab',
     })
 
-
+@login_required
 def ajouter_utilisateur(request):
     if request.method == 'POST':
         form = UtilisateurForm(request.POST)
@@ -131,7 +112,7 @@ def ajouter_utilisateur(request):
         form = UtilisateurForm()
     return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})
 
-
+@login_required
 def importer_utilisateurs(request):
     utilisateurs_preview = []
 
@@ -205,7 +186,7 @@ def importer_utilisateurs(request):
                 subject="Bienvenue sur QuickLab",
                 message=message,
                 from_email='QuickLab <votre_email@gmail.com>',
-                recipient_list=[user.email],
+                recipient_list=["quentin.droucheau@etu.univ-orleans.fr"],
                 fail_silently=False,
             )
 
@@ -217,7 +198,7 @@ def importer_utilisateurs(request):
         else:
             messages.success(request, "Tous les utilisateurs ont été importés avec succès.")
 
-        return redirect("utilisateurs:liste_utilisateurs")
+        return redirect("utilisateurs:utilisateurs")
 
     return render(request, "utilisateurs/preparateurs/importer_utilisateurs.html", {
         "utilisateurs_preview": utilisateurs_preview

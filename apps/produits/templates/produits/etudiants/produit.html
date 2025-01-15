@@ -13,7 +13,7 @@
             <div class="boutons">
                 <a href="#" class="action-bouton">Favoris</a>
                 {% if in_panier %}
-                    <a href="{% url 'suppression_panier' produit.id %}" class="action-bouton">Supprimer du panier</a>
+                    <a href="{% url 'paniers:suppression_panier' produit.id %}" class="action-bouton">Supprimer du panier</a>
                 {% else %}
                     <a class="action-bouton" id="reserver-bouton">Ajouter au panier</a>
                 {% endif %}
@@ -33,7 +33,7 @@
 </div>
 
 <div id="popup" style="display: none;">
-    <form action="{% url 'ajout_panier' produit.id %}" method="POST">
+    <form action="{% url 'paniers:ajout_panier' produit.id %}" method="POST">
         {% csrf_token %}
         <label for="quantite">Quantité :</label>
         <input type="number" id="quantite" name="quantite" min="0" step="0.01" required>

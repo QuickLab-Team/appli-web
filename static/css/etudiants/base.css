@@ -23,3 +23,30 @@ html, body {
     flex: 1;
     height: 70%;
 }
+
+.cadre-table-scroll{
+    display: inline-block;
+    height: 30em;
+    overflow-y: scroll;
+    width: 100%;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+.table-scroll thead th{
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-color);
+}
+.table-scroll tfoot td{
+    position: sticky;
+    bottom: 0;
+}
+.table-scroll {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table-scroll tbody td {
+    padding: 12px;
+    text-align: center;
+    border-right: none;
+    border-bottom: 1px solid black;
+}

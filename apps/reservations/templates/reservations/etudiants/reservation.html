@@ -13,7 +13,7 @@
     <div class="reservation">
         <div class="reservation-detail">
             <div>
-                <a class="close" href="{% url 'reservations' %}">&times;</a>
+                <a class="close" href="{% url 'reservations:reservations' %}">&times;</a>
             </div>
             <div class="reservation-info">
                 <h1 class="titre">{{ reservation.titre }}</h1>
@@ -21,10 +21,10 @@
                 <p><strong>Statut : </strong>{{ reservation.get_etat_display }}</p>
                 <div class="action">
                     {% if reservation.etat != "annule" and reservation.etat != "termine" %}
-                        <a class="bouton bouton-annuler" href="{% url 'annuler_reservation' reservation.id %}">Annuler</a>
+                        <a class="bouton bouton-annuler" href="{% url 'reservations:annuler_reservation' reservation.id %}">Annuler</a>
                     {% endif %}
                     {% if reservation.etat == "attente_recuperation" and reservation.etat != "termine" %}
-                        <a class="bouton bouton-recuperer" href="{% url 'recuperer_reservation' reservation.id %}">Récupérer</a>
+                        <a class="bouton bouton-recuperer" href="{% url 'reservations:recuperer_reservation' reservation.id %}">Récupérer</a>
                     {% endif %}
                     <a class="bouton bouton-messagerie" onclick="ouvrirMessagerie();">Messagerie</a>
                 </div>
@@ -47,7 +47,12 @@
             <div class="messages">
                 {% for message_reservation in messages %}
                     <div class="message">
-                        <div class="{% if message_reservation.utilisateur == reservation.utilisateur %}message-sent{% else %}message-received{% endif %}">
+                        {% if message_reservation.utilisateur.id == user.id %}
+                            <div class="message-sent">
+                        {% else %}
+                            <div class="message-received">
+                        {% endif %}
+
                             <p class="message-text">{{ message_reservation.message }}</p>
                         </div>
                         <p class="message-time">{{ message_reservation.date|date:"d M H:i" }}</p>
@@ -56,7 +61,7 @@
             </div>
             <div class="input-container">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <input type="hidden" name="ajouter_message_reservation_lien" value="{% url 'ajouter_message_reservation' reservation.id %}">
+                <input type="hidden" name="ajouter_message_reservation_lien" value="{% url 'reservations:ajouter_message_reservation' reservation.id %}">
                 <input 
                     type="text" 
                     name="message" 

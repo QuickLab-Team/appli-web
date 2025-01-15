@@ -22,14 +22,14 @@
                         </div>
                         <div class="right">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                            <input type="hidden" name="update-lien" value="{% url 'modifier_quantite_panier' produit_panier.id %}">
+                            <input type="hidden" name="update-lien" value="{% url 'paniers:modifier_quantite_panier' produit_panier.id %}">
                             <input id="quantite-input" type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="quantite-input">
                             <select name="unite" class="unite-input">
                                 {% for unite in produit_panier.produit.get_unites %}
                                     <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
                                 {% endfor %}
                             </select>
-                            <a href="{% url 'suppression_panier' produit_panier.produit.id %}">Supprimer</a>
+                            <a href="{% url 'paniers:suppression_panier' produit_panier.produit.id %}">Supprimer</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -39,7 +39,7 @@
             </div>
 
             <div id="popup" style="display: none;">
-                <form action="{% url 'reserver_panier' %}" method="GET">
+                <form action="{% url 'paniers:reserver_panier' %}" method="GET">
                     {% csrf_token %}
                     <label for="titre">Titre de la réservation:</label>
                     <input type="text" id="titre" name="titre">

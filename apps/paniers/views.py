@@ -19,13 +19,13 @@ def ajout_panier(request, produit_id):
         panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
         panier_produit = PanierProduit.objects.create(panier=panier, produit=produit, quantite=0)
         panier_produit.add_quantite(quantite, unite)
-    return redirect('panier')
+    return redirect('paniers:panier')
 
 def suppression_panier(request, produit_id):
     panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
     produit = get_object_or_404(Produit, id=produit_id)
     PanierProduit.objects.filter(panier=panier, produit=produit).delete()
-    return redirect('panier')
+    return redirect('paniers:panier')
 
 def modifier_quantite_panier(request, produit_panier_id):
     if request.method == 'POST':
@@ -66,5 +66,5 @@ def reserver_panier(request):
             produit_panier.produit.add_quantite(-produit_panier.quantite)
         
         panier.produits.all().delete()
-        return redirect('reservation', reservation.id)
-    return redirect('panier')
+        return redirect('reservations:reservation', reservation.id)
+    return redirect('paniers:panier')

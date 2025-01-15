@@ -7,16 +7,16 @@
 <header class="header">
     <div class="top">
         <div class="logo">
-            <a href="{% url 'home' %}">
+            <a href="{% url 'utilisateurs:accueil' %}">
                 QuickLab
             </a>
         </div>
         {% include 'etudiants/search_bar.html' %}
         <nav class="nav">
             <ul>
-                <li><a href="{% url 'home' %}">Accueil</a></li>
-                <li><a href="{% url 'reservations' %}">Réservations</a></li>
-                <li><a href="{% url 'panier' %}">Panier</a></li>
+                <li><a href="{% url 'utilisateurs:accueil' %}">Accueil</a></li>
+                <li><a href="{% url 'reservations:reservations' %}">Réservations</a></li>
+                <li><a href="{% url 'paniers:panier' %}">Panier</a></li>
                 <li><a href="{% url 'utilisateurs:compte' %}">Compte</a></li>
             </ul>
         </nav>
@@ -43,7 +43,7 @@
         <div class="filtres">
             <ul>
 
-                <li><a href="#">Tous les produits</a></li>
+                <li><a href="{% url 'produits:produits' %}">Tous les produits</a></li>
                 <li><a href="#">Catégories</a></li>
                 <li><a href="#">Disponible</a></li>
                 <li><a href="#">Localisation</a></li>
