@@ -11,15 +11,13 @@
             <div class="top-compte">
                 <h3>Informations du compte</h3>
                 <div>
-                    <button class="btn-action">Modifier le profil</button>
-                    <button class="btn-action">Changer le mot de passe</button>
-                    <button class="btn-action">Se déconnecter</button>
+                    <button class="bouton btn-action">Modifier le profil</button>
+                    <button class="bouton btn-action">Changer le mot de passe</button>
+                    <a class="bouton" href="{% url 'utilisateurs:deconnexion' %}">Se déconnecter</a>
                 </div>
             </div>
             <ul>
                 <li><strong>Email :</strong> {{ user.email }}</li>
-                <li><strong>Mot de passe :</strong> {{ user.password }}</li>
-                <li><strong>Date d'inscription :</strong> {{ user.date_inscription|date:"d M Y" }}</li>
             </ul>
         </div>
     </div>
