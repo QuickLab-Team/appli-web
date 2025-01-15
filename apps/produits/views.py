@@ -16,10 +16,10 @@ from django.template.loader import render_to_string
 
 
 def produits(request):
-    produits = Produit.objects.all()
-    familles = Famille.objects.all()
-    stockages = Stockage.objects.all()
-    fournisseurs = Fournisseur.objects.all()
+    produits = Produit.objects.all().order_by('nom')
+    familles = Famille.objects.all().order_by('nom')
+    stockages = Stockage.objects.all().order_by('nom')
+    fournisseurs = Fournisseur.objects.all().order_by('nom')
 
     # Récupération des filtres depuis les paramètres GET
     query = request.GET.get('q', '')
@@ -113,7 +113,6 @@ def importer_produits(request):
 
                 if produit["quantite"]  and produit["unite"]:
                     p.add_type(produit["unite"])
-                    
                     if produit["unite"] == "ml":
                         p.quantite = produit["quantite"] / 1000
                     elif produit["unite"] == "cl":
@@ -156,3 +155,72 @@ def produit_detail(request, produit_id):
     })
 
 
+def ajouter_produit(request):
+
+    fournisseurs = Fournisseur.objects.all().order_by('nom')
+    familles = Famille.objects.all().order_by('nom')
+    stockages = Stockage.objects.all().order_by('nom')
+
+    if request.method == 'POST':
+        nom = request.POST.get('nom')
+        quantite = request.POST.get('quantite')
+        stockage = request.POST.get('stockage')
+        famille = request.POST.get('famille')
+        fournisseur = request.POST.get('fournisseur')
+
+        p = Produit.objects.create(
+            nom=nom,
+            quantite=quantite,
+            stockage=Stockage.objects.get_or_create(nom=stockage, service=Stockage.objects.first().service)[0],
+        )
+
+        if famille:
+            p.add_famille(famille)
+
+        if fournisseur:
+            p.add_fournisseur(fournisseur)
+
+        return redirect('produits:produits')
+   
+    return render(request, "produits/preparateurs/ajouter_produit.html", {
+        'fournisseurs': fournisseurs,
+        'familles': familles,
+        'stockages': stockages,
+    })
+
+
+def modifier_produit(request, produit_id):
+    produit = Produit.objects.get(id=produit_id)
+    fournisseurs = Fournisseur.objects.all().order_by('nom')
+    familles = Famille.objects.all().order_by('nom')
+    stockages = Stockage.objects.all().order_by('nom')
+
+    if request.method == 'POST':
+        produit.nom = request.POST.get('nom')
+        produit.quantite = request.POST.get('quantite')
+        produit.stockage = Stockage.objects.get_or_create(nom=request.POST.get('stockage'), service=Stockage.objects.first().service)[0]
+        produit.familles.clear()
+        produit.fournisseur = None
+
+        famille = request.POST.get('famille')
+        fournisseur = request.POST.get('fournisseur')
+
+        if famille:
+            produit.add_famille(famille)
+
+        if fournisseur:
+            produit.add_fournisseur(fournisseur)
+
+        produit.save()
+        return redirect('produits:produit_detail', produit_id=produit.id)
+
+    return render(request, "produits/preparateurs/modifier_produit.html", {
+        'produit': produit,
+        'fournisseurs': fournisseurs,
+        'familles': familles,
+        'stockages': stockages,
+    })
+
+def supprimer_produit(produit_id):
+    Produit.objects.get(id=produit_id).delete()
+    return redirect('produits:produits')

@@ -15,21 +15,21 @@
         <select name="famille" title="Famille" multiple onchange="this.form.submit()">
             <option value="">Toutes les familles</option>
             {% for famille in familles %}
-                <option value="{{ famille.id }}" {% if famille.id|stringformat:"s" in selected_famille %}selected{% endif %}>{{ famille.nom }}</option>
+                <option value="{{ famille.id }}" {% if famille.id|stringformat:"s" in selected_famille %}selected{% endif %}>{{ famille.nom|capfirst  }}</option>
             {% endfor %}
         </select>
 
         <select name="fournisseur" title="Fournisseur" multiple onchange="this.form.submit()">
             <option value="">Tous les fournisseurs</option>
             {% for fournisseur in fournisseurs %}
-                <option value="{{ fournisseur.id }}" {% if fournisseur.id|stringformat:"s" in selected_fournisseur %}selected{% endif %}>{{ fournisseur.nom }}</option>
+                <option value="{{ fournisseur.id }}" {% if fournisseur.id|stringformat:"s" in selected_fournisseur %}selected{% endif %}>{{ fournisseur.nom|capfirst  }}</option>
             {% endfor %}
         </select>
 
         <select name="stockage" title="Stockage" multiple onchange="this.form.submit()">
             <option value="">Tous les stockages</option>
             {% for stockage in stockages %}
-                <option value="{{ stockage.id }}" {% if stockage.id|stringformat:"s" in selected_stockage %}selected{% endif %}>{{ stockage.nom }}</option>
+                <option value="{{ stockage.id }}" {% if stockage.id|stringformat:"s" in selected_stockage %}selected{% endif %}>{{ stockage.nom|capfirst  }}</option>
             {% endfor %}
         </select>
     </div>
@@ -57,10 +57,10 @@
             <td>{{ produit.fournisseur.nom }}</td>
             <td>
                 {% for famille in produit.familles.all %}
-                {{ famille.nom }}<br>
+                {{ famille.nom|capfirst }}<br>
                 {% endfor %}
             </td>
-            <td>{{ produit.stockage.nom }}</td>
+            <td>{{ produit.stockage.nom|capfirst  }}</td>
             </tr>
             {% endfor %}
         </tbody>

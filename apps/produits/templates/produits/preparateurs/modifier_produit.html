@@ -1,0 +1,66 @@
+{% extends 'preparateurs/base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/ajouter_produit.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Modifier un produit</h1>
+
+<form method="post" action="{% url 'produits:modifier_produit' produit.id %}">
+    {% csrf_token %}
+    <div>
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom" value="{{ produit.nom }}" maxlength="100" required>
+    </div>
+    <div>
+        <label for="quantite">Quantité:</label>
+        <input type="number" id="quantite" name="quantite" value="{{ produit.quantite }}" step="any" required>
+
+        <label for="unite">Unité:</label>
+        <select id="unite" name="unite" required>
+            <option value="ml" {% if produit.unite == 'ml' %}selected{% endif %}>ml</option>
+            <option value="cl" {% if produit.unite == 'cl' %}selected{% endif %}>cl</option>
+            <option value="g" {% if produit.unite == 'g' %}selected{% endif %}>g</option>
+            <option value="kg" {% if produit.unite == 'kg' %}selected{% endif %}>kg</option>
+            <option value="l" {% if produit.unite == 'l' %}selected{% endif %}>L</option>
+            <option value="unite" {% if produit.unite == 'unite' %}selected{% endif %}>Unité</option>
+        </select>
+    </div>
+    <div>
+        <label for="fournisseur">Fournisseur:</label>
+        <select id="fournisseur" name="fournisseur">
+            <option value="">Pas de fournisseur</option>
+            {% for fournisseur in fournisseurs %}
+                <option value="{{ fournisseur.nom }}" {% if produit.fournisseur and produit.fournisseur.nom == fournisseur.nom %}selected{% endif %}>{{ fournisseur.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="familles">Familles:</label>
+        <select id="familles" name="familles" multiple>
+            <option value="">Pas de famille</option>
+            {% for famille in familles %}
+                <option value="{{ famille.id }}" {% if famille in produit.familles.all %}selected{% endif %}>{{ famille.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="stockage">Stockage:</label>
+        <select id="stockage" name="stockage" required>
+            {% for stockage in stockages %}
+                <option value="{{ stockage.nom }}" {% if produit.stockage and produit.stockage.nom == stockage.nom %}selected{% endif %}>{{ stockage.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="type">Type:</label>
+        <select id="type" name="type" required>
+            <option value="liquide" {% if produit.type == 'liquide' %}selected{% endif %}>Liquide</option>
+            <option value="solide" {% if produit.type == 'solide' %}selected{% endif %}>Solide</option>
+            <option value="unite" {% if produit.type == 'unite' %}selected{% endif %}>Unité</option>
+        </select>
+    </div>
+    <button type="submit">Modifier</button>
+</form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'preparateurs/base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/ajouter_produit.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Ajouter un produit</h1>
+
+<form method="post" action="{% url 'produits:ajouter_produit' %}">
+    {% csrf_token %}
+    <div>
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom" maxlength="100" required>
+    </div>
+    <div>
+        <label for="quantite">Quantité:</label>
+        <input type="number" id="quantite" name="quantite" step="any" required>
+
+        <label for="unite">Unité:</label>
+        <select id="unite" name="unite" required>
+            <option value="ml">ml</option>
+            <option value="cl">cl</option>
+            <option value="g">g</option>
+            <option value="kg">kg</option>
+            <option value="l">L</option>
+            <option value="unite">Unité</option>
+        </select>
+
+    </div>
+    <div>
+        <label for="fournisseur">Fournisseur:</label>
+        <select id="fournisseur" name="fournisseur">
+            <option value="">Pas de fournisseur</option>
+            {% for fournisseur in fournisseurs %}
+                <option value="{{ fournisseur.nom }}">{{ fournisseur.nom }}</option>
+
+            {% endfor %}
+            
+        </select>
+        
+    </div>
+    <div>
+        <label for="familles">Familles:</label>
+        <select id="familles" name="familles" multiple>
+            <option value="">Pas de famille</option>
+            {% for famille in familles %}
+                <option value="{{ famille.id }}">{{ famille.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="stockage">Stockage:</label>
+        <select id="stockage" name="stockage" required>
+            {% for stockage in stockages %}
+                <option value="{{ stockage.nom }}">{{ stockage.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="type">Type:</label>
+        <select id="type" name="type" required>
+            <option value="liquide">Liquide</option>
+            <option value="solide">Solide</option>
+            <option value="unite">Unité</option>
+        </select>
+    </div>
+    <button type="submit">Ajouter</button>
+</form>
+
+
+{% endblock %}

@@ -26,4 +26,9 @@
     <p><strong>Type:</strong> {{ produit.get_type_display }}</p>
 </div>
 
+<div class="actions">
+    <a href="{% url 'produits:modifier_produit' produit.id %}" class="btn btn-warning">Modifier</a>
+    <a href="{% url 'produits:supprimer_produit' produit.id %}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</a>
+</div>
+
 {% endblock %}
