@@ -220,7 +220,7 @@
     }
 }
 
-#popu-familles, #popup-services{
+#popup-familles, #popup-services{
     position: fixed;
     top: 0;
     left: 0;
@@ -243,5 +243,5 @@
     background-color: white;
     padding: 10px;
     border-radius: 5px;
-    width: 300px;
+    width: 400px;
 }

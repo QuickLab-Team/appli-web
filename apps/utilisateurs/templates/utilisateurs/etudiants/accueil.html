@@ -22,7 +22,7 @@
                     {% for produit in produits|slice:":2" %}
                         <div class="info-card">
                             <p>{{ produit.nom }}</p>
-                            <p>{{ produit.date_ajout|date:"d/m/Y H:i:s" }}</p>
+                            <p>{{ produit.date_ajout|date:"d/m/Y" }}</p>
                             <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
                         </div>
                     {% endfor %}
