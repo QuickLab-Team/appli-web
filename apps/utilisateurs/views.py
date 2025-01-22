@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
 
 from quicklab import settings
 from .forms import UtilisateurForm
@@ -23,48 +22,68 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
-from django.http import Http404
 from django.utils.crypto import get_random_string
-from produits.models import Famille, Service, Produit
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
-@login_required
-def compte(request):
-    if request.user.role == 'etudiant':
-        return render(request, 'utilisateurs/etudiants/compte.html', {
-            'titre': 'QuickLab',
-            'familles': Famille.objects.all().distinct(),
-            'services': Service.objects.all().distinct(),
-        })
-    return redirect('utilisateurs:accueil')
-
-@login_required
-def accueil(request):
-    if request.user.role == 'etudiant':
-        return render(request, 'utilisateurs/etudiants/accueil.html', {
-            'titre': 'QuickLab',
-            'familles': Famille.objects.all().distinct(),
-            'services': Service.objects.all().distinct(),
-            'produits': Produit.objects.all(),
-        })
-        
-    return render(request, 'utilisateurs/preparateurs/accueil.html', {
+def home(request):
+    return render(request, 'base.html', {
         'titre': 'QuickLab',
     })
 
+def test(request):
+    return render(request, 'utilisateurs/etudiants/accueil.html', {
+        'titre': 'QuickLab',
+    })
+
+
+@login_required
+def accueil(request):
+
+    if request.user.role == 'etudiant':
+            return render(request, 'utilisateurs/etudiants/accueil.html', {
+                'titre': 'QuickLab',
+            })
+        
+    elif request.user.role == 'preparateur' or request.user.role == 'administrateur': 
+            return render(request, 'utilisateurs/preparateurs/accueil.html', {
+                'titre': 'QuickLab',
+            })
+
+    
+
+def inscription(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('accueil')
+    else:
+        form = UserCreationForm()
+    return render(request, 'preparateurs/inscription.html', {'form': form})
+
+
 def deconnexion(request):
+
     logout(request)
     return redirect('utilisateurs:connexion')
 
 class ConnexionView(LoginView):
     template_name = 'utilisateurs/connexion.html'
-    success_url = reverse_lazy('utilisateurs:accueil')
+    success_url = 'accueil'
     redirect_authenticated_user = True
 
     def get_success_url(self):
         return self.success_url
 
-@login_required
-def utilisateurs(request):
+def liste_utilisateurs(request):
     User = get_user_model()
     query = request.GET.get('q', '')  # Recherche
     role = request.GET.get('role', '')  # Filtre par rôle
@@ -94,7 +113,7 @@ def utilisateurs(request):
         html = render_to_string('utilisateurs/includes/utilisateurs_table.html', {'utilisateurs': utilisateurs})
         return JsonResponse({'html': html})
 
-    return render(request, 'utilisateurs/preparateurs/utilisateurs.html', {
+    return render(request, 'utilisateurs/preparateurs/liste_utilisateurs.html', {
         'utilisateurs': utilisateurs,
         'roles': User.ROLES,
         'annees': User.ANNEES,
@@ -104,21 +123,20 @@ def utilisateurs(request):
         'selected_annee': annee,
         'selected_groupe': groupe,
         'student_count': student_count,
-        'titre': 'QuickLab',
     })
 
-@login_required
+
 def ajouter_utilisateur(request):
     if request.method == 'POST':
         form = UtilisateurForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('utilisateurs:utilisateurs')
+            return redirect('utilisateurs:liste_utilisateurs')
     else:
         form = UtilisateurForm()
     return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})
 
-@login_required
+
 def importer_utilisateurs(request):
     utilisateurs_preview = []
 
@@ -192,7 +210,7 @@ def importer_utilisateurs(request):
                 subject="Bienvenue sur QuickLab",
                 message=message,
                 from_email='QuickLab <votre_email@gmail.com>',
-                recipient_list=["quentin.droucheau@etu.univ-orleans.fr"],
+                recipient_list=[user.email],
                 fail_silently=False,
             )
 
@@ -204,7 +222,7 @@ def importer_utilisateurs(request):
         else:
             messages.success(request, "Tous les utilisateurs ont été importés avec succès.")
 
-        return redirect("utilisateurs:utilisateurs")
+        return redirect("utilisateurs:liste_utilisateurs")
 
     return render(request, "utilisateurs/preparateurs/importer_utilisateurs.html", {
         "utilisateurs_preview": utilisateurs_preview
@@ -275,3 +293,25 @@ def modifier_utilisateur(request, utilisateur_id):
 
     return JsonResponse({"success": False, "message": "Requête invalide."}, status=400)
 
+@login_required
+def mon_compte(request):
+    """Vue pour afficher les informations de compte."""
+    return render(request, 'utilisateurs/preparateurs/mon_compte.html', {
+        'user': request.user
+    })
+
+@login_required
+def changer_mot_de_passe(request):
+    """Vue pour permettre à l'utilisateur de changer son mot de passe."""
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Votre mot de passe a été changé avec succès.')
+            return redirect('utilisateurs:mon_compte')
+        else:
+            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'utilisateurs/preparateurs/changer_mot_de_passe.html', {'form': form})
