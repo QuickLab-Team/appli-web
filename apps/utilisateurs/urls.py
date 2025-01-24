@@ -5,7 +5,6 @@ from .views import ConnexionView
 app_name = 'utilisateurs'
 
 urlpatterns = [
-    path('accueil', views.accueil, name='accueil'),
     path('home', views.test, name='home'),
     path('inscription/', views.inscription, name='inscription'),
     path('', ConnexionView.as_view(), name='connexion'),
@@ -17,5 +16,6 @@ urlpatterns = [
     path('modifier/<int:utilisateur_id>/', views.modifier_utilisateur, name='modifier_utilisateur'),
     path('mon_compte/', views.mon_compte, name='mon_compte'),
     path('changer_mot_de_passe/', views.changer_mot_de_passe, name='changer_mot_de_passe'),
-    path('deconnexion/', views.deconnexion, name='deconnexion'),
+    
+    
 ]

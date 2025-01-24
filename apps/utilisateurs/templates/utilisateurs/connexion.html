@@ -8,11 +8,12 @@
     <title>Connexion - QuickLab</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/utilisateurs/connexion.css' %}">
+    <script src="{% static 'js/connexion.js' %}"></script>
+
 </head>
 
 <body>
     <div class="container">
-        <!-- Section principale pour desktop -->
         <div class="image-section">
             <img src="{% static 'images/image1.png' %}" alt="Laboratoire">
         </div>
@@ -30,7 +31,7 @@
                         <input type="password" id="password" name="password" required>
                     </div>
                     <div class="forgot__password">
-                        <a href="#">MOT DE PASSE OUBLIÉ ?</a>
+                        <a href="#" id="forgotPasswordLink">MOT DE PASSE OUBLIÉ ?</a>
                     </div>
                     <div class="bouton__connexion">
                         <button type="submit">SE CONNECTER</button>
@@ -40,5 +41,21 @@
         </div>
     </div>
 </body>
+
+
+<!-- Popup -->
+<div id="passwordResetPopup" class="popup hidden">
+    <div class="popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <h2>Réinitialiser le mot de passe</h2>
+        <form method="post" action="{% url 'password_reset' %}" id="passwordResetForm">
+            {% csrf_token %}
+            <label for="email">Adresse e-mail</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Envoyer</button>
+        </form>
+        <p id="popupMessage" class="hidden"></p>
+    </div>
+</div>
 
 </html>
