@@ -210,7 +210,7 @@ def importer_utilisateurs(request):
                 subject="Bienvenue sur QuickLab",
                 message=message,
                 from_email='QuickLab <votre_email@gmail.com>',
-                recipient_list=[user.email],
+                recipient_list=["quentin.droucheau@etu.univ-orleans.fr"],
                 fail_silently=False,
             )
 
