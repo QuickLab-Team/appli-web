@@ -31,6 +31,14 @@ python3 manage.py migrate
 python3 manage.py createsuperuser
 ```
 
+### Création de l'image et push sur docker Hub
+
+```bash
+docker build -t <nom_utilisateur>/quicklab:latest .
+docker push <nom_utilisateur>/quicklab:latest
+```
+
+
 ## Accès a phpmyadmin
 
 http://localhost:8080/

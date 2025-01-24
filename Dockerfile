@@ -15,6 +15,3 @@ COPY . /code/
 
 # Exposer le port que l'application Django utilise
 EXPOSE 8000
-
-# Définir la commande par défaut pour exécuter l'application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
