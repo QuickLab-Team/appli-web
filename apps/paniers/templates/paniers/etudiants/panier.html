@@ -6,7 +6,7 @@
 {% endblock %}
 {% block js %}
 <script src="{% static 'js/paniers/etudiants/panier.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -21,15 +21,19 @@
                             <h4>{{ produit_panier.produit.famille.nom }}</h4>
                         </div>
                         <div class="right">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                            <input type="hidden" name="update-lien" value="{% url 'paniers:modifier_quantite_panier' produit_panier.id %}">
-                            <input id="quantite-input" type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="quantite-input">
-                            <select name="unite" class="unite-input">
-                                {% for unite in produit_panier.produit.get_unites %}
-                                    <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
-                                {% endfor %}
-                            </select>
-                            <a href="{% url 'paniers:suppression_panier' produit_panier.produit.id %}">Supprimer</a>
+                            <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <input type="hidden" name="update-lien" value="{% url 'paniers:modifier_produit_panier' %}">
+                                <input type="hidden" name="produit_id" value="{{ produit_panier.produit.id }}">
+                                <input type="number" name="quantite" value="{{ produit_panier.get_quantite }}">
+                                <select name="unite">
+                                    {% for unite in produit_panier.produit.get_unites %}
+                                        <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Supprimer</button>
+                            </form>
                         </div>
                     </div>
                 {% endfor %}
@@ -39,7 +43,7 @@
             </div>
 
             <div id="popup" style="display: none;">
-                <form action="{% url 'paniers:reserver_panier' %}" method="GET">
+                <form action="{% url 'paniers:reserver_panier' %}" method="POST">
                     {% csrf_token %}
                     <label for="titre">Titre de la réservation:</label>
                     <input type="text" id="titre" name="titre">

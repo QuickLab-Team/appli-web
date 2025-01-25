@@ -6,3 +6,5 @@ venv/
 .sqlite3
 .csv
 .xlsx
+db.sqlite3
+*.DS_Store
