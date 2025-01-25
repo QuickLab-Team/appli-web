@@ -4,6 +4,10 @@
 
 ```bash
 python manage.py test apps
+
+coverage run --source='apps/produits' manage.py test apps/produits
+
+coverage report
 ```
 
 ### Données de test

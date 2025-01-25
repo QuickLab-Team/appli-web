@@ -2,28 +2,27 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/produits/etudiants/produits.css' %}">
+    <link rel="stylesheet" href="{% static 'css/produits/etudiants/produits.css' %}">
 {% endblock %}
 
 {% block content %}
-        <div class="produits">
+    <div class="produits">
         {% for produit in produits %}
-                <div class="produit">
-                        <div class="left">
-                                <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" height="40px" width="40px">
-                                <h3 class="produit-nom">{{ produit.nom }}</h3>
-                        </div>
-                        <div class="right">
-                                <h3>{{ produit.get_quantite }} {{ produit.get_unite }} en stock</h3>
-                                {% if produit.quantite != null and produit.quantite > 0 %}
-                                        <h3 class="dispo">Disponible</h3>
-                                {% else %}
-                                        <h3 class="non-dispo">Non disponible</h3>
-                                {% endif %}
-                                <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
-                        </div>
-                        
+            <div class="produit">
+                <div class="left">
+                    <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" height="40px" width="40px">
+                    <h3 class="produit-nom">{{ produit.nom }}</h3>
                 </div>
+                <div class="right">
+                    <h3>{{ produit.get_quantite }} {{ produit.get_unite }} en stock</h3>
+                    {% if produit.quantite != null and produit.quantite > 0 %}
+                            <h3 class="dispo">Disponible</h3>
+                    {% else %}
+                            <h3 class="non-dispo">Non disponible</h3>
+                    {% endif %}
+                    <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
+                </div>
+            </div>
         {% endfor %}
-        </div>
+    </div>
 {% endblock %}
