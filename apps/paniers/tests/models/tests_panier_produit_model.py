@@ -29,11 +29,11 @@ class PanierProduitModelTest(TestCase):
         produit = Produit.objects.create(
             nom='Produit',
             quantite=10,
-            description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, alias vel, earum laborum cupiditate illum nostrum excepturi dignissimos eligendi deserunt consectetur iusto sunt, reiciendis ad maiores nulla in. Porro molestiae facilis tempora eius repellat sapiente tenetur fugiat, id animi explicabo quae enim aut sequi aperiam! Maiores ullam commodi quos consequatur?',
-            famille=famille1,
             stockage=stockage1,
             type='unite'
         )
+
+        produit.familles.set([famille1])
 
         self.panier_produit = PanierProduit.objects.create(
             panier=self.panier,

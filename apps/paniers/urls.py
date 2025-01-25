@@ -5,8 +5,8 @@ app_name = 'paniers'
 
 urlpatterns = [
     path('', views.panier, name='panier'),
-    path('ajout/<int:produit_id>/', views.ajout_panier, name='ajout_panier'),
-    path('suppression/<int:produit_id>/', views.suppression_panier, name='suppression_panier'),
-    path('modifier/<int:produit_panier_id>/', views.modifier_quantite_panier, name='modifier_quantite_panier'),
-    path('reserver/', views.reserver_panier, name='reserver_panier'),
+    path('ajouter', views.ajouter_produit_panier, name='ajouter_produit_panier'),
+    path('supprimer', views.supprimer_produit_panier, name='supprimer_produit_panier'),
+    path('modifier', views.modifier_produit_panier, name='modifier_produit_panier'),
+    path('reserver', views.reserver_panier, name='reserver_panier'),
 ]

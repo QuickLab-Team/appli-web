@@ -12,7 +12,11 @@
             <h2 class="mobile">{{ produit.nom }}</h2>
             <div class="boutons">
                 {% if in_panier %}
-                    <a href="{% url 'paniers:suppression_panier' produit.id %}" class="action-bouton">Supprimer du panier</a>
+                    <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST" style="display:inline;">
+                        <input type="hidden" name="produit_id" value="{{ produit.id }}">
+                        {% csrf_token %}
+                        <button type="submit" class="action-bouton">Supprimer du panier</button>
+                    </form>
                 {% else %}
                     <a class="action-bouton" id="reserver-bouton">Ajouter au panier</a>
                 {% endif %}
@@ -38,8 +42,9 @@
 </div>
 
 <div id="popup" style="display: none;">
-    <form action="{% url 'paniers:ajout_panier' produit.id %}" method="POST">
+    <form action="{% url 'paniers:ajouter_produit_panier' %}" method="POST">
         {% csrf_token %}
+        <input type="hidden" name="produit_id" value="{{ produit.id }}">
         <label for="quantite">Quantité :</label>
         <input type="number" id="quantite" name="quantite" min="0" step="0.01" required>
         <select name="unite">
