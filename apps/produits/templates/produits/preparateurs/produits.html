@@ -50,7 +50,7 @@
         
         <tbody>
             {% for produit in produits %}
-            <tr onclick="window.location.href='{% url 'produits:produit_detail' produit.id %}'" style="cursor: pointer;">
+            <tr onclick="window.location.href='{% url 'produits:produit' produit.id %}'" style="cursor: pointer;">
             <td>{{ produit.nom }}</td>
             <td>{{ produit.get_quantite }}</td>
             <td>{{ produit.get_unite }}</td>

@@ -1,17 +1,11 @@
 from django.shortcuts import render, redirect
 from .models import Produit, Famille, Stockage, Fournisseur, Service
 from django.contrib import messages
-from .forms import FileImportForm
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
-import csv
-from io import TextIOWrapper
 import pandas as pd
-import openpyxl
-from django.http import JsonResponse
 from paniers.models import Panier
 from django.shortcuts import get_object_or_404, redirect
-from django.template.loader import render_to_string
+from django.http import HttpResponse
 
 @login_required
 def produits(request):
@@ -40,15 +34,7 @@ def produits(request):
         produits = produits.filter(stockage__service__id=selected_service)
 
     # Gestion des rôles et rendu HTML
-    if request.user.role == 'etudiant':
-        return render(request, 'produits/etudiants/produits.html', {
-            'titre': 'QuickLab',
-            'produits': produits,
-            'familles': familles,
-            'services': Service.objects.all().distinct(),
-        })
-    elif request.user.role in ['preparateur', 'administrateur']:
-        
+    if request.user.role in ['preparateur', 'administrateur']:
         return render(request, 'produits/preparateurs/produits.html', {
             'titre': 'QuickLab',
             'produits': produits,
@@ -60,10 +46,19 @@ def produits(request):
             'selected_fournisseur': selected_fournisseur,
             'selected_stockage': selected_stockage,
         })
-
+    else:
+        return render(request, 'produits/etudiants/produits.html', {
+            'titre': 'QuickLab',
+            'produits': produits,
+            'familles': familles,
+            'services': Service.objects.all().distinct(),
+        })
 
 @login_required
 def importer_produits(request):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+    
     produits_preview = []
 
     if request.method == "POST" and "fichier" in request.FILES:
@@ -101,7 +96,6 @@ def importer_produits(request):
 
         for produit in produits_preview:
                 
-                
                 p = Produit.objects.create(
                     nom=produit["nom"],
                     quantite=0,
@@ -134,35 +128,36 @@ def importer_produits(request):
 
         del request.session["produits_preview"]
         return produits(request)
+    
+    elif request.method == "POST":
+        return HttpResponse(status=400)
 
-
-    return render(request, "produits/preparateurs/importer.html", {
+    return render(request, "produits/preparateurs/importer_produits.html", {
         "produits_preview": produits_preview
     })
 
 @login_required
 def produit(request, produit_id):
-    produit = Produit.objects.get(id=produit_id)
-    panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
-    return render(request, 'produits/etudiants/produit.html', {
-        'titre': 'QuickLab',
-        'produit': produit,
-        'in_panier': panier.produits.filter(produit=produit).exists(),
-        'familles': Famille.objects.all().distinct(),
-    })
+    produit = get_object_or_404(Produit, id=produit_id)
+    if request.user.role in ['preparateur', 'administrateur']:
+        return render(request, 'produits/preparateurs/produit.html', {
+            'titre': 'QuickLab',
+            'produit': produit,
+        })
+    else:
+        panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
+        return render(request, 'produits/etudiants/produit.html', {
+            'titre': 'QuickLab',
+            'produit': produit,
+            'in_panier': panier.produits.filter(produit=produit).exists(),
+            'familles': Famille.objects.all().distinct(),
+        })
 
 @login_required
-def produit_detail(request, produit_id):
-    produit = Produit.objects.get(id=produit_id)
-    return render(request, 'produits/preparateurs/produit.html', {
-        'titre': 'QuickLab',
-        'produit': produit,
-    })
-
-
 def ajouter_produit(request):
-
-   
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+    
     fournisseurs = Fournisseur.objects.all().order_by('nom')
     familles = Famille.objects.all().order_by('nom')
     stockages = Stockage.objects.all().order_by('nom')
@@ -217,9 +212,12 @@ def ajouter_produit(request):
         'stockages': stockages,
     })
 
-
+@login_required
 def modifier_produit(request, produit_id):
-    produit = Produit.objects.get(id=produit_id)
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+    
+    produit = get_object_or_404(Produit, id=produit_id)
     fournisseurs = Fournisseur.objects.all().order_by('nom')
     familles = Famille.objects.all().order_by('nom')
     stockages = Stockage.objects.all().order_by('nom')
@@ -241,7 +239,7 @@ def modifier_produit(request, produit_id):
             produit.add_fournisseur(fournisseur)
 
         produit.save()
-        return redirect('produits:produit_detail', produit_id=produit.id)
+        return redirect('produits:produit', produit_id=produit.id)
 
     return render(request, "produits/preparateurs/modifier_produit.html", {
         'produit': produit,
@@ -250,8 +248,15 @@ def modifier_produit(request, produit_id):
         'stockages': stockages,
     })
 
+@login_required
 def supprimer_produit(request, produit_id):
-    produit = get_object_or_404(Produit, id=produit_id)
-    produit.delete()
-    messages.success(request, "Produit supprimé avec succès.")
-    return redirect('produits:produits')
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+    
+    if request.method == 'POST':
+        produit = get_object_or_404(Produit, id=produit_id)
+        produit.delete()
+        messages.success(request, "Produit supprimé avec succès.")
+        return redirect('produits:produits')
+    
+    return HttpResponse(status=405)
