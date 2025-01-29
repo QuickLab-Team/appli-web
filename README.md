@@ -19,19 +19,19 @@ python3 manage.py setdata
 ### Lancement sur puce intel
 
 ```bash
-docker compose up
+docker compose up --build -d
 ```
 
 ### Lancement sur puce ARM
 
 ```bash
-docker compose -f docker-compose-arm.yml up
+docker compose -f docker-compose-arm.yml up --build -d
 ```
 
 ### Lancement en production
 
 ```bash
-docker compose -f docker-compose-prod.yml --env-file .env-production up
+docker compose -d -f docker-compose-prod.yml --env-file .env-production up --build
 ```
 
 Dans le terminal du container web
