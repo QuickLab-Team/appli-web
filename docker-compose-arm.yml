@@ -56,6 +56,7 @@ services:
       - DEBUG=${DEBUG}
       - ENV=${ENV}
       - SECRET_KEY=${SECRET_KEY}
+      - EMAIL_DEV=${EMAIL_DEV}
     networks:
       - mynetwork
     command: >

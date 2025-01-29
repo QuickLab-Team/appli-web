@@ -2,6 +2,7 @@
 import json
 import random
 import string
+import os
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -206,11 +207,19 @@ def importer_utilisateurs(request):
             Cordialement,
             L'équipe QuickLab
             """
+
+            if os.environ.get('ENV') == 'prod':
+                mail = user.email
+            elif os.environ.get('EMAIL_DEV'):
+                mail = os.environ.get('EMAIL_DEV')
+            else:
+                mail = settings.EMAIL_HOST_USER
+                
             send_mail(
                 subject="Bienvenue sur QuickLab",
                 message=message,
                 from_email='QuickLab <votre_email@gmail.com>',
-                recipient_list=["quentin.droucheau@etu.univ-orleans.fr"],
+                recipient_list=[mail],
                 fail_silently=False,
             )
 
