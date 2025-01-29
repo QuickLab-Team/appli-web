@@ -48,6 +48,10 @@ services:
       - DATABASE_PORT=${DATABASE_PORT}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - HOST=${HOST}
+      - DEBUG=${DEBUG}
+      - ENV=${ENV}
+      - SECRET_KEY=${SECRET_KEY}
     networks:
       - mynetwork
     command: >

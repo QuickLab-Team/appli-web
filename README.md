@@ -24,6 +24,12 @@ docker compose up
 docker compose -f docker-compose-arm.yml up
 ```
 
+### Lancement en production
+
+```bash
+docker compose -f docker-compose-prod.yml --env-file .env-production up
+```
+
 Dans le terminal du container web
 
 ```bash
@@ -34,8 +40,8 @@ python3 manage.py createsuperuser
 ### Création de l'image et push sur docker Hub
 
 ```bash
-docker build -t <nom_utilisateur>/quicklab:latest .
-docker push <nom_utilisateur>/quicklab:latest
+docker build -t quentin1591/quicklab:latest .
+docker push quentin1591/quicklab:latest
 ```
 
 
