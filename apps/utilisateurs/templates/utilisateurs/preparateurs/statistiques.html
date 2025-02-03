@@ -1,0 +1,71 @@
+{% extends "preparateurs/base.html" %}
+
+{% block content %}
+<h1>Statistiques</h1>
+
+<h2>Étudiants connectés</h2>
+
+<h3>Aujourd'hui</h3>
+<ul>
+    {% if etudiants_connectes_aujourdhui %}
+        {% for stat in etudiants_connectes_aujourdhui %}
+        <li>{{ stat.annee }} : {{ stat.total }} étudiant(s)</li>
+        {% endfor %}
+    {% else %}
+        <li>Aucun étudiant connecté aujourd'hui.</li>
+    {% endif %}
+</ul>
+
+<h3>Ce mois</h3>
+<ul>
+    {% if etudiants_connectes_mois %}
+        {% for stat in etudiants_connectes_mois %}
+        <li>{{ stat.annee }} : {{ stat.total }} étudiant(s)</li>
+        {% endfor %}
+    {% else %}
+        <li>Aucun étudiant connecté ce mois-ci.</li>
+    {% endif %}
+</ul>
+
+<h2>Réservations</h2>
+
+<h3>Aujourd'hui</h3>
+<ul>
+    {% if reservations_etudiants_aujourdhui %}
+        {% for stat in reservations_etudiants_aujourdhui %}
+        <li>{{ stat.utilisateur__annee }} : {{ stat.total }} réservation(s)</li>
+        {% endfor %}
+    {% else %}
+        <li>Aucune réservation réalisée par des étudiants aujourd'hui.</li>
+    {% endif %}
+</ul>
+
+<h3>Ce mois</h3>
+<ul>
+    {% if reservations_etudiants_mois %}
+        {% for stat in reservations_etudiants_mois %}
+        <li>{{ stat.utilisateur__annee }} : {{ stat.total }} réservation(s)</li>
+        {% endfor %}
+    {% else %}
+        <li>Aucune réservation réalisée par des étudiants ce mois-ci.</li>
+    {% endif %}
+</ul>
+
+<h2>Réservations réaliser par les préparateurs</h2>
+<p>
+    Aujourd'hui :
+    {% if reservations_preparateurs_aujourdhui > 0 %}
+        {{ reservations_preparateurs_aujourdhui }} réservation(s)
+    {% else %}
+        aucune réservation réalisée par des préparateurs aujourd'hui.
+    {% endif %}
+</p>
+<p>
+    Ce mois :
+    {% if reservations_preparateurs_mois > 0 %}
+        {{ reservations_preparateurs_mois }} réservation(s)
+    {% else %}
+        aucune réservation réalisée par des préparateurs ce mois-ci.
+    {% endif %}
+</p>
+{% endblock %}

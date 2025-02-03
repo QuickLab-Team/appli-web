@@ -28,6 +28,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models import Count
+from django.utils.timezone import now, timedelta
+from django.shortcuts import render
+from reservations.models import Reservation
 
 def home(request):
     return render(request, 'base.html', {
@@ -301,6 +305,13 @@ def mon_compte(request):
     })
 
 @login_required
+def compte(request):
+    """Vue pour afficher les informations de compte."""
+    return render(request, 'utilisateurs/preparateurs/compte.html', {
+        'user': request.user
+    })
+
+@login_required
 def changer_mot_de_passe(request):
     """Vue pour permettre à l'utilisateur de changer son mot de passe."""
     if request.method == 'POST':
@@ -315,3 +326,57 @@ def changer_mot_de_passe(request):
     else:
         form = PasswordChangeForm(user=request.user)
     return render(request, 'utilisateurs/preparateurs/changer_mot_de_passe.html', {'form': form})
+
+
+@login_required
+def statistiques(request):
+    # Dates
+    aujourd_hui = now().date()
+    debut_mois = aujourd_hui.replace(day=1)
+
+    # Étudiants connectés aujourd'hui
+    etudiants_connectes_aujourdhui = Utilisateur.objects.filter(
+        role='etudiant',
+        last_login__date=aujourd_hui
+    ).values('annee').annotate(total=Count('id'))
+
+    # Étudiants connectés dans le mois
+    etudiants_connectes_mois = Utilisateur.objects.filter(
+        role='etudiant',
+        last_login__date__gte=debut_mois
+    ).values('annee').annotate(total=Count('id'))
+
+    # Réservations aujourd'hui par année (étudiants)
+    reservations_etudiants_aujourdhui = Reservation.objects.filter(
+        utilisateur__role='etudiant',
+        date__date=aujourd_hui
+    ).values('utilisateur__annee').annotate(total=Count('id'))
+
+    # Réservations dans le mois par année (étudiants)
+    reservations_etudiants_mois = Reservation.objects.filter(
+        utilisateur__role='etudiant',
+        date__date__gte=debut_mois
+    ).values('utilisateur__annee').annotate(total=Count('id'))
+
+    # Réservations aujourd'hui par préparateurs
+    reservations_preparateurs_aujourdhui = Reservation.objects.filter(
+        utilisateur__role='preparateur',
+        date__date=aujourd_hui
+    ).count()
+
+    # Réservations dans le mois par préparateurs
+    reservations_preparateurs_mois = Reservation.objects.filter(
+        utilisateur__role='preparateur',
+        date__date__gte=debut_mois
+    ).count()
+
+    # Contexte pour le template
+    context = {
+        'etudiants_connectes_aujourdhui': etudiants_connectes_aujourdhui,
+        'etudiants_connectes_mois': etudiants_connectes_mois,
+        'reservations_etudiants_aujourdhui': reservations_etudiants_aujourdhui,
+        'reservations_etudiants_mois': reservations_etudiants_mois,
+        'reservations_preparateurs_aujourdhui': reservations_preparateurs_aujourdhui,
+        'reservations_preparateurs_mois': reservations_preparateurs_mois,
+    }
+    return render(request, 'utilisateurs/preparateurs/statistiques.html', context)
