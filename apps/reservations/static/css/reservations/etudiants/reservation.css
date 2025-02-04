@@ -1,176 +1,50 @@
-.reservation-info {
-    text-align: center;
+.closeMessagerie {
+    display: none;
 }
 
-.reservation-info > *{
-    margin: 10px 0;
-}
+@media (max-width: 768px) {
+    .closeMessagerie {
+        display: block;
+    }
 
-.close{
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    color: #000000;
-    text-decoration: none;
-}
+    .space-x-4 > :not([hidden]) ~ :not([hidden]) { 
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
 
-.reservation .reservation-detail .produits ul li{
-    margin-top: 10px;
-}
+    .messagerie {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 400px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        z-index: 100;
+    }
+    
+    .messagerie-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+        margin-left: 0 !important;
+    }
+    
+    
+    .messagerie.active, .messagerie-overlay.active {
+        display: block;
+    }
 
-.reservation .reservation-detail .produits ul li div{
-    display: flex;
-    justify-content: space-between;
-}
-
-.reservation{
-    display: flex;
-    flex-direction: row;
-    padding: 5%;
-    flex-wrap: nowrap;
-    height: 100%;
-    justify-content: center;
-}
-
-.reservation-info .action{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.reservation-detail{
-    flex-grow: 4;
-}
-
-.messagerie{
-    flex-grow: 0.5;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    flex-direction: column;
-    padding: 20px;
-    height: 100%;
-}
-
-.messagerie .messages{
-    overflow-y: auto;
-    scrollbar-width: thin;
-    max-height: 100%;
-    min-height: calc(100% - 30px);
-    display: flex;
-    flex-direction: column-reverse;
-    padding-right: 20px;
-    scrollbar-color: var(--third-color) var(--secondary-color);
-}
-
-.messagerie .input-container {
-    display: flex;
-    margin-top: 10px;
-}
-
-@media (max-width: 768px){
-    .messagerie{
+    .reservation-detail {
         display: none;
     }
-}
-
-@media (min-width: 768px){
-    .messagerie{
-        display: flex;
-    }
-
-    .bouton-messagerie{
-        display: none;
-    }
-}
-
-.etat {
-    font-size: 18px;
-    color: #5cb85c;
-    margin: 10px 0;
-}
-
-.produits {
-    margin: 0 10%;
-    padding: 2%;
-    background-color: var(--second-color);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-height: 45vh;
-    overflow-y: auto;
-}
-
-.produits h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.produits ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.produits li {
-    font-size: 16px;
-    padding: 5px 0;
-}
-
-.messagerie .message {
-    display: flex;
-    flex-direction: column;
-}
-
-.messagerie .message-sent {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 200px;
-    background-color: var(--primary-color);
-    align-self: flex-end;
-    color: white;
-}
-
-.messagerie .message-received {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 200px;
-    background-color: var(--third-color);
-    align-self: flex-start;
-}
-
-.messagerie .message-text{
-    margin: 0;
-    padding: 0;
-    word-wrap: break-word;
-}
-
-.messagerie .message-time{
-    font-size: 12px;
-    color: #888;
-    text-align: right;
-}
-
-.messagerie input {
-    width: 85%;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    margin-right: 10px;
-    background-color: var(--third-color);
-}
-
-.messagerie .send-btn {
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    border: none;
-    border-radius: 20px;
-    color: white;
-    cursor: pointer;
-}
-
-.bouton-annuler{
-    margin: 20px;
 }

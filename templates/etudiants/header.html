@@ -50,81 +50,36 @@
     </div>
     {% include 'etudiants/menu.html' %}
 </header>
-<div id="popup-familles" style="display: none;">
-    <div>
-        <select name="filtre_famille">
+
+<!-- Popup Familles -->
+<div id="popup-familles" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-80 relative">
+        <select name="filtre_famille" class="w-full p-2 border rounded">
             <option value="0" selected>Toutes les familles</option>
             {% for famille in familles %}
                 <option value="{{ famille.id }}">{{ famille.nom }}</option>
             {% endfor %}
         </select>
-        <button id="confirmer-bouton" class="bouton">Confirmer</button>
+        <button id="confirmer-bouton" class="w-full mt-4 p-2 bg-[var(--primary-color)] text-white rounded">Confirmer</button>
+        <button id="annuler-bouton-familles" class="w-full mt-2 p-2 bg-red-500 text-white rounded">Annuler</button>
     </div>
 </div>
 
-<div id="popup-services" style="display: none;">
-    <div>
-        <select name="filtre_service">
+<!-- Popup Services -->
+<div id="popup-services" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-80 relative">
+        <select name="filtre_service" class="w-full p-2 border rounded">
             <option value="0" selected>Tous les services</option>
             {% for service in services %}
                 <option value="{{ service.id }}">{{ service.nom }}</option>
             {% endfor %}
         </select>
-        <button id="confirmer-bouton-service" class="bouton">Confirmer</button>
+        <button id="confirmer-bouton-service" class="w-full mt-4 p-2 bg-[var(--primary-color)] text-white rounded">Confirmer</button>
+        <button id="annuler-bouton-services" class="w-full mt-2 p-2 bg-red-500 text-white rounded">Annuler</button>
     </div>
 </div>
 
 <script>
-    document.getElementById("familles-bouton").addEventListener("click", function() {
-        document.getElementById("popup-familles").style.display = "block";
-    });
-
-    document.getElementById("confirmer-bouton").addEventListener("click", function() {
-        let select = document.querySelector('select[name="filtre_famille"]');
-        let famille = select.options[select.selectedIndex].value;
-        let url = "{% url 'produits:produits' %}";
-
-        if(famille != 0) {
-            url += "?famille=" + famille;
-        }
-
-        window.location.href = url;
-    });
-
-    document.getElementById("services-bouton").addEventListener("click", function() {
-        document.getElementById("popup-services").style.display = "block";
-    });
-
-    document.getElementById("confirmer-bouton-service").addEventListener("click", function() {
-        let select = document.querySelector('select[name="filtre_service"]');
-        let service = select.options[select.selectedIndex].value;
-        let url = "{% url 'produits:produits' %}";
-
-        if(service != 0) {
-            url += "?service=" + service;
-        }
-
-        window.location.href = url;
-    });
-
-    const menu = document.querySelector('.menu');
-    const menuBurger = document.querySelector('.menu-burger');
-    const closeMenu = document.querySelector('.close-menu');
-
-    menu.style.position = 'absolute'; 
-    menu.style.top = '0';
-    menu.style.left = '0';
-    menu.style.width = '100%';
-    menu.style.height = '100%';
-    menu.style.zIndex = '1000';
-    menu.style.display = 'none';
-    menu.style.backgroundColor = 'white';
-
-    menuBurger.addEventListener('click', () => {
-        menu.style.display = 'block';
-    });
-
-    closeMenu.addEventListener('click', () => {
-        menu.style.display = 'none';
-    });
+    var produitsUrl = "{% url 'produits:produits' %}";
 </script>
+<script src="{% static 'js/header.js' %}"></script>

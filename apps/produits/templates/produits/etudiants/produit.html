@@ -1,68 +1,96 @@
 {% extends 'etudiants/base.html' %}
 {% load static %}
 
-{% block styles %}
-<link rel="stylesheet" href="{% static 'css/produits/etudiants/produit.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="produit">
-        <div class="top-produit">
-            <h2 class="pc">Produit : {{ produit.nom }}</h2>
-            <h2 class="mobile">{{ produit.nom }}</h2>
-            <div class="boutons">
-                {% if in_panier %}
-                    <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST" style="display:inline;">
-                        <input type="hidden" name="produit_id" value="{{ produit.id }}">
-                        {% csrf_token %}
-                        <button type="submit" class="action-bouton">Supprimer du panier</button>
-                    </form>
-                {% else %}
-                    <a class="action-bouton" id="reserver-bouton">Ajouter au panier</a>
-                {% endif %}
-            </div>
+<div class="max-w-4xl mx-auto p-8">
+
+    <!-- Titre Centré -->
+    <h1 class="text-4xl font-bold text-center text-[var(--primary-color)] mb-6">{{ produit.nom }}</h1>
+
+    <!-- Informations Produit -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Bloc Informations -->
+        <div class="p-6 bg-gray-100 rounded-lg shadow-md">
+            <p class="text-lg"><strong>Quantité :</strong> {{ produit.get_quantite|default:"Non défini" }} {{ produit.get_unite|default:"" }}</p>
+            <p class="text-lg"><strong>Fournisseur :</strong> {{ produit.fournisseur.nom|default:"Non défini" }}</p>
+            <p class="text-lg"><strong>Date d'ajout :</strong> {{ produit.date_ajout|default:"Non défini" }}</p>
+            <p class="text-lg"><strong>Stockage :</strong> {{ produit.stockage.nom|default:"Non défini" }}</p>
         </div>
-        <div class="details">
-            <div>
-                <p><strong>Quantité en stock :</strong></p>
-                <p class="info">{{ produit.get_quantite }} {{ produit.get_unite }}</p>
-            </div>
-            <div>
-                <p><strong>Familles :</strong></p>
+
+        <!-- Bloc Familles & Type -->
+        <div class="p-6 bg-gray-100 rounded-lg shadow-md">
+            <p class="text-lg"><strong>Familles :</strong></p>
+            <ul class="list-disc list-inside text-gray-700 mb-4">
                 {% for famille in produit.familles.all %}
-                    <p> - {{ famille.nom }}</p>
+                    <li>{{ famille.nom }}</li>
+                {% empty %}
+                    <li class="text-gray-500">Non défini</li>
                 {% endfor %}
-            </div>
-            <div>
-                <p><strong>Localisation du produit :</strong></p>
-                <p class="info">{{ produit.stockage.service.nom }} {{ produit.stockage.nom }}</p>
-            </div>
+            </ul>
+            <p class="text-lg"><strong>Type :</strong> {{ produit.type|default:"Non défini" }}</p>
         </div>
+
+    </div>
+
+    <!-- Boutons -->
+    <div class="mt-8 flex gap-4 justify-center">
+        {% if in_panier %}
+            <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="produit_id" value="{{ produit.id }}">
+                <button type="submit"
+                    class="px-6 py-3 rounded-lg text-white shadow-md hover:opacity-80"
+                    style="background-color: var(--primary-color);">
+                    Supprimer du panier
+                </button>
+            </form>
+        {% else %}
+            <a id="reserver-bouton"
+                class="px-6 py-3 rounded-lg text-white shadow-md cursor-pointer hover:opacity-80"
+                style="background-color: var(--primary-color);">
+                Ajouter au panier
+            </a>
+        {% endif %}
     </div>
 </div>
 
-<div id="popup" style="display: none;">
-    <form action="{% url 'paniers:ajouter_produit_panier' %}" method="POST">
+<!-- Popup -->
+<div id="popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <form action="{% url 'paniers:ajouter_produit_panier' %}" method="POST"
+          class="bg-white p-8 rounded-lg shadow-lg w-96">
         {% csrf_token %}
         <input type="hidden" name="produit_id" value="{{ produit.id }}">
-        <label for="quantite">Quantité :</label>
-        <input type="number" id="quantite" name="quantite" min="0" step="0.01" required>
-        <select name="unite">
+
+        <label for="quantite" class="block font-semibold mb-2">Quantité :</label>
+        <input type="number" id="quantite" name="quantite" min="0" step="0.01" required
+               class="w-full border p-3 rounded-md mb-4">
+
+        <select name="unite" class="w-full border p-3 rounded-md mb-4">
             {% for unite in produit.get_unites %}
                 <option value="{{ unite }}">{{ unite }}</option>
             {% endfor %}
         </select>
-        <button id="confirmer-bouton" class="bouton">Confirmer</button>
+
+        <div class="flex justify-between mt-4">
+            <button type="button" id="annuler-bouton" class="px-6 py-3 bg-gray-300 rounded-lg hover:bg-gray-400">
+                Annuler
+            </button>
+            <button type="submit" class="px-6 py-3 text-white rounded-lg hover:opacity-80"
+                    style="background-color: var(--primary-color);">
+                Confirmer
+            </button>
+        </div>
     </form>
 </div>
 
 <script>
-    document.getElementById("reserver-bouton").addEventListener("click", function() {
-        document.getElementById("popup").style.display = "block";
-    });
+document.getElementById("reserver-bouton").addEventListener("click", function() {
+    document.getElementById("popup").classList.remove("hidden");
+});
 
-    document.getElementById("confirmer-bouton").addEventListener("click", function() {
-        document.getElementById("popup").style.display = "none";
-    });
+document.getElementById("annuler-bouton").addEventListener("click", function() {
+    document.getElementById("popup").classList.add("hidden");
+});
 </script>
 {% endblock %}
