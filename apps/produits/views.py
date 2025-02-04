@@ -6,6 +6,9 @@ import pandas as pd
 from paniers.models import Panier
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 @login_required
 def produits(request):
@@ -56,6 +59,8 @@ def produits(request):
 
 @login_required
 def importer_produits(request):
+    services = Service.objects.all().distinct()
+
     if request.user.role not in ['preparateur', 'administrateur']:
         return HttpResponse(status=403)
     
@@ -66,9 +71,7 @@ def importer_produits(request):
         df = pd.read_excel(fichier, skiprows=3)
 
         for _, row in df.iterrows():
-
             quantite = 0.0
-
             if row["Quantité"]:
                 quantite_str = str(row["Quantité"])
                 quantite = ''.join(filter(str.isdigit, quantite_str))
@@ -78,7 +81,7 @@ def importer_produits(request):
             famille = row.get("Fonction")
             fournisseur = row.get("Fournisseur")
 
-            famille = famille if pd.notna(famille) and famille != "-"else "Pas de famille"
+            famille = famille if pd.notna(famille) and famille != "-" else "Pas de famille"
             fournisseur = fournisseur if pd.notna(fournisseur) and fournisseur != "-" else "Pas de fournisseur"
             produits_preview.append({
                 "nom": row["Produits"],
@@ -93,38 +96,37 @@ def importer_produits(request):
 
     elif request.method == "POST" and "importer" in request.POST:
         produits_preview = request.session.get("produits_preview", [])
+        selected_service = request.POST.get("service")
 
         for produit in produits_preview:
-                
-                p = Produit.objects.create(
-                    nom=produit["nom"],
-                    quantite=0,
-                    stockage=Stockage.objects.get_or_create(nom=produit["stockage"], service=Stockage.objects.first().service)[0],
-                )
+            p = Produit.objects.create(
+                nom=produit["nom"],
+                quantite=0,
+                stockage=Stockage.objects.get_or_create(nom=produit["stockage"], service=Service.objects.get(nom=selected_service))[0],
+            )
 
-                if produit["famille"] != "Pas de famille":
-                    p.add_famille(produit["famille"])
-            
+            if produit["famille"] != "Pas de famille":
+                p.add_famille(produit["famille"])
 
-                if produit["fournisseur"] != "Pas de fournisseur":
-                    p.add_fournisseur(produit["fournisseur"])
+            if produit["fournisseur"] != "Pas de fournisseur":
+                p.add_fournisseur(produit["fournisseur"])
 
-                if produit["quantite"]  and produit["unite"]:
-                    p.add_type(produit["unite"])
-                    if produit["unite"] == "ml":
-                        p.quantite = produit["quantite"] / 1000
-                    elif produit["unite"] == "cl":
-                        p.quantite = produit["quantite"] / 100
-                    elif produit["unite"] == "l":
-                        p.quantite = produit["quantite"]
-                    elif produit["unite"] == "g":
-                        p.quantite = produit["quantite"] / 1000
-                    elif produit["unite"] == "kg":
-                        p.quantite = produit["quantite"]
-                    else:
-                        p.quantite = produit["quantite"]
+            if produit["quantite"] and produit["unite"]:
+                p.add_type(produit["unite"])
+                if produit["unite"] == "ml":
+                    p.quantite = produit["quantite"] / 1000
+                elif produit["unite"] == "cl":
+                    p.quantite = produit["quantite"] / 100
+                elif produit["unite"] == "l":
+                    p.quantite = produit["quantite"]
+                elif produit["unite"] == "g":
+                    p.quantite = produit["quantite"] / 1000
+                elif produit["unite"] == "kg":
+                    p.quantite = produit["quantite"]
+                else:
+                    p.quantite = produit["quantite"]
 
-                    p.save()
+                p.save()
 
         del request.session["produits_preview"]
         return produits(request)
@@ -133,7 +135,8 @@ def importer_produits(request):
         return HttpResponse(status=400)
 
     return render(request, "produits/preparateurs/importer_produits.html", {
-        "produits_preview": produits_preview
+        "produits_preview": produits_preview,
+        "services": services,
     })
 
 @login_required
@@ -161,6 +164,7 @@ def ajouter_produit(request):
     fournisseurs = Fournisseur.objects.all().order_by('nom')
     familles = Famille.objects.all().order_by('nom')
     stockages = Stockage.objects.all().order_by('nom')
+    services = Service.objects.all().order_by('nom')
 
     if request.method == 'POST':
         nom = request.POST.get('nom')
@@ -169,6 +173,7 @@ def ajouter_produit(request):
         unite = request.POST.get('unite')
         famille = request.POST.get('familles')
         fournisseur = request.POST.get('fournisseur')
+        service = request.POST.get('service')
 
         if unite == "ml":
             type = 'liquide'
@@ -193,7 +198,7 @@ def ajouter_produit(request):
             nom=nom,
             quantite=quantite,
             type=type,
-            stockage=Stockage.objects.get_or_create(nom=stockage, service=Stockage.objects.first().service)[0],
+            stockage=Stockage.objects.get_or_create(nom=stockage, service=Service.objects.get(nom=service))[0],
         )
 
         if fournisseur:
@@ -209,6 +214,7 @@ def ajouter_produit(request):
     return render(request, "produits/preparateurs/ajouter_produit.html", {
         'fournisseurs': fournisseurs,
         'familles': familles,
+        'services' : services,
         'stockages': stockages,
     })
 
@@ -220,18 +226,24 @@ def modifier_produit(request, produit_id):
     produit = get_object_or_404(Produit, id=produit_id)
     fournisseurs = Fournisseur.objects.all().order_by('nom')
     familles = Famille.objects.all().order_by('nom')
+    services = Service.objects.all().order_by('nom')
     stockages = Stockage.objects.all().order_by('nom')
 
     if request.method == 'POST':
         produit.nom = request.POST.get('nom')
         produit.quantite = request.POST.get('quantite')
-        produit.stockage = Stockage.objects.get_or_create(nom=request.POST.get('stockage'), service=Stockage.objects.first().service)[0]
+        
         produit.fournisseur = Fournisseur.objects.get_or_create(nom=request.POST.get('fournisseur'))[0]
 
         famille = request.POST.get('familles')
         fournisseur = request.POST.get('fournisseur')
 
+        service_nom = request.POST.get('service')
+        service, created = Service.objects.get_or_create(nom=service_nom)
+
         produit.familles.clear()
+
+        produit.stockage = Stockage.objects.get_or_create(nom=request.POST.get('stockage'), service=service)[0]
 
         produit.add_famille(famille)
 
@@ -245,6 +257,7 @@ def modifier_produit(request, produit_id):
         'produit': produit,
         'fournisseurs': fournisseurs,
         'familles': familles,
+        'services': services,
         'stockages': stockages,
     })
 
@@ -260,3 +273,17 @@ def supprimer_produit(request, produit_id):
         return redirect('produits:produits')
     
     return HttpResponse(status=405)
+
+@csrf_exempt
+def add_service(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        service_name = data.get('name')
+        if service_name:
+            service, created = Service.objects.get_or_create(nom=service_name)
+            if created:
+                return JsonResponse({'success': True, 'service': service_name})
+            else:
+                return JsonResponse({'success': False, 'error': 'Service already exists'})
+        return JsonResponse({'success': False, 'error': 'Invalid data'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

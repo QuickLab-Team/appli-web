@@ -5,7 +5,7 @@ from django.utils import timezone
 # Create your models here.
 
 conversion_liquides = {
-    'l': 1,
+    'L': 1,
     'cl': 0.01,
     'ml': 0.001
 }

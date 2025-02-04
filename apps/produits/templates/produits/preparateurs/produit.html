@@ -21,9 +21,10 @@
             <li>{{ famille.nom }}</li>
         {% endfor %}
     </ul>
-    <p><strong>Date d'ajout:</strong> {{ produit.date_ajout }}</p>
+    <p><strong>Date d'ajout:</strong> {{ produit.date_ajout|date:" H:i d/m/Y "  }}</p>
     <p><strong>Stockage:</strong> {{ produit.stockage.nom }}</p>
     <p><strong>Type:</strong> {{ produit.get_type_display }}</p>
+    <p><strong>Service:</strong> {{ produit.stockage.service.nom }}</p>
 </div>
 
 <div class="actions">

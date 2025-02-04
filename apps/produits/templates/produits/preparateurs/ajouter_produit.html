@@ -50,6 +50,14 @@
         </select>
     </div>
     <div>
+        <label for="services">Service :</label>
+        <select id="service" name="service" required>
+            {% for service in services %}
+                <option value="{{ service.nom }}">{{ service.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
         <label for="stockage">Lieu de stockage:</label>
         <select id="stockage" name="stockage" required>
             {% for stockage in stockages %}

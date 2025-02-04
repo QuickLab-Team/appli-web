@@ -46,6 +46,14 @@
         </select>
     </div>
     <div>
+        <label for="service">Service:</label>
+        <select id="service" name="service" required>
+            {% for service in services %}
+                <option value="{{ service.nom }}" {% if produit.stockage and produit.stockage.service.nom == service.nom %}selected{% endif %}>{{ service.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
         <label for="stockage">Stockage:</label>
         <select id="stockage" name="stockage" required>
             {% for stockage in stockages %}

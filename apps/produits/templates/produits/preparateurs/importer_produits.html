@@ -15,8 +15,74 @@
 </form>
 
 {% if produits_preview %}
+
+    
     <h2>Prévisualisation des produits</h2>
     <p><strong>Total des produits trouvés :</strong> {{ produits_preview|length }}</p>
+
+    <form method="post" id="import-form" style="display: inline;">
+        {% csrf_token %}
+        <input type="hidden" name="importer" value="true">
+        <label for="service">Service:</label>
+        <select name="service" id="service" required>
+            {% for service in services %}
+                <option value="{{ service.nom }}">{{ service.nom }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="bouton">Importer dans la base de données</button>
+    </form>
+    <button type="button" class="bouton" onclick="openServicePopup()">Ajouter un service</button>
+
+    <div id="servicePopup" class="popup" style="display:none;">
+        <div class="popup-content">
+            <span class="close" onclick="closeServicePopup()">&times;</span>
+            <h2>Ajouter un nouveau service</h2>
+            <form method="post" id="add-service-form">
+                {% csrf_token %}
+                <label for="new_service_name">Nom du service:</label>
+                <input type="text" id="new_service_name" name="new_service_name" required>
+                <button type="submit" class="bouton">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openServicePopup() {
+            document.getElementById('servicePopup').style.display = 'block';
+        }
+
+        function closeServicePopup() {
+            document.getElementById('servicePopup').style.display = 'none';
+        }
+
+        document.getElementById('add-service-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const newServiceName = document.getElementById('new_service_name').value;
+            
+            fetch("{% url 'produits:add_service' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ name: newServiceName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const serviceSelect = document.getElementById('service');
+                    const newOption = document.createElement('option');
+                    newOption.value = newServiceName;
+                    newOption.textContent = newServiceName;
+                    serviceSelect.appendChild(newOption);
+                    closeServicePopup();
+                } else {
+                    alert('Erreur lors de l\'ajout du service');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 
     <form method="post">
         {% csrf_token %}
@@ -45,7 +111,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button type="submit" class="bouton">Importer dans la base de données</button>
     </form>
 {% endif %}
 <script>
