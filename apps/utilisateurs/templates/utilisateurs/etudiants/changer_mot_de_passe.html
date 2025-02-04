@@ -1,0 +1,17 @@
+{% extends 'etudiants/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/utilisateurs/changer_mot_de_passe.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="password-change-container">
+    <h2>Changer mon mot de passe</h2>
+    <form method="post" class="password-change-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
+    </form>
+</div>
+{% endblock %}
