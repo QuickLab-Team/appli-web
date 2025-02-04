@@ -10,6 +10,7 @@ from django.contrib.auth.views import LoginView
 
 from quicklab import settings
 from .forms import UtilisateurForm
+from produits.models import Produit
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import BadHeaderError, JsonResponse
@@ -47,6 +48,7 @@ def accueil(request):
     if request.user.role == 'etudiant':
             return render(request, 'utilisateurs/etudiants/accueil.html', {
                 'titre': 'QuickLab',
+                'produits': Produit.objects.all(),
             })
         
     elif request.user.role == 'preparateur' or request.user.role == 'administrateur': 
@@ -305,6 +307,9 @@ def modifier_utilisateur(request, utilisateur_id):
 @login_required
 def mon_compte(request):
     """Vue pour afficher les informations de compte."""
+    if request.user.role == 'etudiant':
+        return render(request, 'utilisateurs/etudiants/compte.html')
+    
     return render(request, 'utilisateurs/preparateurs/mon_compte.html', {
         'user': request.user
     })

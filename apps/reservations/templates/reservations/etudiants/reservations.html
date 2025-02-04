@@ -2,23 +2,26 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/reservations/etudiants/reservations.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="reservation-content">
+    <div class="flex flex-col items-center justify-start gap-4 p-4 overflow-y-auto h-screen relative">
         {% if reservations.count > 0 %}
             {% for reservation in reservations %}
-                <div class="box">
-                    <p class="date" >{{ reservation.date|date:"d/m/Y H:i:s" }}</p>
-                    <h3>{{ reservation.titre }}</h3>
-                    <p class="etat-{{ reservation.etat }}">{{ reservation.get_etat_display }}</p>
-                    <a href="{% url 'reservations:reservation' reservation.id %}">Détail de la réservation</a>
+                <div class="bg-white border border-gray-200 rounded-lg p-5 w-full max-w-lg text-center shadow-lg">
+                    <p class="text-sm text-gray-600">{{ reservation.date|date:"d/m/Y H:i:s" }}</p>
+                    <h3 class="text-lg font-semibold text-gray-800 my-2 break-words">{{ reservation.titre }}</h3>
+                    <p class="etat-{{ reservation.etat }} mb-4">
+                        {{ reservation.get_etat_display }}
+                    </p>
+                    <a href="{% url 'reservations:reservation' reservation.id %}" 
+                       class="px-6 py-2 border border-gray-800 text-gray-800 rounded-lg text-sm w-full block transition duration-300 hover:bg-[var(--primary-color)] hover:text-white">
+                        Détail
+                    </a>
                 </div>
             {% endfor %}
         {% else %}
-            <h1>Aucune réservation</h1>
+            <h1 class="text-xl font-bold text-gray-800">Aucune réservation</h1>
         {% endif %}
     </div>
-    
 {% endblock %}

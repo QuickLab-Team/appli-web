@@ -10,66 +10,64 @@
 {% endblock %}
 
 {% block content %}
-    <div class="reservation">
-        <div class="reservation-detail">
-            <div>
-                <a class="close" href="{% url 'reservations:reservations' %}">&times;</a>
+    <div class="flex flex-col md:flex-row justify-center items-start p-8 h-full space-x-4">
+        <div class="flex-grow bg-white shadow-lg rounded-lg p-6 w-full md:w-2/3">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">{{ reservation.titre }}</h1>
+                <a class="text-2xl text-gray-700 hover:text-gray-900" href="{% url 'reservations:reservations' %}">&times;</a>
             </div>
-            <div class="reservation-info">
-                <h1 class="titre">{{ reservation.titre }}</h1>
-                <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y H:i:s" }}</p>
-                <p><strong>Statut : </strong>{{ reservation.get_etat_display }}</p>
-                <div class="action">
-                    {% if reservation.etat != "annule" and reservation.etat != "termine" %}
-                        <a class="bouton bouton-annuler" href="{% url 'reservations:annuler_reservation' reservation.id %}">Annuler</a>
-                    {% endif %}
-                    {% if reservation.etat == "attente_recuperation" and reservation.etat != "termine" %}
-                        <a class="bouton bouton-recuperer" href="{% url 'reservations:recuperer_reservation' reservation.id %}">Récupérer</a>
-                    {% endif %}
-                    <a class="bouton bouton-messagerie" onclick="ouvrirMessagerie();">Messagerie</a>
-                </div>
+            <p class="text-gray-700"><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y H:i:s" }}</p>
+            <p class="text-gray-700"><strong>Statut :</strong> {{ reservation.get_etat_display }}</p>
+            <div class="flex space-x-4 mt-4">
+                {% if reservation.etat != "annule" and reservation.etat != "termine" %}
+                    <a class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" href="{% url 'reservations:annuler_reservation' reservation.id %}">Annuler</a>
+                {% endif %}
+                {% if reservation.etat == "attente_recuperation" and reservation.etat != "termine" %}
+                    <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{% url 'reservations:recuperer_reservation' reservation.id %}">Récupérer</a>
+                {% endif %}
             </div>
-            <div class="produits">
-                <h3>Produits :</h3>
-                <ul>
+            <div class="mt-6 bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold">Produits :</h3>
+                <ul class="mt-2">
                     {% for produit_reservation in reservation.produits.all %}
-                        <li>
-                            <div>
-                                <p>{{ produit_reservation.produit.nom }} - {{ produit_reservation.get_quantite }} {{ produit_reservation.get_unite }}</p>
-                                <a class="bouton" href="{% url 'produits:produit' produit_reservation.produit.id %}">Voir plus</a>
-                            </div>
+                        <li class="flex justify-between items-center p-2 border-b">
+                            <p>{{ produit_reservation.produit.nom }} - {{ produit_reservation.get_quantite }} {{ produit_reservation.get_unite }}</p>
+                            <a class="text-blue-500 hover:underline" href="{% url 'produits:produit' produit_reservation.produit.id %}">Voir plus</a>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
-        <div class="messagerie">
-            <div class="messages">
-                {% for message_reservation in messages %}
-                    <div class="message">
-                        {% if message_reservation.utilisateur.id == user.id %}
-                            <div class="message-sent">
-                        {% else %}
-                            <div class="message-received">
-                        {% endif %}
+        <!-- Messagerie -->
 
-                            <p class="message-text">{{ message_reservation.message }}</p>
-                        </div>
-                        <p class="message-time">{{ message_reservation.date|date:"d M H:i" }}</p>
+        <div class="messagerie-overlay" onclick="fermerMessagerie();"></div>
+        <div class="w-full md:w-1/3 bg-white shadow-lg rounded-lg p-6 messagerie hidden md:flex flex-col">
+            <button onclick="fermerMessagerie();" class="closeMessagerie" style="position: absolute; top: 0px; left: 10px; background: none; border: none; font-size: 20px;">&times;</button>
+            <div class="overflow-y-auto max-h-96 scrollbar-thin scrollbar-thumb-gray-500">
+                {% for message_reservation in messages %}
+                    <div class="my-2">
+                        {% if message_reservation.utilisateur.id == user.id %}
+                            <div class="bg-blue-500 text-white p-3 rounded-lg self-end max-w-xs">
+                        {% else %}
+                            <div class="bg-gray-200 text-gray-800 p-3 rounded-lg self-start max-w-xs">
+                        {% endif %}
+                                <p>{{ message_reservation.message }}</p>
+                            </div>
+                        <p class="text-xs text-gray-500 text-right">{{ message_reservation.date|date:"d M H:i" }}</p>
                     </div>
                 {% endfor %}
             </div>
-            <div class="input-container">
+            <div class="flex mt-4 space-x-2">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="ajouter_message_reservation_lien" value="{% url 'reservations:ajouter_message_reservation' reservation.id %}">
-                <input 
-                    type="text" 
-                    name="message" 
-                    placeholder="Tapez votre message..."
-                    onkeydown="if(event.key === 'Enter'){envoyerMessage();}" 
-                >
-                <button onclick="envoyerMessage();" class="send-btn">Envoyer</button>
+                <input type="text" name="message" placeholder="Tapez votre message..." class="flex-grow p-2 border rounded-lg" onkeydown="if(event.key === 'Enter'){envoyerMessage();}">
+                <button onclick="envoyerMessage();" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Envoyer</button>
             </div>
         </div>
-    </div>
+
+
+    <!-- Bouton Messagerie pour mobile -->
+    <button class="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg md:hidden" onclick="ouvrirMessagerie();">
+        Messagerie
+    </button>
 {% endblock %}

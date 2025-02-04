@@ -1,32 +1,40 @@
 {% extends 'etudiants/base.html' %}
 {% load static %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'css/utilisateurs/etudiants/accueil.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="accueil">
-        <div class="top-accueil">
-            <h2>Bonjour, {{ user.prenom }} 👋 !</h2>
+    <div class="mx-4 mt-12 md:mx-8 lg:mx-12">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl md:text-4xl font-bold" style="color: var(--primary-color);">
+                Bonjour, {{ user.prenom }} 👋 !
+            </h2>
         </div>
-        
 
-        <p>QuickLab est votre solution intuitive et performante pour simplifier 
+        <p class="text-gray-700 text-base md:text-lg lg:text-xl leading-relaxed mb-6">
+            QuickLab est votre solution intuitive et performante pour simplifier 
             la gestion des commandes au sein du département de chimie. Notre outil a été 
-            conçu pour vous offrir une expérience fluide, efficace et adaptée à vos besoins.</p>
+            conçu pour vous offrir une expérience fluide, efficace et adaptée à vos besoins.
+        </p>
 
-        <div class="informations">
-            <h3>Derniers produits ajoutés</h3>
-                <div class="box">
-                    {% for produit in produits|slice:":2" %}
-                        <div class="info-card">
-                            <p>{{ produit.nom }}</p>
-                            <p>{{ produit.date_ajout|date:"d/m/Y" }}</p>
-                            <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
+        <div class="mt-12">
+            <h3 class="text-xl md:text-3xl font-semibold mb-4" style="color: var(--primary-color);">
+                Derniers produits ajoutés
+            </h3>
+            <div class="flex flex-col md:flex-row md:justify-between gap-4">
+                {% for produit in produits|slice:":2" %}
+                    <div class="flex items-center justify-between bg-gray-100 rounded-lg p-4 shadow-md w-full md:w-5/12">
+                        <div>
+                            <p class="font-medium text-gray-900">{{ produit.nom }}</p>
+                            <p class="text-gray-500 text-sm">{{ produit.date_ajout|date:"d/m/Y" }}</p>
                         </div>
-                    {% endfor %}
-                </div>
+                        <a href="{% url 'produits:produit' produit.id %}" 
+                           class="text-sm font-semibold relative transition duration-300 hover:opacity-80"
+                           style="color: var(--primary-color);">
+                            Voir +
+                            <span class="absolute left-0 bottom-0 w-full h-0.5 bg-primary transform scale-x-0 origin-bottom-right transition-transform duration-300 hover:scale-x-100"></span>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}
