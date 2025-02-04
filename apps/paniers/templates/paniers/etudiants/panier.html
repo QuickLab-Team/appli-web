@@ -10,59 +10,63 @@
 {% endblock %}
 
 {% block content %}
-    <div class="panier">
+    <div class="mx-4 mt-10 md:mx-8 lg:mx-12">
         {% if panier.produits.count > 0 %}
-            <h1>Votre panier</h1>
-            <div class="produits">
+            <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-6">Votre panier</h1>
+            
+            <div class="overflow-y-auto scrollbar-thin my-4">
                 {% for produit_panier in panier.produits.all %}
-                    <div class="produit">
-                        <div class="left">
-                            <h3>{{ produit_panier.produit.nom }}</h3>
-                            <h4>{{ produit_panier.produit.famille.nom }}</h4>
+                    <div class="flex justify-between items-center bg-[var(--fourth-color)] rounded-lg p-4 shadow-md mx-6 my-2">
+                        <div class="flex flex-col flex-grow-0 basis-[45%]">
+                            <h3 class="text-lg font-medium text-gray-800">{{ produit_panier.produit.nom }}</h3>
+                            <h4 class="text-gray-600">{{ produit_panier.produit.famille.nom }}</h4>
                         </div>
-                        <div class="right">
-                            <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST">
+                        <div class="flex items-center space-x-4">
+                            <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST" class="flex items-center space-x-2">
                                 {% csrf_token %}
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                 <input type="hidden" name="update-lien" value="{% url 'paniers:modifier_produit_panier' %}">
                                 <input type="hidden" name="produit_id" value="{{ produit_panier.produit.id }}">
-                                <input type="number" name="quantite" value="{{ produit_panier.get_quantite }}">
-                                <select name="unite">
+                                <input type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="border border-gray-300 rounded px-2 py-1 w-16">
+                                <select name="unite" class="border border-gray-300 rounded px-2 py-1">
                                     {% for unite in produit_panier.produit.get_unites %}
                                         <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
                                     {% endfor %}
                                 </select>
-                                <button type="submit">Supprimer</button>
+                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Supprimer</button>
                             </form>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            <div class="action">
-                <a class="bouton" id="reserver-bouton">Reserver</a>
+
+            <div class="flex justify-center my-6">
+                <button id="reserver-bouton" class="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg shadow-md hover:bg-opacity-90 transition">Réserver</button>
             </div>
 
-            <div id="popup" style="display: none;">
-                <form action="{% url 'paniers:reserver_panier' %}" method="POST">
+            <div id="popup" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center hidden">
+                <form action="{% url 'paniers:reserver_panier' %}" method="POST" class="bg-white p-6 rounded-lg shadow-lg w-80">
                     {% csrf_token %}
-                    <label for="titre">Titre de la réservation:</label>
-                    <input type="text" id="titre" name="titre">
-                    <button id="confirmer-bouton" class="bouton">Confirmer</button>
+                    <label for="titre" class="block mb-2 font-semibold text-gray-700">Titre de la réservation :</label>
+                    <input type="text" id="titre" name="titre" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                    <div class="flex justify-end">
+                        <button id="confirmer-bouton" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">Confirmer</button>
+                    </div>
                 </form>
             </div>
 
             <script>
                 document.getElementById("reserver-bouton").addEventListener("click", function() {
-                    document.getElementById("popup").style.display = "block";
+                    document.getElementById("popup").classList.remove("hidden");
                 });
             
                 document.getElementById("confirmer-bouton").addEventListener("click", function() {
-                    document.getElementById("popup").style.display = "none";
+                    document.getElementById("popup").classList.add("hidden");
                 });
             </script>
 
         {% else %}
-            <h1>Votre panier est vide</h1>
+            <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-10">Votre panier est vide ... :(</h1>
         {% endif %}
     </div>
 {% endblock %}

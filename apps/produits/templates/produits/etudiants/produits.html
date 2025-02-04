@@ -1,28 +1,37 @@
 {% extends 'etudiants/base.html' %}
 {% load static %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'css/produits/etudiants/produits.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="produits">
+<div class="max-w-full w-full mx-auto px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32 py-4">
+
+    <div class="space-y-3">
         {% for produit in produits %}
-            <div class="produit">
-                <div class="left">
-                    <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" height="40px" width="40px">
-                    <h3 class="produit-nom">{{ produit.nom }}</h3>
+            <div class="flex flex-wrap justify-between items-center bg-gray-100 rounded-lg p-3 shadow-md">
+
+                <!-- Partie gauche : Image + Nom -->
+                <div class="flex items-center justify-center space-x-3 w-full sm:w-auto">
+                    <img src="{% static 'images/etudiants/icon-produit.png' %}" alt="Icon produit" class="h-8 w-8 sm:h-10 sm:w-10">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">{{ produit.nom }}</h3>
                 </div>
-                <div class="right">
-                    <h3>{{ produit.get_quantite }} {{ produit.get_unite }} en stock</h3>
+
+                <!-- Partie droite : Stock + Disponibilité + Lien -->
+                <div class="flex items-center space-x-4 w-full sm:w-auto justify-between">
+                    <h3 class="text-gray-700 text-sm sm:text-base">{{ produit.get_quantite }} {{ produit.get_unite }} en stock</h3>
+
                     {% if produit.quantite != null and produit.quantite > 0 %}
-                            <h3 class="dispo">Disponible</h3>
+                        <h3 class="text-green-600 font-semibold text-sm sm:text-base">Disponible</h3>
                     {% else %}
-                            <h3 class="non-dispo">Non disponible</h3>
+                        <h3 class="text-red-600 font-semibold text-sm sm:text-base">Non disponible</h3>
                     {% endif %}
-                    <a href="{% url 'produits:produit' produit.id %}">Voir +</a>
+
+                    <a href="{% url 'produits:produit' produit.id %}"
+                       class="text-[var(--primary-color)] hover:text-blue-800 text-sm sm:text-base relative after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-blue-600 after:scale-x-0 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+                        Voir +
+                    </a>
                 </div>
+
             </div>
         {% endfor %}
     </div>
+</div>
 {% endblock %}

@@ -18,7 +18,6 @@
     margin-top: 1%;
 }
 
-
 /* Logo */
 .header .top .logo {
     margin-left: 3%;
@@ -227,15 +226,17 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 #popup-familles div, #popup-services div{
     justify-content: center;
     align-items: center;
     display: flex;
+    flex-direction: column;
     position: relative;
     top: 50%;
     left: 50%;

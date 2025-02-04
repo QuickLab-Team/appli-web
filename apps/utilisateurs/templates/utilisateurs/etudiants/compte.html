@@ -6,19 +6,25 @@
 {% endblock %}
 
 {% block content %}
-    <div class="compte">
-        <div class="info-compte">
-            <div class="top-compte">
-                <h3>Informations du compte</h3>
-                <div>
-                    <button class="bouton btn-action">Modifier le profil</button>
-                    <button class="bouton btn-action">Changer le mot de passe</button>
-                    <a class="bouton" href="{% url 'utilisateurs:deconnexion' %}">Se déconnecter</a>
-                </div>
-            </div>
-            <ul>
-                <li><strong>Email :</strong> {{ user.email }}</li>
-            </ul>
+    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <div class="mb-6 border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-700">Informations du compte</h3>
+        </div>
+        <ul class="mb-6">
+            <li class="text-gray-600"><strong>Prénom :</strong> {{ user.prenom }}</li>
+            <li class="text-gray-600"><strong>Nom :</strong> {{ user.nom }}</li>
+            <li class="text-gray-600"><strong>Email :</strong> {{ user.email }}</li>
+        </ul>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                Modifier le profil
+            </button>
+            <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                Changer le mot de passe
+            </button>
+            <a href="{% url 'utilisateurs:deconnexion' %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-center">
+                Se déconnecter
+            </a>
         </div>
     </div>
 {% endblock %}
