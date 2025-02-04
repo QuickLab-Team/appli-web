@@ -63,10 +63,16 @@
                 document.getElementById("confirmer-bouton").addEventListener("click", function() {
                     document.getElementById("popup").classList.add("hidden");
                 });
+
+                document.getElementById("annuler-bouton").addEventListener("click", function (event) {
+                    event.preventDefault();
+                    document.getElementById("popup").classList.add("hidden");
+                    window.location.href = "{% url 'paniers:panier' %}";
+                });
             </script>
 
         {% else %}
-            <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-10">Votre panier est vide ... :(</h1>
+            <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-10">Votre panier est vide ... 😢</h1>
         {% endif %}
     </div>
 {% endblock %}

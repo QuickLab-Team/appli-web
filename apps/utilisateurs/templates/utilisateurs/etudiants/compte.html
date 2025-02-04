@@ -16,10 +16,7 @@
             <li class="text-gray-600"><strong>Email :</strong> {{ user.email }}</li>
         </ul>
         <div class="flex flex-col sm:flex-row gap-3">
-            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-                Modifier le profil
-            </button>
-            <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+            <a href="{% url 'utilisateurs:changer_mot_de_passe' %}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
                 Changer le mot de passe
             </button>
             <a href="{% url 'utilisateurs:deconnexion' %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-center">

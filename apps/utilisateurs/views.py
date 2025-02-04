@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from django.utils.translation import gettext_lazy as _
 
 from quicklab import settings
 from .forms import UtilisateurForm
@@ -55,8 +56,6 @@ def accueil(request):
             return render(request, 'utilisateurs/preparateurs/accueil.html', {
                 'titre': 'QuickLab',
             })
-
-    
 
 def inscription(request):
     if request.method == 'POST':
@@ -314,11 +313,22 @@ def mon_compte(request):
         'user': request.user
     })
 
+class PasswordChangeFormFrancais(PasswordChangeForm):
+    """Formulaire personnalisé pour afficher les erreurs en français."""
+    error_messages = {
+        'password_incorrect': _("L'ancien mot de passe est incorrect."),
+        'password_mismatch': _("Les deux mots de passe ne correspondent pas."),
+        'password_too_short': _("Votre mot de passe doit contenir au moins 8 caractères."),
+        'password_too_common': _("Votre mot de passe est trop courant."),
+        'password_entirely_numeric': _("Votre mot de passe ne peut pas être uniquement composé de chiffres."),
+        'password_similar': _("Votre mot de passe est trop similaire à vos informations personnelles."),
+    }
+
 @login_required
 def changer_mot_de_passe(request):
     """Vue pour permettre à l'utilisateur de changer son mot de passe."""
     if request.method == 'POST':
-        form = PasswordChangeForm(user=request.user, data=request.POST)
+        form = PasswordChangeFormFrancais(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
@@ -327,5 +337,8 @@ def changer_mot_de_passe(request):
         else:
             messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
     else:
-        form = PasswordChangeForm(user=request.user)
-    return render(request, 'utilisateurs/preparateurs/changer_mot_de_passe.html', {'form': form})
+        form = PasswordChangeFormFrancais(user=request.user)
+
+    template_name = 'utilisateurs/etudiants/changer_mot_de_passe.html' if request.user.role == 'etudiant' else 'utilisateurs/preparateurs/changer_mot_de_passe.html'
+    
+    return render(request, template_name, {'form': form})
