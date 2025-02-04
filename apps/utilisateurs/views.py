@@ -296,6 +296,9 @@ def modifier_utilisateur(request, utilisateur_id):
 @login_required
 def mon_compte(request):
     """Vue pour afficher les informations de compte."""
+    if request.user.role == 'etudiant':
+        return render(request, 'utilisateurs/etudiants/compte.html')
+    
     return render(request, 'utilisateurs/preparateurs/mon_compte.html', {
         'user': request.user
     })
