@@ -4,77 +4,97 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/paniers/etudiants/panier.css' %}">
 {% endblock %}
+
 {% block js %}
 <script src="{% static 'js/paniers/etudiants/panier.js' %}"></script>
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-    <div class="mx-4 mt-10 md:mx-8 lg:mx-12">
-        {% if panier.produits.count > 0 %}
-            <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-6">Votre panier</h1>
-            
-            <div class="overflow-y-auto scrollbar-thin my-4">
-                {% for produit_panier in panier.produits.all %}
-                    <div class="flex justify-between items-center bg-[var(--fourth-color)] rounded-lg p-4 shadow-md mx-6 my-2">
-                        <div class="flex flex-col flex-grow-0 basis-[45%]">
-                            <h3 class="text-lg font-medium text-gray-800">{{ produit_panier.produit.nom }}</h3>
-                            <h4 class="text-gray-600">{{ produit_panier.produit.famille.nom }}</h4>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST" class="flex items-center space-x-2">
-                                {% csrf_token %}
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                <input type="hidden" name="update-lien" value="{% url 'paniers:modifier_produit_panier' %}">
-                                <input type="hidden" name="produit_id" value="{{ produit_panier.produit.id }}">
-                                <input type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="border border-gray-300 rounded px-2 py-1 w-16">
-                                <select name="unite" class="border border-gray-300 rounded px-2 py-1">
-                                    {% for unite in produit_panier.produit.get_unites %}
-                                        <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Supprimer</button>
-                            </form>
-                        </div>
+<div class="mx-auto mt-10 px-4 max-w-screen-md md:max-w-screen-lg">
+    {% if panier.produits.count > 0 %}
+        <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-6">Votre panier</h1>
+
+        <div class="overflow-y-auto scrollbar-thin my-4">
+            {% for produit_panier in panier.produits.all %}
+                <!-- Version PC -->
+                <div class="hidden md:flex justify-between items-center bg-[var(--fourth-color)] rounded-lg p-4 shadow-md mx-6 my-2">
+                    <div class="flex flex-col flex-grow-0 basis-[45%]">
+                        <h3 class="text-lg font-medium text-gray-800">{{ produit_panier.produit.nom }}</h3>
+                        <h4 class="text-gray-600">{{ produit_panier.produit.famille.nom }}</h4>
                     </div>
-                {% endfor %}
-            </div>
-
-            <div class="flex justify-center my-6">
-                <button id="reserver-bouton" class="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg shadow-md hover:bg-opacity-90 transition">Réserver</button>
-            </div>
-
-            <div id="popup" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center hidden">
-                <form action="{% url 'paniers:reserver_panier' %}" method="POST" class="bg-white p-6 rounded-lg shadow-lg w-80">
-                    {% csrf_token %}
-                    <label for="titre" class="block mb-2 font-semibold text-gray-700">Titre de la réservation :</label>
-                    <input type="text" id="titre" name="titre" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-
-                    <div class="flex justify-between">
-                        <button type="button" id="annuler-bouton" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-400 transition">Annuler</button>
-                        <button id="confirmer-bouton" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">Confirmer</button>
+                    <div class="flex items-center space-x-4">
+                        <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST" class="flex items-center space-x-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="produit_id" value="{{ produit_panier.produit.id }}">
+                            <input type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="border border-gray-300 rounded px-2 py-1 w-16">
+                            <select name="unite" class="border border-gray-300 rounded px-2 py-1">
+                                {% for unite in produit_panier.produit.get_unites %}
+                                    <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Supprimer</button>
+                        </form>
                     </div>
-                </form>
-            </div>
+                </div>
 
-            <script>
-                document.getElementById("reserver-bouton").addEventListener("click", function() {
-                    document.getElementById("popup").classList.remove("hidden");
-                });
-            
-                document.getElementById("confirmer-bouton").addEventListener("click", function() {
-                    document.getElementById("popup").classList.add("hidden");
-                });
+                <!-- Version Mobile -->
+                <div class="block md:hidden flex flex-col items-center bg-[var(--fourth-color)] rounded-lg p-4 shadow-md my-2">
+                    <div class="text-center">
+                        <h3 class="text-lg font-medium text-gray-800">{{ produit_panier.produit.nom }}</h3>
+                        <h4 class="text-gray-600">{{ produit_panier.produit.famille.nom }}</h4>
+                    </div>
+                    <div class="flex flex-wrap justify-center items-center gap-2 mt-2">
+                        <form action="{% url 'paniers:supprimer_produit_panier' %}" method="POST" class="flex items-center gap-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="produit_id" value="{{ produit_panier.produit.id }}">
+                            <input type="number" name="quantite" value="{{ produit_panier.get_quantite }}" class="border border-gray-300 rounded px-2 py-1 w-16 text-center">
+                            <select name="unite" class="border border-gray-300 rounded px-2 py-1">
+                                {% for unite in produit_panier.produit.get_unites %}
+                                    <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-                document.getElementById("annuler-bouton").addEventListener("click", function (event) {
-                    event.preventDefault();
-                    document.getElementById("popup").classList.add("hidden");
-                    window.location.href = "{% url 'paniers:panier' %}";
-                });
-            </script>
+        <div class="flex justify-center my-6">
+            <button id="reserver-bouton" class="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg shadow-md hover:bg-opacity-90 transition">Réserver</button>
+        </div>
 
-        {% else %}
-            <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-10">Votre panier est vide ... 😢</h1>
-        {% endif %}
-    </div>
+        <div id="popup" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center hidden">
+            <form action="{% url 'paniers:reserver_panier' %}" method="POST" class="bg-white p-6 rounded-lg shadow-lg w-80">
+                {% csrf_token %}
+                <label for="titre" class="block mb-2 font-semibold text-gray-700">Titre de la réservation :</label>
+                <input type="text" id="titre" name="titre" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                <div class="flex justify-between">
+                    <button type="button" id="annuler-bouton" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Annuler</button>
+                    <button id="confirmer-bouton" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">Confirmer</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            document.getElementById("reserver-bouton").addEventListener("click", function() {
+                document.getElementById("popup").classList.remove("hidden");
+            });
+
+            document.getElementById("confirmer-bouton").addEventListener("click", function() {
+                document.getElementById("popup").classList.add("hidden");
+            });
+
+            document.getElementById("annuler-bouton").addEventListener("click", function (event) {
+                event.preventDefault();
+                document.getElementById("popup").classList.add("hidden");
+                window.location.href = "{% url 'paniers:panier' %}";
+            });
+        </script>
+
+    {% else %}
+        <h1 class="text-center text-2xl font-semibold text-[var(--primary-color)] my-10">Votre panier est vide ... 😢</h1>
+    {% endif %}
+</div>
 {% endblock %}

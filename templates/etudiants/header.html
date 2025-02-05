@@ -27,12 +27,12 @@
                 <img src="{% static 'images/etudiants/menu/menu_burger.png' %}" alt="menu">
             </div>
             <div class="logo">
-                <a href="#">
+                <a href="{% url 'utilisateurs:accueil' %}">
                     QuickLab
                 </a>
             </div>
             <div class="reservations">
-                <a href="#">
+                <a href="{% url 'paniers:panier' %}">
                     <img src="{% static 'images/etudiants/menu/reservations.png' %}" alt="reservations">
                 </a>
             </div>
