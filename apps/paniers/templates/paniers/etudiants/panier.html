@@ -49,7 +49,9 @@
                     {% csrf_token %}
                     <label for="titre" class="block mb-2 font-semibold text-gray-700">Titre de la réservation :</label>
                     <input type="text" id="titre" name="titre" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-                    <div class="flex justify-end">
+
+                    <div class="flex justify-between">
+                        <button type="button" id="annuler-bouton" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-400 transition">Annuler</button>
                         <button id="confirmer-bouton" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">Confirmer</button>
                     </div>
                 </form>
