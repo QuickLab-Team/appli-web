@@ -31,7 +31,7 @@ class PanierProduit(models.Model):
     def add_quantite(self, quantite, unite = None):
         if self.produit.type == 'liquide':
             if unite is None:
-                unite = 'l'
+                unite = conversion_liquides.keys()[0]
 
             if unite in conversion_liquides:
                 self.quantite += quantite * conversion_liquides[unite]
@@ -39,7 +39,7 @@ class PanierProduit(models.Model):
                 raise ValueError(f"Unité invalide pour un liquide : {unite}")
         elif self.produit.type == 'solide':
             if unite is None:
-                unite = 'kg'
+                unite = conversion_solides.keys()[0]
                 
             if unite in conversion_solides:
                 self.quantite += quantite * conversion_solides[unite]
