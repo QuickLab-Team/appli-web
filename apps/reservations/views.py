@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from produits.models import Famille, Service
 from django.core.mail import send_mail
+import os
+from quicklab import settings
 
 # Vue pour la liste des réservations
 @login_required
@@ -74,6 +76,13 @@ def modifier_reservation_etat(request, reservation_id):
         if etat == "valide":
             etudiant = reservation.utilisateur  # Supposons que Reservation a un champ `utilisateur`
             if etudiant and etudiant.email:
+                if os.environ.get('ENV') == 'prod':
+                    mail = etudiant.email
+                elif os.environ.get('EMAIL_DEV'):
+                    mail = os.environ.get('EMAIL_DEV')
+                else:
+                    mail = settings.EMAIL_HOST_USER
+
                 message = f"""
                 Bonjour {etudiant.prenom},
 
@@ -88,7 +97,7 @@ def modifier_reservation_etat(request, reservation_id):
                     subject="Votre réservation a été validée",
                     message=message,
                     from_email='QuickLab <votre_email@gmail.com>',
-                    recipient_list=[etudiant.email],
+                    recipient_list=[mail],
                     fail_silently=False,
                 )
 
