@@ -6,7 +6,6 @@
 .menu .titre{
     font-size: 1.2em;
     font-weight: bold;
-    font-family: 'Nunito';
     margin-bottom: 30px;
     margin-left: 20px;
     margin-right: 20px;
@@ -17,7 +16,6 @@
     margin-bottom: 20px;
     margin-left: 40px;
     margin-right: 40px;
-    font-family: 'Nunito';
     color: #EAE6E6;
 }
 
@@ -31,5 +29,7 @@
 }
 
 .menu ul{
-    margin-top: 20%;
+    padding: 1.25em;
+    width: 100%;
+    height: 100%;
 }

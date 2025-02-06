@@ -5,17 +5,14 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'produits:fournisseurs' %}" class="bouton-retour">Retour à la liste des fournisseurs</a>
-<h2>Nom du fournisseur : {{ fournisseur.nom }}</h2>
-
+<a href="{% url 'produits:fournisseurs' %}" class="btn btn-primary">Retour</a>
+<h2 class="text-2xl font-bold mb-4">Nom du fournisseur : {{ fournisseur.nom }}</h2>
 
 <a href="{% url 'produits:modifier_fournisseur' fournisseur.id %}" class="btn btn-warning">Modifier</a>
 
-
-
 <form method="post" action="{% url 'produits:supprimer_fournisseur' fournisseur.id %}" style="display:inline;">
     {% csrf_token %}
-    <button type="submit" class="bouton-supprimer">Supprimer</button>
+    <button type="submit" class="btn btn-danger">Supprimer</button>
 </form>
 
 

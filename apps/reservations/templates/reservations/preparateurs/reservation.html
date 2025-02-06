@@ -14,7 +14,7 @@
     <div class="reservation">
         <div class="reservation-detail">
             <div class="reservation-info">
-                <h1 class="titre">{{ reservation.titre }}</h1>
+                <h1 class="text-2xl font-bold mb-4">{{ reservation.titre }}</h1>
                 <p><strong>Date de réservation :</strong> {{ reservation.date|date:"d / m / Y H:i:s" }}</p>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <input type="hidden" name="update_etat_reservation_lien" value="{% url 'reservations:modifier_reservation_etat' reservation.id %}">

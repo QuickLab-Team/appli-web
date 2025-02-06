@@ -1,7 +1,5 @@
 # preparateurs/views.py
 import json
-import random
-import string
 import os
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
@@ -11,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from quicklab import settings
 from .forms import UtilisateurForm
-from produits.models import Produit
+from produits.models import Produit, Famille, Service
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import BadHeaderError, JsonResponse
@@ -54,6 +52,8 @@ def accueil(request):
             return render(request, 'utilisateurs/etudiants/accueil.html', {
                 'titre': 'QuickLab',
                 'produits': Produit.objects.all(),
+                'familles': Famille.objects.all().distinct(),
+                'services': Service.objects.all().order_by('nom')
             })
         
     elif request.user.role == 'preparateur' or request.user.role == 'administrateur': 
@@ -129,6 +129,7 @@ def liste_utilisateurs(request):
         'selected_annee': annee,
         'selected_groupe': groupe,
         'student_count': student_count,
+        'titre': 'QuickLab',
     })
 
 
@@ -142,7 +143,7 @@ def ajouter_utilisateur(request):
     else:
         form = UtilisateurForm(user=request.user)
 
-    return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})
+    return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form, 'titre': 'QuickLab'})
 
 
 def importer_utilisateurs(request):
@@ -241,7 +242,8 @@ def importer_utilisateurs(request):
         return redirect("utilisateurs:liste_utilisateurs")
 
     return render(request, "utilisateurs/preparateurs/importer_utilisateurs.html", {
-        "utilisateurs_preview": utilisateurs_preview
+        "utilisateurs_preview": utilisateurs_preview,
+        'titre': 'QuickLab',
     })
 
 @login_required

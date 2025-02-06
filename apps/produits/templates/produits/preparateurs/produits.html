@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<h2>Liste des produits</h2>
+<h1 class="text-2xl font-bold mb-4">Liste des produits</h1>
 
 <form method="get" action="{% url 'produits:produits' %}">
     <div class="filters">
@@ -39,7 +39,7 @@
         </div>
 
     </div>
-    <button type="submit" name="action" value="exporter" class="btn">Exporter</button>
+    <button type="submit" name="action" value="exporter" class="btn btn-primary">Exporter</button>
 </form>
 
 <div class="cadre-table-scroll">

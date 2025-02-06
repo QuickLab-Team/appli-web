@@ -115,7 +115,7 @@ class Produit(models.Model):
 
         for unite, valeur in conversion.items():
             if self.quantite >= valeur:
-                return int(self.quantite / valeur)
+                return self.quantite / valeur
             
         return None
     

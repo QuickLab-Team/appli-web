@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Ajouter un produit</h1>
+<h1 class="text-2xl font-bold mb-4 text-center">Ajouter un produit</h1>
 
 <form method="post" action="{% url 'produits:ajouter_produit' %}">
     {% csrf_token %}

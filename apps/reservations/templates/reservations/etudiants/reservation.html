@@ -43,7 +43,7 @@
         <div class="messagerie-overlay" onclick="fermerMessagerie();"></div>
         <div class="w-full md:w-1/3 bg-white shadow-lg rounded-lg p-6 messagerie hidden md:flex flex-col">
             <button onclick="fermerMessagerie();" class="closeMessagerie" style="position: absolute; top: 0px; left: 10px; background: none; border: none; font-size: 20px;">&times;</button>
-            <div class="overflow-y-auto max-h-96 scrollbar-thin scrollbar-thumb-gray-500">
+            <div class="overflow-y-auto max-h-96 scrollbar-thin scrollbar-thumb-gray-500 flex flex-col-reverse">
                 {% for message_reservation in messages %}
                     <div class="my-2">
                         {% if message_reservation.utilisateur.id == user.id %}

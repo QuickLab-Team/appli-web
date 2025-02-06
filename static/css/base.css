@@ -55,3 +55,31 @@
     display: flex;
     margin-right: 30px;
 }
+
+.btn {
+    display: inline-block;
+    font-size: 1em;
+    border-radius: 7px;
+    padding: 2px 7px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.btn-warning {
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+}

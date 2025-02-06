@@ -168,6 +168,7 @@ def importer_produits(request):
     return render(request, "produits/preparateurs/importer_produits.html", {
         "produits_preview": produits_preview,
         "services": services,
+        'titre': 'QuickLab',
     })
 
 @login_required
@@ -255,6 +256,7 @@ def ajouter_produit(request):
         'fournisseurs': fournisseurs,
         'familles': familles,
         'stockages': stockages,
+        'titre': 'QuickLab',
     })
 
 @login_required
@@ -270,8 +272,6 @@ def modifier_produit(request, produit_id):
 
     if request.method == 'POST':
         produit.nom = request.POST.get('nom')
-        quantite = request.POST.get('quantite')
-        unite = request.POST.get('unite')
         
         produit.fournisseur = Fournisseur.objects.get_or_create(nom=request.POST.get('fournisseur'))[0]
 
@@ -353,6 +353,7 @@ def fournisseurs(request):
     return render(request, "produits/preparateurs/fournisseurs.html", {
         'fournisseurs': fournisseurs,
         'query': query,
+        'titre': 'QuickLab',
     })
 
 @login_required
@@ -384,6 +385,7 @@ def stockages(request):
         'services': services,
         'query': query,
         'selected_service': selected_service,
+        'titre': 'QuickLab',
     })
 
 @login_required
@@ -402,6 +404,7 @@ def ajouter_stockage(request):
 
     return render(request, "produits/preparateurs/ajouter_stockage.html", {
         'services': services,
+        'titre': 'QuickLab',
     })
 
 @login_required

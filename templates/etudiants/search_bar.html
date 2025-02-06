@@ -4,10 +4,6 @@
 <link rel="stylesheet" href="{% static 'css/etudiants/search_bar.css' %}">
 {% endblock %}
 
-{% block js %}
-<script src="{% static 'js/produits/etudiants/search.js' %}"></script>
-{% endblock %}
-
 <div class="search-bar">
     <form action="{% url 'produits:produits' %}" method="get">
         <input type="text" name="q" id="search" placeholder="Rechercher un produit">
