@@ -11,36 +11,35 @@
 <form method="post" class="ajout-utilisateur">
     {% csrf_token %}
     <table>
-        <tr>
-            <td>{{ form.nom.label_tag }}</td>
+        <tr><td>{{ form.nom.label_tag }}</td></tr>
+        <tr><td>{{ form.nom }}</td></tr>
+
+        <tr><td>{{ form.prenom.label_tag }}</td></tr>
+        <tr><td>{{ form.prenom }}</td></tr>
+
+        <tr><td>{{ form.email.label_tag }}</td></tr>
+        <tr><td>{{ form.email }}</td></tr>
+
+        <tr><td>{{ form.role.label_tag }}</td></tr>
+        <tr><td>{{ form.role }}</td></tr>
+
+        <tr id="annee-row" style="display: none;">
+            <td>{{ form.annee.label_tag }}</td>
         </tr>
-        <tr>
-            <td>{{ form.nom }}</td>
+        <tr id="annee-field" style="display: none;">
+            <td>{{ form.annee }}</td>
         </tr>
-        <tr>
-            <td>{{ form.prenom.label_tag }}</td>
+
+        <tr id="groupe-row" style="display: none;">
+            <td>{{ form.groupe.label_tag }}</td>
         </tr>
-        <tr>
-            <td>{{ form.prenom }}</td>
+        <tr id="groupe-field" style="display: none;">
+            <td>{{ form.groupe }}</td>
         </tr>
-        <tr>
-            <td>{{ form.email.label_tag }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.email }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.role.label_tag }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.role }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password }}</td>
-        </tr>
+
+        <tr><td>{{ form.password.label_tag }}</td></tr>
+        <tr><td>{{ form.password }}</td></tr>
+
         <tr>
             <td class="center-button">
                 <button type="submit">Ajouter</button>
@@ -48,4 +47,32 @@
         </tr>
     </table>
 </form>  
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const roleField = document.querySelector("#id_role");
+    const anneeRow = document.getElementById("annee-row");
+    const anneeField = document.getElementById("annee-field");
+    const groupeRow = document.getElementById("groupe-row");
+    const groupeField = document.getElementById("groupe-field");
+
+    function toggleEtudiantFields() {
+        if (roleField.value === "etudiant") {
+            anneeRow.style.display = "";
+            anneeField.style.display = "";
+            groupeRow.style.display = "";
+            groupeField.style.display = "";
+        } else {
+            anneeRow.style.display = "none";
+            anneeField.style.display = "none";
+            groupeRow.style.display = "none";
+            groupeField.style.display = "none";
+        }
+    }
+
+    roleField.addEventListener("change", toggleEtudiantFields);
+    toggleEtudiantFields();
+});
+</script>
+
 {% endblock %}

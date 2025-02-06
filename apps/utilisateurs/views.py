@@ -128,14 +128,16 @@ def liste_utilisateurs(request):
     })
 
 
+@login_required
 def ajouter_utilisateur(request):
     if request.method == 'POST':
-        form = UtilisateurForm(request.POST)
+        form = UtilisateurForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('utilisateurs:liste_utilisateurs')
     else:
-        form = UtilisateurForm()
+        form = UtilisateurForm(user=request.user)
+
     return render(request, 'utilisateurs/preparateurs/ajouter_utilisateur.html', {'form': form})
 
 
