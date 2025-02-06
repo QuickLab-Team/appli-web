@@ -8,10 +8,10 @@
 <h1>Importer des produits</h1>
 <form method="post" enctype="multipart/form-data" class="import-form">
     {% csrf_token %}
-    <label for="file_input" class="bouton">Choisir un fichier</label>
+    <label for="file_input" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition cursor-pointer">Choisir un fichier</label>
     <input type="file" id="file_input" name="fichier" accept=".csv, .xlsx" onchange="updateFileName()">
     <span id="file_name">Aucun fichier sélectionné</span>
-    <button type="submit" class="bouton">Prévisualiser</button>
+    <button type="submit" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">Prévisualiser</button>
 </form>
 
 {% if produits_preview %}
@@ -45,7 +45,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button type="submit" class="bouton">Importer dans la base de données</button>
+        <button type="submit" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">Importer dans la base de données</button>
     </form>
 {% endif %}
 <script>
