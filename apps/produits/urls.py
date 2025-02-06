@@ -8,6 +8,7 @@ urlpatterns = [
     path('<int:produit_id>/', views.produit, name='produit'),
     path('importer/', views.importer_produits, name='importer_produits'),
     path('ajouter/', views.ajouter_produit, name='ajouter_produit'),
+    path('exporter/', views.exporter_produits, name='exporter_produits'),
     path('<int:produit_id>/modifier', views.modifier_produit, name='modifier_produit'),
     path('<int:produit_id>/supprimer', views.supprimer_produit, name='supprimer_produit'),
     path('add_service/', views.add_service, name='add_service'),

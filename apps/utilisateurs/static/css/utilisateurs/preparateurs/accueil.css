@@ -14,3 +14,7 @@
 .accueil li{
     font-size: 1.2em;
 }
+
+.accueil ul{
+    margin-left: 20px;
+}

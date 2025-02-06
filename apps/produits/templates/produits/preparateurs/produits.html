@@ -35,6 +35,12 @@
     </div>
 </form>
 
+<a href="{% url 'produits:exporter_produits' %}?
+    q={{ query }}&
+    famille={{ selected_famille }}&
+    fournisseur={{ selected_fournisseur }}&
+    stockage={{ selected_stockage }}" class="btn">Exporter</a>
+
 <div class="cadre-table-scroll">
     <table class="table-scroll">
         <thead>

@@ -9,6 +9,55 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+import csv
+
+@login_required
+def exporter_produits(request):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+
+    produits = Produit.objects.all().order_by('nom')
+    
+    # Récupération des filtres depuis les paramètres GET
+    query = request.GET.get('q', '')
+    selected_famille = request.GET.get('famille', '')
+    selected_fournisseur = request.GET.get('fournisseur', '')
+    selected_stockage = request.GET.get('stockage', '')
+    selected_service = request.GET.get('service', '')
+
+    # Application des filtres dynamiques
+    if query:
+        produits = produits.filter(nom__icontains=query)
+    if selected_famille:
+        produits = produits.filter(familles__id=selected_famille)
+    if selected_fournisseur:
+        produits = produits.filter(fournisseur__id=selected_fournisseur)
+    if selected_stockage:
+        produits = produits.filter(stockage__id=selected_stockage)
+    if selected_service:
+        produits = produits.filter(stockage__service__id=selected_service)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="produits.csv"'
+
+    writer = csv.writer(response)
+    
+    writer.writerow(["Nom", "Quantité", "Fournisseur", "Familles", "Date d'ajout", "Stockage", "Seuil", "Type"])
+
+    for produit in produits:
+        writer.writerow([
+            produit.nom,
+            produit.quantite,
+            produit.fournisseur.nom if produit.fournisseur else "",
+            ", ".join(f.nom for f in produit.familles.all()),
+            produit.date_ajout.strftime("%Y-%m-%d %H:%M:%S"),
+            produit.stockage.nom,
+            produit.seuil,
+            produit.get_type_display(),
+        ])
+
+    messages.success(request, "Produits exportés avec succès.")
+    return response
 
 @login_required
 def produits(request):
