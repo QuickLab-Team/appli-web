@@ -25,12 +25,20 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(6xuaa=v13n+(@bmtri77-q&ktui%=37ny%r03de^6k=7^$3o6'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('DEBUG') == 'True':
+    DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    os.environ.get('HOST'),
+]
+
+# DEBUG = False
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -109,8 +117,12 @@ WSGI_APPLICATION = 'quicklab.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
 
