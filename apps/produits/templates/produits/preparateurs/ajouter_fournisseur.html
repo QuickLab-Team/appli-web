@@ -1,0 +1,15 @@
+{% extends 'preparateurs/base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/ajouter_fournisseur.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Ajouter un fournisseur</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="nom">Nom du fournisseur:</label>
+    <input type="text" id="nom" name="nom" required>
+    <button type="submit" class="bouton">Ajouter</button>
+</form>
+{% endblock %}

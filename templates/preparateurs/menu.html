@@ -9,6 +9,7 @@
         <li class="sous-titre"><a href="{% url 'produits:ajouter_produit' %}">Ajouter un produit</a></li>
         <li class="sous-titre"><a href="{% url 'produits:importer_produits' %}">Importer des produits</a></li>
         <li class="sous-titre"><a href="{% url 'produits:produits' %}">Liste des produits</a></li>
+        <li class="sous-titre"><a href="{% url 'produits:fournisseurs' %}">Liste des fournisseurs</a></li>
         <li class="titre">Réservations</li>
         <li class="sous-titre"><a href="{% url 'reservations:reservations' %}">Gestion des réservations</a></li>
         <li class="titre">Utilisateurs</li>
@@ -16,7 +17,7 @@
         <li class="sous-titre"><a href="{% url 'utilisateurs:ajouter_utilisateur' %}">Ajouter un utilisateur</a></li>
         <li class="sous-titre"><a href="{% url 'utilisateurs:importer_utilisateurs' %}">Importer des utilisateurs</a></li>
         <li class="titre">Stockage</li>
-        <li class="sous-titre"><a href="">Liste des stockages</a></li>
-        <li class="sous-titre"><a href="">Ajouter un stockage</a></li>
+        <li class="sous-titre"><a href="{% url 'produits:stockages' %}">Liste des stockages</a></li>
+        <li class="sous-titre"><a href="{% url 'produits:ajouter_stockage' %}">Ajouter un stockage</a></li>
     </ul>
 </div>

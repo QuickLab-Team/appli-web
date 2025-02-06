@@ -1,0 +1,41 @@
+{% extends "preparateurs/base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/produits.css' %}">
+    <link rel="stylesheet" href="{% static 'css/preparateurs/stockages.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Liste du stockage</h1>
+<form method="get" class="search-form">
+    <input type="text" name="q" placeholder="Rechercher..." value="{{ query }}">
+    <select name="service">
+        <option value="">Tous les services</option>
+        {% for service in services %}
+        <option value="{{ service.id }}" {% if service.id == selected_service %}selected{% endif %}>{{ service.nom }}</option>
+        {% endfor %}
+    </select>
+</form>
+<a href="{% url 'produits:ajouter_stockage' %}" class="bouton">Ajouter un stockage</a>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Service</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stockage in stockages %}
+            <tr onclick="window.location.href='{% url 'produits:stockage_detail' stockage.id %}'" style="cursor: pointer;">
+                <td>{{ stockage.nom }}</td>
+                <td>{{ stockage.service.nom }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+

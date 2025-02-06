@@ -68,6 +68,7 @@ class Produit(models.Model):
     familles = models.ManyToManyField(Famille, blank=True)
     date_ajout = models.DateTimeField(default=timezone.now)
     stockage = models.ForeignKey(Stockage, on_delete=models.CASCADE)
+    seuil = models.FloatField(default=0.0)
     type = models.CharField(max_length=10, choices=[('liquide', 'Liquide'), ('solide', 'Solide'), ('unite', 'Unité')], default='unite')
     
     def __str__(self):

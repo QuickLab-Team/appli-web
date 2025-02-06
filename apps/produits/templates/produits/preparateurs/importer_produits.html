@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{% static 'css/preparateurs/importer.css' %}">
 {% endblock %}
 
+
+
 {% block content %}
 <h1>Importer des produits</h1>
 <form method="post" enctype="multipart/form-data" class="import-form">
@@ -46,43 +48,7 @@
         </div>
     </div>
 
-    <script>
-        function openServicePopup() {
-            document.getElementById('servicePopup').style.display = 'block';
-        }
 
-        function closeServicePopup() {
-            document.getElementById('servicePopup').style.display = 'none';
-        }
-
-        document.getElementById('add-service-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const newServiceName = document.getElementById('new_service_name').value;
-            
-            fetch("{% url 'produits:add_service' %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ name: newServiceName })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const serviceSelect = document.getElementById('service');
-                    const newOption = document.createElement('option');
-                    newOption.value = newServiceName;
-                    newOption.textContent = newServiceName;
-                    serviceSelect.appendChild(newOption);
-                    closeServicePopup();
-                } else {
-                    alert('Erreur lors de l\'ajout du service');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
 
     <form method="post">
         {% csrf_token %}
@@ -113,11 +79,12 @@
         </table>
     </form>
 {% endif %}
-<script>
-    function updateFileName() {
-        const fileInput = document.getElementById('file_input');
-        const fileNameSpan = document.getElementById('file_name');
-        fileNameSpan.textContent = fileInput.files[0].name;
-    }
-</script>
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/preparateurs/importer_produit.js' %}"></script>
+    <script>
+        const addServiceUrl = "{% url 'produits:add_service' %}";
+    </script>
 {% endblock %}

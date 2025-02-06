@@ -231,7 +231,8 @@ def modifier_produit(request, produit_id):
 
     if request.method == 'POST':
         produit.nom = request.POST.get('nom')
-        produit.quantite = request.POST.get('quantite')
+        quantite = request.POST.get('quantite')
+        unite = request.POST.get('unite')
         
         produit.fournisseur = Fournisseur.objects.get_or_create(nom=request.POST.get('fournisseur'))[0]
 
@@ -240,11 +241,8 @@ def modifier_produit(request, produit_id):
 
         service_nom = request.POST.get('service')
         service, created = Service.objects.get_or_create(nom=service_nom)
-
         produit.familles.clear()
-
         produit.stockage = Stockage.objects.get_or_create(nom=request.POST.get('stockage'), service=service)[0]
-
         produit.add_famille(famille)
 
         if fournisseur:
@@ -287,3 +285,148 @@ def add_service(request):
                 return JsonResponse({'success': False, 'error': 'Service already exists'})
         return JsonResponse({'success': False, 'error': 'Invalid data'})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+@login_required
+def fournisseurs(request):
+    query = request.GET.get('q', '')
+    fournisseurs = Fournisseur.objects.all().order_by("nom")
+    if query:
+        fournisseurs = fournisseurs.filter(nom__icontains=query)
+    return render(request, "produits/preparateurs/fournisseurs.html", {
+        'fournisseurs': fournisseurs,
+        'query': query,
+    })
+
+@login_required
+def ajouter_fournisseur(request):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+    
+    if request.method == 'POST':
+        nom = request.POST.get('nom')
+        Fournisseur.objects.create(nom=nom)
+        return redirect('produits:fournisseurs')
+    
+    return render(request, "produits/preparateurs/ajouter_fournisseur.html")
+
+@login_required
+def stockages(request):
+    query = request.GET.get('q', '')
+    selected_service = request.GET.get('service', '')
+    stockages = Stockage.objects.all().order_by("nom")
+    services = Service.objects.all().distinct()
+
+    if query:
+        stockages = stockages.filter(nom__icontains=query)
+    if selected_service:
+        stockages = stockages.filter(service__id=selected_service)
+
+    return render(request, "produits/preparateurs/stockages.html", {
+        'stockages': stockages,
+        'services': services,
+        'query': query,
+        'selected_service': selected_service,
+    })
+
+@login_required
+def ajouter_stockage(request):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+
+    services = Service.objects.all().order_by('nom')
+
+    if request.method == 'POST':
+        nom = request.POST.get('nom')
+        service_id = request.POST.get('service')
+        service = get_object_or_404(Service, id=service_id)
+        Stockage.objects.create(nom=nom, service=service)
+        return redirect('produits:stockages')
+
+    return render(request, "produits/preparateurs/ajouter_stockage.html", {
+        'services': services,
+    })
+
+@login_required
+def modifier_stockage(request, stockage_id):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+
+    stockage = get_object_or_404(Stockage, id=stockage_id)
+    services = Service.objects.all().order_by('nom')
+
+    if request.method == 'POST':
+        stockage.nom = request.POST.get('nom')
+        service_id = request.POST.get('service')
+        stockage.service = get_object_or_404(Service, id=service_id)
+        stockage.save()
+        return redirect('produits:stockages')
+
+    return render(request, "produits/preparateurs/modifier_stockage.html", {
+        'stockage': stockage,
+        'services': services,
+    })
+
+@login_required
+def supprimer_stockage(request, stockage_id):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+
+    if request.method == 'POST':
+        stockage = get_object_or_404(Stockage, id=stockage_id)
+        stockage.delete()
+        messages.success(request, "Stockage supprimé avec succès.")
+        return redirect('produits:stockages')
+
+    return HttpResponse(status=405)
+
+@login_required
+def modifier_fournisseur(request, fournisseur_id):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+
+    fournisseur = get_object_or_404(Fournisseur, id=fournisseur_id)
+
+    if request.method == 'POST':
+        fournisseur.nom = request.POST.get('nom')
+        fournisseur.save()
+        return redirect('produits:fournisseurs')
+
+    return render(request, "produits/preparateurs/modifier_fournisseur.html", {
+        'fournisseur': fournisseur,
+    })
+
+@login_required
+def supprimer_fournisseur(request, fournisseur_id):
+    if request.user.role not in ['preparateur', 'administrateur']:
+        return HttpResponse(status=403)
+
+    if request.method == 'POST':
+        fournisseur = get_object_or_404(Fournisseur, id=fournisseur_id)
+        fournisseur.delete()
+        messages.success(request, "Fournisseur supprimé avec succès.")
+        return redirect('produits:fournisseurs')
+
+    return HttpResponse(status=405)
+
+
+@login_required
+def fournisseur_detail(request, fournisseur_id):
+    fournisseur = get_object_or_404(Fournisseur, id=fournisseur_id)
+    produits = Produit.objects.filter(fournisseur=fournisseur).order_by('nom')
+
+    return render(request, "produits/preparateurs/fournisseur_detail.html", {
+        'fournisseur': fournisseur,
+        'produits': produits,
+    })
+
+@login_required
+def stockage_detail(request, stockage_id):
+    stockage = get_object_or_404(Stockage, id=stockage_id)
+    produits = Produit.objects.filter(stockage=stockage).order_by('nom')
+
+    return render(request, "produits/preparateurs/stockage_detail.html", {
+        'stockage': stockage,
+        'produits': produits,
+    })
+

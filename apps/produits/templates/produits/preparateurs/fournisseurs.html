@@ -1,0 +1,27 @@
+{% extends 'preparateurs/base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/fournisseurs.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Liste des fournisseurs</h1>
+<form method="get" class="search-form">
+    <input type="text" name="q" placeholder="Rechercher..." value="{{ query }}">
+</form>
+<a href="{% url 'produits:ajouter_fournisseur' %}" class="bouton">Ajouter un fournisseur</a>
+<table>
+    <thead>
+        <tr>
+            <th>Nom</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fournisseur in fournisseurs %}
+        <tr onclick="window.location.href='{% url 'produits:fournisseur_detail' fournisseur.id %}'" style="cursor: pointer;">
+            <td>{{ fournisseur.nom }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "preparateurs/base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/produits.css' %}">
+    <link rel="stylesheet" href="{% static 'css/preparateurs/ajouter_stockage.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Ajouter un stockage</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="nom">Nom:</label>
+    <input type="text" id="nom" name="nom" required>
+    <label for="service">Service:</label>
+    <select id="service" name="service" required>
+        {% for service in services %}
+        <option value="{{ service.id }}">{{ service.nom }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="bouton">Ajouter</button>
+</form>
+<button type="button" class="bouton" onclick="openServicePopup()">Ajouter un service</button>
+
+<div id="servicePopup" class="popup" style="display:none;">
+    <div class="popup-content">
+        <span class="close" onclick="closeServicePopup()">&times;</span>
+        <h2>Ajouter un nouveau service</h2>
+        <form method="post" id="add-service-form">
+            {% csrf_token %}
+            <label for="new_service_name">Nom du service:</label>
+            <input type="text" id="new_service_name" name="new_service_name" required>
+            <button type="submit" class="bouton">Ajouter</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/preparateurs/importer_produit.js' %}"></script>
+    <script>
+        const addServiceUrl = "{% url 'produits:add_service' %}";
+    </script>
+{% endblock %}

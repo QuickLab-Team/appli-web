@@ -29,7 +29,7 @@
         <select name="stockage" title="Stockage" multiple onchange="this.form.submit()">
             <option value="">Tous les stockages</option>
             {% for stockage in stockages %}
-                <option value="{{ stockage.id }}" {% if stockage.id|stringformat:"s" in selected_stockage %}selected{% endif %}>{{ stockage.nom|capfirst  }}</option>
+                <option value="{{ stockage.id }}" {% if stockage.id|stringformat:"s" in selected_stockage %}selected{% endif %}>{{ stockage.nom|capfirst }} ( {{ stockage.service.nom|capfirst }} )</option>
             {% endfor %}
         </select>
     </div>
@@ -45,6 +45,7 @@
                 <th>Fournisseur</th>
                 <th>Famille</th>
                 <th>Stockage</th>
+                <th>Service</th>
             </tr>
         </thead>
         
@@ -61,6 +62,7 @@
                 {% endfor %}
             </td>
             <td>{{ produit.stockage.nom|capfirst  }}</td>
+            <td>{{ produit.stockage.service.nom|capfirst  }} </td>
             </tr>
             {% endfor %}
         </tbody>

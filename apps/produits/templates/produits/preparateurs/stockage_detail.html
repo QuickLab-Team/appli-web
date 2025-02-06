@@ -1,0 +1,47 @@
+{% extends 'preparateurs/base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/preparateurs/stockage_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'produits:stockages' %}" class="bouton-retour">Retour à la liste des stockages</a>
+<h2>Nom du stockage : {{ stockage.nom }}</h2>
+
+<a href="{% url 'produits:modifier_stockage' stockage.id %}" class="btn btn-warning">Modifier</a>
+
+<form method="post" action="{% url 'produits:supprimer_stockage' stockage.id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="bouton-supprimer">Supprimer</button>
+</form>
+
+<h3>Produits associés</h3>
+<div class="cadre-table-scroll">
+    <table class="table-scroll">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Unité</th>
+                <th>Famille</th>
+                <th>Fournisseur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+            <tr>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.get_quantite }}</td>
+                <td>{{ produit.get_unite }}</td>
+                <td>
+                    {% for famille in produit.familles.all %}
+                        {{ famille.nom }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ produit.fournisseur.nom }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
