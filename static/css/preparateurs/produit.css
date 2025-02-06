@@ -1,5 +1,3 @@
-
-
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -86,4 +84,24 @@ h1 {
 #actions {
     display: flex;
     justify-content: center;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkbox input {
+    margin-right: 10px;
+}
+
+.btn-seuil {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.btn-seuil:hover {
+    background-color: #218838;
 }

@@ -16,8 +16,8 @@
 </form>
 
 <h3>Produits associés</h3>
-<div class="cadre-table-scroll">
-    <table class="table-scroll">
+<div class="table-container">
+    <table>
         <thead>
             <tr>
                 <th>Nom</th>
@@ -31,7 +31,7 @@
             {% for produit in produits %}
             <tr>
                 <td>{{ produit.nom }}</td>
-                <td>{{ produit.get_quantite }}</td>
+                <td>{{ produit.quantite }}</td>
                 <td>{{ produit.get_unite }}</td>
                 <td>
                     {% for famille in produit.familles.all %}

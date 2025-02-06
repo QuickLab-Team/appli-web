@@ -25,6 +25,7 @@
     <p><strong>Stockage:</strong> {{ produit.stockage.nom }}</p>
     <p><strong>Type:</strong> {{ produit.get_type_display }}</p>
     <p><strong>Service:</strong> {{ produit.stockage.service.nom }}</p>
+    <p><strong>Seuil:</strong> {{ produit.get_seuil }} {{ produit.get_seuil_unites}} </p>
 </div>
 
 <div class="actions">
