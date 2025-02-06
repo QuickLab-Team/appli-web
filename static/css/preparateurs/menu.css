@@ -8,12 +8,15 @@
     font-weight: bold;
     font-family: 'Nunito';
     margin-bottom: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .menu .sous-titre{
     font-size: 0.8em;
     margin-bottom: 20px;
-    margin-left: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
     font-family: 'Nunito';
     color: #EAE6E6;
 }

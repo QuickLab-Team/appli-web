@@ -9,7 +9,7 @@
 {% endblock %}
 
 <div class="search-bar">
-    <form action="" method="get">
-        <input type="text" name="search" id="search" placeholder="Rechercher un produit">
+    <form action="{% url 'produits:produits' %}" method="get">
+        <input type="text" name="q" id="search" placeholder="Rechercher un produit">
     </form>
 </div>
