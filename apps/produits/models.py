@@ -154,3 +154,33 @@ class Produit(models.Model):
     def add_fournisseur(self, fournisseur):
         self.fournisseur = Fournisseur.objects.get_or_create(nom=fournisseur)[0]
         self.save()
+
+    
+    def get_seuil_unites(self):
+        if self.type == 'liquide':
+            conversion = dict(sorted(conversion_liquides.items(), key=lambda item:[1]))
+        elif self.type == 'solide':
+            conversion = dict(sorted(conversion_solides.items(), key=lambda item:[1]))
+        else:
+            return 'unite'
+
+        for unite, valeur in conversion.items():
+            if self.seuil >= valeur:
+                return unite
+            
+        return None
+        
+    def get_seuil(self):
+        if self.type == 'liquide':
+            conversion = dict(sorted(conversion_liquides.items(), key=lambda item: item[1]))
+        elif self.type == 'solide':
+            conversion = dict(sorted(conversion_solides.items(), key=lambda item: item[1]))
+        else:
+            return self.seuil
+
+        for unite, valeur in conversion.items():
+            if self.seuil >= valeur:
+                return self.seuil / valeur
+            
+        return None
+

@@ -32,6 +32,12 @@
                 <option value="{{ stockage.id }}" {% if stockage.id|stringformat:"s" in selected_stockage %}selected{% endif %}>{{ stockage.nom|capfirst }} ( {{ stockage.service.nom|capfirst }} )</option>
             {% endfor %}
         </select>
+
+        <div class="checkbox" onchange="this.form.submit()">
+            <input type="checkbox" id="seuil" name="seuil" value="1" {% if seuil %}checked{% endif %} onchange="this.form.submit()">
+            <label for="seuil">Produits au seuil</label>
+        </div>
+
     </div>
 </form>
 
@@ -41,6 +47,7 @@
             <tr>
                 <th>Nom</th>
                 <th>Quantité</th>
+                <th>Seuil</th>
                 <th>Unité</th>
                 <th>Fournisseur</th>
                 <th>Famille</th>
@@ -54,6 +61,7 @@
             <tr onclick="window.location.href='{% url 'produits:produit' produit.id %}'" style="cursor: pointer;">
             <td>{{ produit.nom }}</td>
             <td>{{ produit.get_quantite }}</td>
+            <td>{{ produit.seuil }} </td>
             <td>{{ produit.get_unite }}</td>
             <td>{{ produit.fournisseur.nom }}</td>
             <td>
@@ -68,7 +76,6 @@
         </tbody>
     </table>
 </div>
-
 
 {% endblock %}
 

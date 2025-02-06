@@ -8,8 +8,8 @@
 {% block content %}
 <h1>Liste du stockage</h1>
 <form method="get" class="search-form">
-    <input type="text" name="q" placeholder="Rechercher..." value="{{ query }}">
-    <select name="service">
+    <input type="text" name="q" placeholder="Rechercher..." value="{{ query }}" oninput="this.form.submit()">
+    <select name="service" onchange="this.form.submit()">
         <option value="">Tous les services</option>
         {% for service in services %}
         <option value="{{ service.id }}" {% if service.id == selected_service %}selected{% endif %}>{{ service.nom }}</option>

@@ -28,6 +28,20 @@
         </select>
     </div>
     <div>
+        <label for="seuil">Seuil:</label>
+        <input type="number" id="seuil" name="seuil" value="{{ produit.seuil }}" step="any" required>
+
+        <label for="unite_seuil">Unité Seuil:</label>
+        <select id="unite_seuil" name="unite_seuil" required>
+            <option value="ml" {% if produit.unite_seuil == 'ml' %}selected{% endif %}>ml</option>
+            <option value="cl" {% if produit.unite_seuil == 'cl' %}selected{% endif %}>cl</option>
+            <option value="g" {% if produit.unite_seuil == 'g' %}selected{% endif %}>g</option>
+            <option value="kg" {% if produit.unite_seuil == 'kg' %}selected{% endif %}>kg</option>
+            <option value="l" {% if produit.unite_seuil == 'l' %}selected{% endif %}>L</option>
+            <option value="unite" {% if produit.unite_seuil == 'unite' %}selected{% endif %}>Unité</option>
+        </select>
+    </div>
+    <div>
         <label for="fournisseur">Fournisseur:</label>
         <select id="fournisseur" name="fournisseur">
             <option value="">Pas de fournisseur</option>

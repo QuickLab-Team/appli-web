@@ -29,6 +29,20 @@
 
     </div>
     <div>
+        <label for="seuil">Seuil:</label>
+        <input type="number" id="seuil" name="seuil" step="any" required>
+
+        <label for="unite_seuil">Unité Seuil:</label>
+        <select id="unite_seuil" name="unite_seuil" required>
+            <option value="ml">ml</option>
+            <option value="cl">cl</option>
+            <option value="g">g</option>
+            <option value="kg">kg</option>
+            <option value="l">L</option>
+            <option value="unite">Unité</option>
+        </select>
+    </div>
+    <div>
         <label for="fournisseur">Fournisseur:</label>
         <select id="fournisseur" name="fournisseur">
             <option value="">Pas de fournisseur</option>
@@ -50,18 +64,10 @@
         </select>
     </div>
     <div>
-        <label for="services">Service :</label>
-        <select id="service" name="service" required>
-            {% for service in services %}
-                <option value="{{ service.nom }}">{{ service.nom }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div>
         <label for="stockage">Lieu de stockage:</label>
         <select id="stockage" name="stockage" required>
             {% for stockage in stockages %}
-                <option value="{{ stockage.nom }}">{{ stockage.nom }}</option>
+                <option value="{{ stockage.id }}">{{ stockage.nom }} (Service : {{ stockage.service.nom}})</option>
             {% endfor %}
         </select>
     </div>

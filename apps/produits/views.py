@@ -3,6 +3,7 @@ from .models import Produit, Famille, Stockage, Fournisseur, Service
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import pandas as pd
+from django.db import models
 from paniers.models import Panier
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
@@ -19,22 +20,25 @@ def produits(request):
 
     # Récupération des filtres depuis les paramètres GET
     query = request.GET.get('q', '')
-    selected_famille = request.GET.get('famille', '')
-    selected_fournisseur = request.GET.get('fournisseur', '')
-    selected_stockage = request.GET.get('stockage', '')
+    selected_famille = request.GET.getlist('famille')
+    selected_fournisseur = request.GET.getlist('fournisseur')
+    selected_stockage = request.GET.getlist('stockage')
     selected_service = request.GET.get('service', '')
+    seuil = request.GET.get('seuil')
 
     # Application des filtres dynamiques
     if query:
         produits = produits.filter(nom__icontains=query)
     if selected_famille:
-        produits = produits.filter(familles__id=selected_famille)
+        produits = produits.filter(familles__id__in=selected_famille)
     if selected_fournisseur:
-        produits = produits.filter(fournisseur__id=selected_fournisseur)
+        produits = produits.filter(fournisseur__id__in=selected_fournisseur)
     if selected_stockage:
-        produits = produits.filter(stockage__id=selected_stockage)
+        produits = produits.filter(stockage__id__in=selected_stockage)
     if selected_service:
         produits = produits.filter(stockage__service__id=selected_service)
+    if seuil:
+        produits = produits.filter(quantite__lte=models.F('seuil'))
 
     # Gestion des rôles et rendu HTML
     if request.user.role in ['preparateur', 'administrateur']:
@@ -48,6 +52,7 @@ def produits(request):
             'selected_famille': selected_famille,
             'selected_fournisseur': selected_fournisseur,
             'selected_stockage': selected_stockage,
+            'seuil': seuil,
         })
     else:
         return render(request, 'produits/etudiants/produits.html', {
@@ -164,7 +169,6 @@ def ajouter_produit(request):
     fournisseurs = Fournisseur.objects.all().order_by('nom')
     familles = Famille.objects.all().order_by('nom')
     stockages = Stockage.objects.all().order_by('nom')
-    services = Service.objects.all().order_by('nom')
 
     if request.method == 'POST':
         nom = request.POST.get('nom')
@@ -173,32 +177,41 @@ def ajouter_produit(request):
         unite = request.POST.get('unite')
         famille = request.POST.get('familles')
         fournisseur = request.POST.get('fournisseur')
-        service = request.POST.get('service')
+        seuil = request.POST.get('seuil')
+        unite_seuil = request.POST.get('unite_seuil')
 
         if unite == "ml":
             type = 'liquide'
-            quantite = quantite / 1000
         elif unite == "cl":
             type = 'liquide'
-            quantite = quantite / 100
         elif unite == "l":
             type = 'liquide'
-            quantite = quantite
         elif unite == "g":
             type = 'solide'
-            quantite = quantite / 1000
         elif unite == "kg":
             type = 'solide'
-            quantite = quantite
         else:
             type = 'unite'
-            quantite = quantite
+
+        if unite_seuil == "ml":
+            seuil = float(seuil) / 1000
+        elif unite_seuil == "cl":
+            seuil = float(seuil) / 100
+        elif unite_seuil == "l":
+            seuil = float(seuil)
+        elif unite_seuil == "g":
+            seuil = float(seuil) / 1000
+        elif unite_seuil == "kg":
+            seuil = float(seuil)
+        else:
+            seuil = float(seuil)
 
         p = Produit.objects.create(
             nom=nom,
-            quantite=quantite,
+            quantite=0,
             type=type,
-            stockage=Stockage.objects.get_or_create(nom=stockage, service=Service.objects.get(nom=service))[0],
+            stockage=Stockage.objects.get_or_create(id=stockage)[0],
+            seuil=seuil,
         )
 
         if fournisseur:
@@ -206,6 +219,7 @@ def ajouter_produit(request):
         
         
         p.add_famille(famille)
+        p.add_quantite(quantite, unite)
         p.save()
 
 
@@ -214,7 +228,6 @@ def ajouter_produit(request):
     return render(request, "produits/preparateurs/ajouter_produit.html", {
         'fournisseurs': fournisseurs,
         'familles': familles,
-        'services' : services,
         'stockages': stockages,
     })
 
@@ -244,6 +257,24 @@ def modifier_produit(request, produit_id):
         produit.familles.clear()
         produit.stockage = Stockage.objects.get_or_create(nom=request.POST.get('stockage'), service=service)[0]
         produit.add_famille(famille)
+        
+        seuil = request.POST.get('seuil')
+        unite_seuil = request.POST.get('unite_seuil')
+
+        if unite_seuil == "ml":
+            seuil = float(seuil) / 1000
+        elif unite_seuil == "cl":
+            seuil = float(seuil) / 100
+        elif unite_seuil == "l":
+            seuil = float(seuil)
+        elif unite_seuil == "g":
+            seuil = float(seuil) / 1000
+        elif unite_seuil == "kg":
+            seuil = float(seuil)
+        else:
+            seuil = float(seuil)
+
+        produit.seuil = seuil
 
         if fournisseur:
             produit.add_fournisseur(fournisseur)
