@@ -21,9 +21,9 @@ def produits(request):
 
     # Récupération des filtres depuis les paramètres GET
     query = request.GET.get('q', '')
-    selected_famille = request.GET.getlist('famille')
-    selected_fournisseur = request.GET.getlist('fournisseur')
-    selected_stockage = request.GET.getlist('stockage')
+    selected_famille = request.GET.get('famille')
+    selected_fournisseur = request.GET.get('fournisseur')
+    selected_stockage = request.GET.get('stockage')
     selected_service = request.GET.get('service', '')
     seuil = request.GET.get('seuil')
     action = request.GET.get('action', '')
