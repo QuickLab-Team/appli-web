@@ -20,71 +20,8 @@
 
 <canvas id="chartEtudiantsConnexions"></canvas>
 
-
-
-<!-- A supprimer en mise en production -->
-<button onclick="modifierGraphique()">Modifier les graphiques</button>
-<script>
-
-function modifierGraphique() {
-    const chartEtudiants = Chart.getChart("chartEtudiantsConnexions");
-
-
-
-    // Simuler de nouvelles valeurs aléatoires pour 1ère, 2ème et 3ème année
-    const nouvellesValeursAujourdhui = [
-        Math.floor(Math.random() * 50), // 1ère année
-        Math.floor(Math.random() * 50), // 2ème année
-        Math.floor(Math.random() * 50)  // 3ème année
-    ];
-
-    
-
-    const nouvellesValeursMois = [
-        Math.floor(Math.random() * 100), // 1ère année
-        Math.floor(Math.random() * 100), // 2ème année
-        Math.floor(Math.random() * 100)  // 3ème année
-    ];
-
-    // Appliquer les nouvelles valeurs au graphique
-    chartEtudiants.data.datasets[0].data = nouvellesValeursAujourdhui;
-    chartEtudiants.data.datasets[1].data = nouvellesValeursMois;
-    chartEtudiants.update();
-
-}
-
-</script>
-
 <h2>Réservations des étudiants</h2>
 
 <canvas id="chartReservationsEtudiants"></canvas>
-
-<button onclick="modifierGraphiqueReservations()">Modifier les graphiques de réservation</button>
-
-<script>
-
-function modifierGraphiqueReservations() {
-    const chartReservations = Chart.getChart("chartReservationsEtudiants");
-
-    const nouvellesReservationsAujourdhui = [
-        Math.floor(Math.random() * 50), // 1ère année
-        Math.floor(Math.random() * 50), // 2ème année
-        Math.floor(Math.random() * 50)  // 3ème année
-    ];
-
-    const nouvellesReservationsMois = [
-        Math.floor(Math.random() * 100), // 1ère année
-        Math.floor(Math.random() * 100), // 2ème année
-        Math.floor(Math.random() * 100)  // 3ème année
-    ];
-
-    // Appliquer les nouvelles valeurs au graphique
-    chartReservations.data.datasets[0].data = nouvellesReservationsAujourdhui;
-    chartReservations.data.datasets[1].data = nouvellesReservationsMois;
-    chartReservations.update();
-
-}
-
-</script>
 
 {% endblock %}

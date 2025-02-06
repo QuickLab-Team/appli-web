@@ -55,16 +55,4 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Fonction pour modifier les graphiques (TEST)
-    window.modifierGraphique = function() {
-        chartEtudiants.data.datasets[0].data = allAnnees.map(() => Math.floor(Math.random() * 50));
-        chartEtudiants.data.datasets[1].data = allAnnees.map(() => Math.floor(Math.random() * 100));
-        chartEtudiants.update();
-    };
-
-    window.modifierGraphiqueReservations = function() {
-        chartReservations.data.datasets[0].data = allAnnees.map(() => Math.floor(Math.random() * 50));
-        chartReservations.data.datasets[1].data = allAnnees.map(() => Math.floor(Math.random() * 100));
-        chartReservations.update();
-    };
 });
