@@ -31,6 +31,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils.timezone import now, timedelta
+from django.shortcuts import render
+from reservations.models import Reservation
+from django.db.models import Count
 
 def home(request):
     return render(request, 'base.html', {
@@ -342,3 +346,41 @@ def changer_mot_de_passe(request):
     template_name = 'utilisateurs/etudiants/changer_mot_de_passe.html' if request.user.role == 'etudiant' else 'utilisateurs/preparateurs/changer_mot_de_passe.html'
     
     return render(request, template_name, {'form': form})
+
+@login_required
+def statistiques(request):
+    aujourd_hui = now().date()
+    debut_mois = aujourd_hui.replace(day=1)
+
+    # Définir les années possibles
+    annees_possibles = ["1ère année", "2ème année", "3ème année"]
+
+    # Initialiser les dictionnaires avec toutes les années à 0
+    etudiants_connectes_aujourdhui = {annee: 0 for annee in annees_possibles}
+    etudiants_connectes_mois = {annee: 0 for annee in annees_possibles}
+    reservations_etudiants_aujourdhui = {annee: 0 for annee in annees_possibles}
+    reservations_etudiants_mois = {annee: 0 for annee in annees_possibles}
+
+    # Connexions des étudiants
+    for res in Utilisateur.objects.filter(role='etudiant', last_login__date=aujourd_hui).values('annee').annotate(total=Count('id')):
+        etudiants_connectes_aujourdhui[res['annee']] = res['total']
+
+    for res in Utilisateur.objects.filter(role='etudiant', last_login__date__gte=debut_mois).values('annee').annotate(total=Count('id')):
+        etudiants_connectes_mois[res['annee']] = res['total']
+
+    # Réservations des étudiants
+    for res in Reservation.objects.filter(utilisateur__role='etudiant', date__date=aujourd_hui).values('utilisateur__annee').annotate(total=Count('id')):
+        reservations_etudiants_aujourdhui[res['utilisateur__annee']] = res['total']
+
+    for res in Reservation.objects.filter(utilisateur__role='etudiant', date__date__gte=debut_mois).values('utilisateur__annee').annotate(total=Count('id')):
+        reservations_etudiants_mois[res['utilisateur__annee']] = res['total']
+
+    # Convertir en JSON
+    data_statistiques = json.dumps({
+        "etudiants_connectes_aujourdhui": etudiants_connectes_aujourdhui,
+        "etudiants_connectes_mois": etudiants_connectes_mois,
+        "reservations_etudiants_aujourdhui": reservations_etudiants_aujourdhui,
+        "reservations_etudiants_mois": reservations_etudiants_mois,
+    })
+
+    return render(request, 'utilisateurs/preparateurs/statistiques.html', {'data_statistiques': data_statistiques})
