@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from produits.models import Famille, Service
+from django.core.mail import send_mail
 
 # Vue pour la liste des réservations
 @login_required
@@ -68,5 +69,29 @@ def modifier_reservation_etat(request, reservation_id):
         etat = request.POST.get('etat')
         reservation.etat = etat
         reservation.save()
-        return JsonResponse({'erreur': False, 'message': 'État modifié'}, status=200)
+
+        # Envoyer un email uniquement si la commande est validée
+        if etat == "valide":
+            etudiant = reservation.utilisateur  # Supposons que Reservation a un champ `utilisateur`
+            if etudiant and etudiant.email:
+                message = f"""
+                Bonjour {etudiant.prenom},
+
+                Votre réservation #{reservation.id} a été validée par un préparateur.
+
+                Vous pouvez venir récupérer votre commande dès que possible.
+
+                Cordialement,
+                L'équipe QuickLab
+                """
+                send_mail(
+                    subject="Votre réservation a été validée",
+                    message=message,
+                    from_email='QuickLab <votre_email@gmail.com>',
+                    recipient_list=[etudiant.email],
+                    fail_silently=False,
+                )
+
+        return JsonResponse({'erreur': False, 'message': 'État modifié et email envoyé si validé'}, status=200)
     return HttpResponseNotAllowed(['POST'], 'Méthode non autorisée.')
+
