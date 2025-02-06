@@ -259,6 +259,7 @@ def supprimer_utilisateurs(request):
 
     return JsonResponse({"error": "Requête invalide."}, status=400)
 
+
 @login_required
 def modifier_utilisateur(request, utilisateur_id):
     utilisateur_connecte = request.user
@@ -330,53 +331,38 @@ def changer_mot_de_passe(request):
 
 @login_required
 def statistiques(request):
-    # Dates
     aujourd_hui = now().date()
     debut_mois = aujourd_hui.replace(day=1)
 
-    # Étudiants connectés aujourd'hui
-    etudiants_connectes_aujourdhui = Utilisateur.objects.filter(
-        role='etudiant',
-        last_login__date=aujourd_hui
-    ).values('annee').annotate(total=Count('id'))
+    # Définir les années possibles
+    annees_possibles = ["1ère année", "2ème année", "3ème année"]
 
-    # Étudiants connectés dans le mois
-    etudiants_connectes_mois = Utilisateur.objects.filter(
-        role='etudiant',
-        last_login__date__gte=debut_mois
-    ).values('annee').annotate(total=Count('id'))
+    # Initialiser les dictionnaires avec toutes les années à 0
+    etudiants_connectes_aujourdhui = {annee: 0 for annee in annees_possibles}
+    etudiants_connectes_mois = {annee: 0 for annee in annees_possibles}
+    reservations_etudiants_aujourdhui = {annee: 0 for annee in annees_possibles}
+    reservations_etudiants_mois = {annee: 0 for annee in annees_possibles}
 
-    # Réservations aujourd'hui par année (étudiants)
-    reservations_etudiants_aujourdhui = Reservation.objects.filter(
-        utilisateur__role='etudiant',
-        date__date=aujourd_hui
-    ).values('utilisateur__annee').annotate(total=Count('id'))
+    # Connexions des étudiants
+    for res in Utilisateur.objects.filter(role='etudiant', last_login__date=aujourd_hui).values('annee').annotate(total=Count('id')):
+        etudiants_connectes_aujourdhui[res['annee']] = res['total']
 
-    # Réservations dans le mois par année (étudiants)
-    reservations_etudiants_mois = Reservation.objects.filter(
-        utilisateur__role='etudiant',
-        date__date__gte=debut_mois
-    ).values('utilisateur__annee').annotate(total=Count('id'))
+    for res in Utilisateur.objects.filter(role='etudiant', last_login__date__gte=debut_mois).values('annee').annotate(total=Count('id')):
+        etudiants_connectes_mois[res['annee']] = res['total']
 
-    # Réservations aujourd'hui par préparateurs
-    reservations_preparateurs_aujourdhui = Reservation.objects.filter(
-        utilisateur__role='preparateur',
-        date__date=aujourd_hui
-    ).count()
+    # Réservations des étudiants
+    for res in Reservation.objects.filter(utilisateur__role='etudiant', date__date=aujourd_hui).values('utilisateur__annee').annotate(total=Count('id')):
+        reservations_etudiants_aujourdhui[res['utilisateur__annee']] = res['total']
 
-    # Réservations dans le mois par préparateurs
-    reservations_preparateurs_mois = Reservation.objects.filter(
-        utilisateur__role='preparateur',
-        date__date__gte=debut_mois
-    ).count()
+    for res in Reservation.objects.filter(utilisateur__role='etudiant', date__date__gte=debut_mois).values('utilisateur__annee').annotate(total=Count('id')):
+        reservations_etudiants_mois[res['utilisateur__annee']] = res['total']
 
-    # Contexte pour le template
-    context = {
-        'etudiants_connectes_aujourdhui': etudiants_connectes_aujourdhui,
-        'etudiants_connectes_mois': etudiants_connectes_mois,
-        'reservations_etudiants_aujourdhui': reservations_etudiants_aujourdhui,
-        'reservations_etudiants_mois': reservations_etudiants_mois,
-        'reservations_preparateurs_aujourdhui': reservations_preparateurs_aujourdhui,
-        'reservations_preparateurs_mois': reservations_preparateurs_mois,
-    }
-    return render(request, 'utilisateurs/preparateurs/statistiques.html', context)
+    # Convertir en JSON
+    data_statistiques = json.dumps({
+        "etudiants_connectes_aujourdhui": etudiants_connectes_aujourdhui,
+        "etudiants_connectes_mois": etudiants_connectes_mois,
+        "reservations_etudiants_aujourdhui": reservations_etudiants_aujourdhui,
+        "reservations_etudiants_mois": reservations_etudiants_mois,
+    })
+
+    return render(request, 'utilisateurs/preparateurs/statistiques.html', {'data_statistiques': data_statistiques})

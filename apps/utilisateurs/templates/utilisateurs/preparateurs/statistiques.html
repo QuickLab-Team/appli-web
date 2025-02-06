@@ -1,71 +1,90 @@
 {% extends "preparateurs/base.html" %}
 
+{% load static %}
+
+
+
 {% block content %}
+
 <h1>Statistiques</h1>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script id="data-statistiques" type="application/json">
+    {{ data_statistiques|safe }}
+</script>
+
+<script src="{% static 'js/preparateurs/statistiques.js' %}"></script>
 
 <h2>Étudiants connectés</h2>
 
-<h3>Aujourd'hui</h3>
-<ul>
-    {% if etudiants_connectes_aujourdhui %}
-        {% for stat in etudiants_connectes_aujourdhui %}
-        <li>{{ stat.annee }} : {{ stat.total }} étudiant(s)</li>
-        {% endfor %}
-    {% else %}
-        <li>Aucun étudiant connecté aujourd'hui.</li>
-    {% endif %}
-</ul>
+<canvas id="chartEtudiantsConnexions"></canvas>
 
-<h3>Ce mois</h3>
-<ul>
-    {% if etudiants_connectes_mois %}
-        {% for stat in etudiants_connectes_mois %}
-        <li>{{ stat.annee }} : {{ stat.total }} étudiant(s)</li>
-        {% endfor %}
-    {% else %}
-        <li>Aucun étudiant connecté ce mois-ci.</li>
-    {% endif %}
-</ul>
 
-<h2>Réservations</h2>
 
-<h3>Aujourd'hui</h3>
-<ul>
-    {% if reservations_etudiants_aujourdhui %}
-        {% for stat in reservations_etudiants_aujourdhui %}
-        <li>{{ stat.utilisateur__annee }} : {{ stat.total }} réservation(s)</li>
-        {% endfor %}
-    {% else %}
-        <li>Aucune réservation réalisée par des étudiants aujourd'hui.</li>
-    {% endif %}
-</ul>
+<!-- A supprimer en mise en production -->
+<button onclick="modifierGraphique()">Modifier les graphiques</button>
+<script>
 
-<h3>Ce mois</h3>
-<ul>
-    {% if reservations_etudiants_mois %}
-        {% for stat in reservations_etudiants_mois %}
-        <li>{{ stat.utilisateur__annee }} : {{ stat.total }} réservation(s)</li>
-        {% endfor %}
-    {% else %}
-        <li>Aucune réservation réalisée par des étudiants ce mois-ci.</li>
-    {% endif %}
-</ul>
+function modifierGraphique() {
+    const chartEtudiants = Chart.getChart("chartEtudiantsConnexions");
 
-<h2>Réservations réaliser par les préparateurs</h2>
-<p>
-    Aujourd'hui :
-    {% if reservations_preparateurs_aujourdhui > 0 %}
-        {{ reservations_preparateurs_aujourdhui }} réservation(s)
-    {% else %}
-        aucune réservation réalisée par des préparateurs aujourd'hui.
-    {% endif %}
-</p>
-<p>
-    Ce mois :
-    {% if reservations_preparateurs_mois > 0 %}
-        {{ reservations_preparateurs_mois }} réservation(s)
-    {% else %}
-        aucune réservation réalisée par des préparateurs ce mois-ci.
-    {% endif %}
-</p>
+
+
+    // Simuler de nouvelles valeurs aléatoires pour 1ère, 2ème et 3ème année
+    const nouvellesValeursAujourdhui = [
+        Math.floor(Math.random() * 50), // 1ère année
+        Math.floor(Math.random() * 50), // 2ème année
+        Math.floor(Math.random() * 50)  // 3ème année
+    ];
+
+    
+
+    const nouvellesValeursMois = [
+        Math.floor(Math.random() * 100), // 1ère année
+        Math.floor(Math.random() * 100), // 2ème année
+        Math.floor(Math.random() * 100)  // 3ème année
+    ];
+
+    // Appliquer les nouvelles valeurs au graphique
+    chartEtudiants.data.datasets[0].data = nouvellesValeursAujourdhui;
+    chartEtudiants.data.datasets[1].data = nouvellesValeursMois;
+    chartEtudiants.update();
+
+}
+
+</script>
+
+<h2>Réservations des étudiants</h2>
+
+<canvas id="chartReservationsEtudiants"></canvas>
+
+<button onclick="modifierGraphiqueReservations()">Modifier les graphiques de réservation</button>
+
+<script>
+
+function modifierGraphiqueReservations() {
+    const chartReservations = Chart.getChart("chartReservationsEtudiants");
+
+    const nouvellesReservationsAujourdhui = [
+        Math.floor(Math.random() * 50), // 1ère année
+        Math.floor(Math.random() * 50), // 2ème année
+        Math.floor(Math.random() * 50)  // 3ème année
+    ];
+
+    const nouvellesReservationsMois = [
+        Math.floor(Math.random() * 100), // 1ère année
+        Math.floor(Math.random() * 100), // 2ème année
+        Math.floor(Math.random() * 100)  // 3ème année
+    ];
+
+    // Appliquer les nouvelles valeurs au graphique
+    chartReservations.data.datasets[0].data = nouvellesReservationsAujourdhui;
+    chartReservations.data.datasets[1].data = nouvellesReservationsMois;
+    chartReservations.update();
+
+}
+
+</script>
+
 {% endblock %}
