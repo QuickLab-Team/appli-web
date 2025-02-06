@@ -18,4 +18,5 @@ urlpatterns = [
     path('mon_compte/', views.mon_compte, name='mon_compte'),
     path('changer_mot_de_passe/', views.changer_mot_de_passe, name='changer_mot_de_passe'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
+    path('statistiques/', views.statistiques, name='statistiques'),
 ]
