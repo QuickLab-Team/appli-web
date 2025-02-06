@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+import csv
 
 @login_required
 def produits(request):
@@ -25,6 +26,7 @@ def produits(request):
     selected_stockage = request.GET.getlist('stockage')
     selected_service = request.GET.get('service', '')
     seuil = request.GET.get('seuil')
+    action = request.GET.get('action', '')
 
     # Application des filtres dynamiques
     if query:
@@ -42,6 +44,30 @@ def produits(request):
 
     # Gestion des rôles et rendu HTML
     if request.user.role in ['preparateur', 'administrateur']:
+
+        if action == 'exporter':
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="produits.csv"'
+
+            writer = csv.writer(response)
+            
+            writer.writerow(["Nom", "Quantité", "Fournisseur", "Familles", "Date d'ajout", "Stockage", "Seuil", "Type"])
+
+            for produit in produits:
+                writer.writerow([
+                    produit.nom,
+                    produit.quantite,
+                    produit.fournisseur.nom if produit.fournisseur else "",
+                    ", ".join(f.nom for f in produit.familles.all()),
+                    produit.date_ajout.strftime("%Y-%m-%d %H:%M:%S"),
+                    produit.stockage.nom,
+                    produit.seuil,
+                    produit.get_type_display(),
+                ])
+
+            messages.success(request, "Produits exportés avec succès.")
+            return response
+
         return render(request, 'produits/preparateurs/produits.html', {
             'titre': 'QuickLab',
             'produits': produits,

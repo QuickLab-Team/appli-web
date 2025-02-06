@@ -8,7 +8,7 @@
 
 <h2>Liste des produits</h2>
 
-<form method="get" action="">
+<form method="get" action="{% url 'produits:produits' %}">
     <div class="filters">
         <input type="text" name="q" placeholder="Rechercher un produit" value="{{ query }}">
 
@@ -39,6 +39,7 @@
         </div>
 
     </div>
+    <button type="submit" name="action" value="exporter" class="btn">Exporter</button>
 </form>
 
 <div class="cadre-table-scroll">

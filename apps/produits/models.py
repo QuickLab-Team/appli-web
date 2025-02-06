@@ -60,7 +60,7 @@ class Fournisseur(models.Model):
 class Produit(models.Model):
     """
     Produit
-    """
+    """ 
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=100)
     quantite = models.FloatField()
