@@ -79,7 +79,7 @@ def modifier_produit_panier(request):
             panier = Panier.objects.get_or_create(utilisateur=request.user)[0]
             panier_produit = PanierProduit.objects.filter(panier=panier, produit=produit).first()
             panier_produit.quantite = 0
-            panier_produit.add_quantite(int(quantite), unite)
+            panier_produit.add_quantite(float(quantite), unite)
 
             return redirect('paniers:panier')
 

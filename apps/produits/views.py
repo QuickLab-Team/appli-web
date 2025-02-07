@@ -199,7 +199,7 @@ def ajouter_produit(request):
 
     if request.method == 'POST':
         nom = request.POST.get('nom')
-        quantite = int(request.POST.get('quantite'))
+        quantite = float(request.POST.get('quantite'))
         stockage = request.POST.get('stockage')
         unite = request.POST.get('unite')
         famille = request.POST.get('familles')

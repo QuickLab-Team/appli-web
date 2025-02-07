@@ -24,7 +24,7 @@
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                 <input type="hidden" name="update-lien" value="{% url 'paniers:modifier_produit_panier' %}">
                                 <input type="hidden" name="produit_id" value="{{ produit_panier.produit.id }}">
-                                <input type="number" min="0.01" step="0.01" name="quantite" value="{{ produit_panier.get_quantite }}" class="border border-gray-300 rounded px-2 py-1 w-16">
+                                <input type="number" min="0.01" step="0.01" name="quantite" value="{{ produit_panier.get_quantite|stringformat:'.2f' }}" class="border border-gray-300 rounded px-2 py-1 w-26">
                                 <select name="unite" class="border border-gray-300 rounded px-2 py-1">
                                     {% for unite in produit_panier.produit.get_unites %}
                                         <option value="{{ unite }}" {% if unite == produit_panier.get_unite %}selected{% endif %}>{{ unite }}</option>
