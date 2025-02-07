@@ -1,19 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - QuickLab</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/utilisateurs/connexion.css' %}">
-    <script src="{% static 'js/connexion.js' %}"></script>
 </head>
-
 <body>
     <div class="container">
-        <!-- Section principale pour desktop -->
         <div class="image-section">
             <img src="{% static 'images/image1.png' %}" alt="Laboratoire">
         </div>
@@ -40,20 +36,21 @@
             </div>
         </div>
     </div>
-</body>
 
-<div id="passwordResetPopup" class="popup hidden">
-    <div class="popup-content">
-        <span id="closePopup" class="close">&times;</span>
-        <h2>Réinitialiser le mot de passe</h2>
-        <form method="post" action="{% url 'utilisateurs:password_reset' %}" id="passwordResetForm">
-            {% csrf_token %}
-            <label for="email">Adresse e-mail</label>
-            <input type="email" id="email" name="email" required>
-            <button type="submit">Envoyer</button>
-        </form>
-        <p id="popupMessage" class="hidden"></p>
+    <!-- Popup pour la récupération du mot de passe -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Réinitialisation du mot de passe</h3>
+            <p>Veuillez entrer votre adresse e-mail :</p>
+            <form id="forgotPasswordForm" method="post" action="{% url 'password_reset' %}">
+                {% csrf_token %}
+                <input type="email" name="email" id="resetEmail" placeholder="Votre email" required>
+                <button type="submit" id="resetBouton">Envoyer</button>
+            </form>
+        </div>
     </div>
-</div>
 
+    <script src="{% static 'js/connexion.js' %}"></script>
+</body>
 </html>

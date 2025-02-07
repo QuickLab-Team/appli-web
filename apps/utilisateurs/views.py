@@ -355,7 +355,7 @@ def changer_mot_de_passe(request):
 def statistiques(request):
     aujourd_hui = now().date()
     debut_mois = aujourd_hui.replace(day=1)
-
+    print(aujourd_hui)
     # Définir les années possibles
     annees_possibles = ["1ère année", "2ème année", "3ème année"]
 
