@@ -37,9 +37,13 @@
             <input type="checkbox" id="seuil" name="seuil" value="1" {% if seuil %}checked{% endif %} onchange="this.form.submit()">
             <label for="seuil">Produits au seuil</label>
         </div>
-
     </div>
-    <button type="submit" name="action" value="exporter" class="btn btn-primary">Exporter</button>
+</form>
+
+<form method="get" action="{% url 'produits:produits' %}">
+    <input type="hidden" name="q" value="{{ query }}">
+    <input type="hidden" name="action" value="exporter">
+    <button type="submit" class="btn btn-primary">Exporter</button>
 </form>
 
 <div class="cadre-table-scroll">
@@ -79,6 +83,3 @@
 </div>
 
 {% endblock %}
-
-
-
