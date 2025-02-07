@@ -18,6 +18,7 @@ def reservations(request):
             'reservations': reservations
         })
     else:
+        reservations = reservations.filter(utilisateur=request.user)
         return render(request, 'reservations/etudiants/reservations.html', {
             'titre': 'QuickLab',
             'reservations': reservations,
