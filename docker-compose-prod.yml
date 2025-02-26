@@ -35,8 +35,8 @@ services:
   web:
     image: quentin1591/quicklab:latest
     container_name: quicklab-web
-    ports:
-      - "8000:8000"
+    volumes:
+      - static_volume:/code/staticfiles
     depends_on:
       db:
         condition: service_healthy

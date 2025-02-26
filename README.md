@@ -31,7 +31,7 @@ docker compose -f docker-compose-arm.yml up --build -d
 ### Lancement en production
 
 ```bash
-docker compose -d -f docker-compose-prod.yml --env-file .env-production up --build
+docker compose -f docker-compose-prod.yml --env-file .env-production up --build -d
 ```
 
 Dans le terminal du container web
